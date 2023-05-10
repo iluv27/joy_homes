@@ -13,10 +13,11 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0XFFFAFAFA),
       body: Column(
         children: [
           Expanded(
-            flex: 1,
+            flex: 2,
             child: Image.asset('assets/images/logo.png', scale: 2.5),
           ),
           Expanded(
@@ -29,6 +30,8 @@ class _SearchScreenState extends State<SearchScreen> {
                     child: SizedBox(
                       width: 200,
                       child: RangeSlider(
+                        inactiveColor: AppColors.primary,
+                        activeColor: AppColors.secondary,
                         values: _currentRangeValues,
                         divisions: 5,
                         max: 50000000,
@@ -163,7 +166,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   )),
             ),
           ),
-          Expanded(flex: 1, child: Container())
+          Expanded(flex: 3, child: Container())
         ],
       ),
     );
