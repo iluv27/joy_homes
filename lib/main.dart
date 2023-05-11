@@ -17,9 +17,20 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: MainMenuScreen(),
+      home: const MainMenuScreen(),
+      theme: ThemeData(
+        appBarTheme: const AppBarTheme(
+            backgroundColor: Colors.transparent,
+            shadowColor: Colors.transparent,
+            titleTextStyle: TextStyle(
+                color: AppColors.textColor,
+                fontSize: 22,
+                fontWeight: FontWeight.w600),
+            centerTitle: true,
+            toolbarHeight: 60),
+      ),
     );
   }
 }
@@ -40,8 +51,8 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
 
   static List<Widget> pages = [
     const SearchScreen(),
-    const FavouriteScreen(),
     const HomeScreen(),
+    const FavouriteScreen(),
     const SettingsScreen(),
     const UploadScreen()
   ];
@@ -98,8 +109,16 @@ class _BottomBarItemsState extends State<_BottomBarItems> {
       child: Material(
         elevation: 5,
         child: Container(
-          decoration: const BoxDecoration(
-            color: Color(0XFFFFFFFF),
+          decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.5),
+                spreadRadius: 2,
+                blurRadius: 6,
+                offset: const Offset(0, 3),
+              ),
+            ],
+            color: const Color(0XFFFFFFFF),
           ),
           height: 80,
           child: Row(
