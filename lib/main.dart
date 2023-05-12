@@ -7,6 +7,7 @@ import 'screens/favourites.dart';
 import 'screens/home.dart';
 import 'screens/settings.dart';
 import 'screens/upload.dart';
+import 'signUp_Screens/register.dart';
 
 void main() {
   runApp(const MyApp());
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: const MainMenuScreen(),
+      home: const SignupOptions(),
       theme: ThemeData(
         appBarTheme: const AppBarTheme(
             backgroundColor: Colors.transparent,
