@@ -1,6 +1,5 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:joy_homes/theme.dart';
+import 'constants.dart';
 
 class SignupOptions extends StatelessWidget {
   const SignupOptions({super.key});
@@ -11,12 +10,7 @@ class SignupOptions extends StatelessWidget {
       child: Scaffold(
         body: Stack(
           children: <Widget>[
-            Image.asset(
-              'assets/images/homeimg.png', // Replace with your image path
-              fit: BoxFit.fitWidth,
-              width: double.infinity,
-              height: double.infinity,
-            ),
+            const BackgroundImage(),
             // Your other widgets will be placed on top of the background image
             // For example, here's a centered Text widget
             Column(
@@ -25,50 +19,14 @@ class SignupOptions extends StatelessWidget {
                 const SizedBox(
                   height: 90,
                 ),
-                Image.asset(
-                  'assets/images/logo.png', // Replace with your image path
-                  scale: 3,
-                ),
-                const SizedBox(
-                  height: 15,
-                ),
-                const Text(
-                  'Acquiring Your Dream Home With Ease',
-                  style: TextStyle(fontSize: 16, letterSpacing: 1),
-                ),
+                const LogoTag(),
                 const SizedBox(
                   height: 60,
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                  child: ElevatedButton(
-                    style: ButtonStyle(
-                        elevation: MaterialStateProperty.all(0),
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                            AppColors.secondary),
-                        fixedSize: MaterialStateProperty.all<Size>(
-                            const Size(double.infinity, 48))),
-                    onPressed: () {},
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        Icon(Icons.fmd_good),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          'Sign up with Google',
-                          style: TextStyle(fontSize: 16),
-                        )
-                      ],
-                    ),
-                  ),
+                SignupButtons(
+                  icondata: Icons.fmd_good,
+                  buttonWords: 'Sign up with Google',
+                  onPressed: () {},
                 ),
                 const SizedBox(
                   height: 20,
@@ -80,58 +38,14 @@ class SignupOptions extends StatelessWidget {
                 const SizedBox(
                   height: 20,
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                  child: ElevatedButton(
-                    style: ButtonStyle(
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                        elevation: MaterialStateProperty.all(0),
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                            AppColors.secondary),
-                        fixedSize: MaterialStateProperty.all<Size>(
-                            const Size(double.infinity, 48))),
-                    onPressed: () {},
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        Icon(Icons.mail),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          'Sign up with Mail',
-                          style: TextStyle(fontSize: 16),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
+                SignupButtons(
+                    icondata: Icons.mail,
+                    buttonWords: 'Sign up with Mail',
+                    onPressed: () {}),
                 const SizedBox(
                   height: 60,
                 ),
-                Text.rich(
-                  TextSpan(
-                    text: 'Already have an account? ',
-                    children: [
-                      TextSpan(
-                        text: 'Log in',
-                        style: const TextStyle(
-                          color: AppColors.secondary,
-                        ),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                            // Navigate to the About page
-                          },
-                      ),
-                      const TextSpan(text: '.'),
-                    ],
-                  ),
-                ),
+                const LastText(),
               ],
             ),
           ],
