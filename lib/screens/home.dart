@@ -1,56 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:joy_homes/theme.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'screen_constants.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
+    return const SafeArea(
       child: Scaffold(
-        backgroundColor: const Color(0XFFFAFAFA),
-        appBar: AppBar(
-          title: const Text('Apartments'),
-          actions: [
-            Padding(
-              padding: const EdgeInsets.only(right: 10.0),
-              child: Container(
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: AppColors.primary, // set border color
-                    width: 1.5, // set border width
-                  ),
-                  shape: BoxShape.circle, // set container shape to circle
-                ),
-                child: const CircleAvatar(
-                  maxRadius: 22,
-                  backgroundColor: Colors.transparent,
-                  child: Icon(
-                    Icons.person,
-                    color: AppColors.textColor,
-                    size: 26,
-                  ),
-                ),
-              ),
-            )
-          ],
-          bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(8.0),
-            child: Container(
-              decoration: const BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(
-                    color: AppColors.secondary,
-                    width: 2.0,
-                  ),
-                ),
-              ),
-            ),
-          ),
+        backgroundColor: Color(0XFFFAFAFA),
+        appBar: AppBarWidget(
+          title: 'Apartments',
+          height: 65,
         ),
-        body: const Padding(
-          padding: EdgeInsets.only(top: 15.0),
+        body: Padding(
+          padding: EdgeInsets.only(top: 10.0),
           child: HouseContainer(),
         ),
       ),

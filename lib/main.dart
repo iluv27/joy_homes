@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: SignupScreen(),
+      home: const MainMenuScreen(),
       theme: ThemeData(
         appBarTheme: const AppBarTheme(
             backgroundColor: Colors.transparent,
@@ -56,15 +56,9 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
     const SearchScreen(),
     const HomeScreen(),
     const FavouriteScreen(),
+    const UploadScreen(),
     const SettingsScreen(),
-    const UploadScreen()
   ];
-
-  void _onItemTapped(int index) {
-    setState(() {
-      selectedIndex = index;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {

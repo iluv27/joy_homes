@@ -8,8 +8,13 @@ class SignupScreen extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
 
   TextEditingController fullName = TextEditingController();
+  TextEditingController lastName = TextEditingController();
+  TextEditingController phoneNo = TextEditingController();
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
+  TextEditingController userName = TextEditingController();
+  TextEditingController confirmPassword = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -19,20 +24,26 @@ class SignupScreen extends StatelessWidget {
           children: <Widget>[
             const BackgroundImage(),
             Positioned(
-              top: 100,
+              top: 80,
               height: MediaQuery.of(context).size.height * 1,
               width: MediaQuery.of(context).size.width * 1,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const LogoTag(),
                   Expanded(
-                    flex: 3,
+                    flex: 1,
+                    child: Image.asset(
+                      'assets/images/logo.png', // Replace with your image path
+                      scale: 3,
+                    ),
+                  ),
+                  Expanded(
+                    flex: 4,
                     child: Form(
                       key: _formKey,
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 30.0, vertical: 50),
+                            horizontal: 30.0, vertical: 30),
                         child: Column(
                           children: [
                             InputField(
@@ -44,67 +55,67 @@ class SignupScreen extends StatelessWidget {
                               validatorText: 'Please enter your first name',
                             ),
                             const SizedBox(
-                              height: 15,
+                              height: 25,
                             ),
                             InputField(
-                              textEditingController: fullName,
+                              textEditingController: lastName,
                               onInputChanged: ((value) {
-                                value = fullName.text;
+                                value = lastName.text;
                               }),
                               innerText: 'Last Name',
                               validatorText: 'Please enter your last name',
                             ),
                             const SizedBox(
-                              height: 15,
+                              height: 25,
                             ),
                             InputField(
-                              textEditingController: fullName,
+                              textEditingController: phoneNo,
                               onInputChanged: ((value) {
-                                value = fullName.text;
+                                value = phoneNo.text;
                               }),
                               innerText: 'Phone No.',
                               validatorText: 'Please enter your phone no.',
                             ),
                             const SizedBox(
-                              height: 15,
-                            ),
-                            InputField(
-                              textEditingController: fullName,
-                              onInputChanged: ((value) {
-                                value = fullName.text;
-                              }),
-                              innerText: 'Email',
-                              validatorText: 'Please enter your email',
-                            ),
-                            const SizedBox(
-                              height: 15,
+                              height: 25,
                             ),
                             InputField(
                               textEditingController: email,
                               onInputChanged: ((value) {
                                 value = email.text;
                               }),
+                              innerText: 'Email',
+                              validatorText: 'Please enter your email',
+                            ),
+                            const SizedBox(
+                              height: 25,
+                            ),
+                            InputField(
+                              textEditingController: password,
+                              onInputChanged: ((value) {
+                                value = password.text;
+                              }),
                               innerText: 'Enter Password',
                               validatorText: 'Please enter your password',
                             ),
                             const SizedBox(
-                              height: 15,
+                              height: 25,
                             ),
                             InputField(
-                              textEditingController: password,
+                              textEditingController: confirmPassword,
                               onInputChanged: (value) {
-                                value = password.text;
+                                value = confirmPassword.text;
                               },
                               innerText: 'Confirm Password',
                               validatorText: 'Please confirm your password',
                             ),
                             const SizedBox(
-                              height: 15,
+                              height: 25,
                             ),
                             InputField(
-                              textEditingController: password,
+                              textEditingController: userName,
                               onInputChanged: (value) {
-                                value = password.text;
+                                value = userName.text;
                               },
                               innerText: 'Create Username',
                               validatorText:
@@ -112,13 +123,13 @@ class SignupScreen extends StatelessWidget {
                             ),
                             const CheckBoxListTile(
                               text: Text(
-                                "I accept the terms and conditions  of GhostTalks",
+                                "I accept the terms and conditions  of Joyhomes",
                                 style: TextStyle(
                                     fontSize: 12, color: Colors.black54),
                               ),
                             ),
                             const SizedBox(
-                              height: 30,
+                              height: 20,
                             ),
                             ElevatedButton(
                               onPressed: () {
@@ -151,7 +162,13 @@ class SignupScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const Expanded(flex: 1, child: LastText()),
+                  const Expanded(
+                    flex: 1,
+                    child: LastText(),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  )
                 ],
               ),
             ),
