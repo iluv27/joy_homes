@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:joy_homes/theme.dart';
 import 'package:flutter/gestures.dart';
@@ -69,6 +71,104 @@ class LastText extends StatelessWidget {
           const TextSpan(text: '.'),
         ],
       ),
+    );
+  }
+}
+
+// The LOGIN SCREEN CONST
+class InputField extends StatelessWidget {
+  InputField(
+      {Key? key,
+      required this.innerText,
+      required this.validatorText,
+      this.onInputChanged,
+      this.textEditingController})
+      : super(key: key);
+
+  final String innerText;
+  final String validatorText;
+  final Function(String)? onInputChanged;
+  TextEditingController? textEditingController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: TextFormField(
+        controller: textEditingController,
+        onChanged: onInputChanged,
+        cursorWidth: 1.5,
+        cursorHeight: 20,
+        cursorColor: AppColors.primary,
+        style: const TextStyle(color: Colors.black87),
+        decoration: InputDecoration(
+          contentPadding:
+              const EdgeInsets.symmetric(vertical: 18, horizontal: 22),
+          labelText: innerText,
+          floatingLabelStyle: const TextStyle(
+            color: AppColors.textColor,
+          ),
+          labelStyle: const TextStyle(color: Colors.black26),
+          focusedBorder: const UnderlineInputBorder(
+            borderSide: BorderSide(
+              color: AppColors.textColor,
+              width: 1.0,
+            ),
+          ),
+          enabledBorder: const UnderlineInputBorder(
+            borderSide: BorderSide(
+              color: AppColors.textColor,
+              width: 1.0,
+            ),
+          ),
+          errorBorder: const UnderlineInputBorder(
+            borderSide: BorderSide(
+              color: Color.fromARGB(66, 235, 62, 62),
+              width: 1.0,
+            ),
+          ),
+          focusedErrorBorder: const UnderlineInputBorder(
+            borderSide: BorderSide(
+              color: Color.fromARGB(66, 235, 62, 62),
+              width: 1.0,
+            ),
+          ),
+        ),
+        validator: (value) {
+          if (value!.isEmpty) {
+            return validatorText;
+          }
+          return null;
+        },
+      ),
+    );
+  }
+}
+
+// THIS IS THE REMEMBER ME CHECK BOX
+class CheckBoxListTile extends StatefulWidget {
+  const CheckBoxListTile({super.key, required this.text});
+  final Widget? text;
+  @override
+  State<CheckBoxListTile> createState() => _CheckBoxListTileState();
+}
+
+class _CheckBoxListTileState extends State<CheckBoxListTile> {
+  bool? _isChecked = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return CheckboxListTile(
+      side: const BorderSide(color: Colors.black),
+      contentPadding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+      selected: true,
+      value: _isChecked,
+      onChanged: (bool? value) {
+        setState(() {
+          _isChecked = value;
+        });
+      },
+      title: widget.text,
+      controlAffinity: ListTileControlAffinity.leading,
     );
   }
 }

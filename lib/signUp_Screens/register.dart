@@ -17,7 +17,7 @@ class SignupOptions extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const SizedBox(
-                  height: 90,
+                  height: 200,
                 ),
                 const LogoTag(),
                 const SizedBox(
