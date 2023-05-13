@@ -24,6 +24,7 @@ class _SearchScreenState extends State<SearchScreen> {
             ),
             Expanded(
               flex: 0,
+              // ignore: avoid_unnecessary_containers
               child: Container(
                 child: Column(
                   children: [

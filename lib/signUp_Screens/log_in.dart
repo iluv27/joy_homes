@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:joy_homes/theme.dart';
 import 'constants.dart';
+import 'package:flutter/gestures.dart';
 
 class LoginScreen extends StatelessWidget {
   LoginScreen({super.key});
@@ -17,13 +18,13 @@ class LoginScreen extends StatelessWidget {
           children: <Widget>[
             const BackgroundImage(),
             Positioned(
-              bottom: 0,
+              bottom: 40,
               height: MediaQuery.of(context).size.height * 0.7,
               width: MediaQuery.of(context).size.width * 1,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  LogoTag(),
+                  const LogoTag(),
                   Expanded(
                     flex: 3,
                     child: Form(
@@ -97,7 +98,27 @@ class LoginScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const Expanded(flex: 1, child: LastText()),
+                  Expanded(
+                    flex: 1,
+                    child: Text.rich(
+                      TextSpan(
+                        text: 'Don\'t have an account? ',
+                        children: [
+                          TextSpan(
+                            text: 'Sign up',
+                            style: const TextStyle(
+                              color: AppColors.secondary,
+                            ),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                // Navigate to the About page
+                              },
+                          ),
+                          const TextSpan(text: '.'),
+                        ],
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),

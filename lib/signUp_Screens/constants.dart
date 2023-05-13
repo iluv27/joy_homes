@@ -99,15 +99,12 @@ class InputField extends StatelessWidget {
         cursorWidth: 1.5,
         cursorHeight: 20,
         cursorColor: AppColors.primary,
-        style: const TextStyle(color: Colors.black87),
+        style: const TextStyle(color: AppColors.textColor, fontSize: 16),
         decoration: InputDecoration(
           contentPadding:
               const EdgeInsets.symmetric(vertical: 18, horizontal: 22),
-          labelText: innerText,
-          floatingLabelStyle: const TextStyle(
-            color: AppColors.textColor,
-          ),
-          labelStyle: const TextStyle(color: Colors.black26),
+          hintText: innerText,
+          hintStyle: TextStyle(color: AppColors.textColor.withOpacity(0.5)),
           focusedBorder: const UnderlineInputBorder(
             borderSide: BorderSide(
               color: AppColors.textColor,
