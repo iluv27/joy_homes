@@ -55,7 +55,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
   static List<Widget> pages = [
     const SearchScreen(),
     const HomeScreen(),
-    const FavouriteScreen(),
+    FavouriteScreen(),
     const UploadScreen(),
     const SettingsScreen(),
   ];
@@ -117,7 +117,7 @@ class _BottomBarItemsState extends State<_BottomBarItems> {
             ],
             color: const Color(0XFFFFFFFF),
           ),
-          height: 80,
+          height: 70,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -131,7 +131,7 @@ class _BottomBarItemsState extends State<_BottomBarItems> {
               BottomBarItem(
                 selectedIndex: 1,
                 icon: Icons.house,
-                text: 'houses',
+                text: 'House',
                 onTap: handleItemSelected,
                 isSelected: selIndex == 1,
               ),
@@ -191,16 +191,16 @@ class BottomBarItem extends StatelessWidget {
           Icon(
             icon,
             color: isSelected ? AppColors.secondary : AppColors.textColor,
-            size: isSelected ? 27 : 27,
+            size: isSelected ? 24 : 23,
           ),
           const SizedBox(
-            height: 3,
+            height: 2,
           ),
           Text(
             text,
             style: TextStyle(
                 color: isSelected ? AppColors.primary : AppColors.textColor,
-                fontSize: 13),
+                fontSize: 12),
           ),
         ],
       ),

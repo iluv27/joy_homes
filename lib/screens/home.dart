@@ -15,12 +15,9 @@ class HomeScreen extends StatelessWidget {
         backgroundColor: Color(0XFFFAFAFA),
         appBar: AppBarWidget(
           title: 'Apartments',
-          height: 65,
+          height: 60,
         ),
-        body: Padding(
-          padding: EdgeInsets.only(top: 10.0),
-          child: HouseContainer(),
-        ),
+        body: HouseContainer(),
       ),
     );
   }
@@ -32,7 +29,6 @@ class HouseContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView(
-      padding: const EdgeInsets.all(0),
       children: const [
         HouseItem(),
         HouseItem(),
@@ -50,7 +46,7 @@ class HouseItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 15.0),
+      padding: const EdgeInsets.only(top: 35.0),
       child: Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.width,
@@ -141,7 +137,7 @@ class HouseItem extends StatelessWidget {
                       Positioned(
                         bottom: 0,
                         height: null,
-                        width: MediaQuery.of(context).size.width * 0.94,
+                        width: MediaQuery.of(context).size.width * 0.93,
                         child: const Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [

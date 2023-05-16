@@ -13,7 +13,7 @@ class SettingsScreen extends StatelessWidget {
         backgroundColor: Color(0XFFFAFAFA),
         appBar: AppBarWidget(
           title: 'Settings',
-          height: 65,
+          height: 60,
         ),
         body: SettingsListview(),
       ),
@@ -163,14 +163,14 @@ class SettingsListile extends StatelessWidget {
       ),
       child: ListTile(
         contentPadding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
-        horizontalTitleGap: 20,
+        horizontalTitleGap: 15,
         iconColor: AppColors.primary,
         leading: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Icon(
               firstIcon,
-              size: 45,
+              size: 40,
             ),
           ],
         ),
@@ -200,7 +200,7 @@ class SettingsListile extends StatelessWidget {
             ),
             child: const Icon(
               Icons.arrow_forward_ios_rounded,
-              size: 20,
+              size: 18,
             ),
           ),
         ),
@@ -238,14 +238,14 @@ class _SettingsListile2State extends State<SettingsListile2> {
       ),
       child: ListTile(
         contentPadding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
-        horizontalTitleGap: 20,
+        horizontalTitleGap: 15,
         iconColor: AppColors.primary,
         leading: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Icon(
               widget.firstIcon,
-              size: 45,
+              size: 40,
             ),
           ],
         ),
@@ -268,6 +268,8 @@ class _SettingsListile2State extends State<SettingsListile2> {
         ),
         trailing: GestureDetector(
           child: Container(
+              height: 30,
+              width: 50,
               decoration: BoxDecoration(
                 border: Border.all(
                   color: AppColors.primary,
@@ -275,16 +277,19 @@ class _SettingsListile2State extends State<SettingsListile2> {
                 ),
                 borderRadius: BorderRadius.circular(1000),
               ),
-              child: CupertinoSwitch(
-                value: toggleSwitch,
-                onChanged: (bool value) {
-                  setState(() {
-                    toggleSwitch = value;
-                  });
-                },
-                activeColor: AppColors.primary.withOpacity(0.5),
-                trackColor: Colors.white,
-                thumbColor: AppColors.secondary,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(1000),
+                child: CupertinoSwitch(
+                  value: toggleSwitch,
+                  onChanged: (bool value) {
+                    setState(() {
+                      toggleSwitch = value;
+                    });
+                  },
+                  activeColor: AppColors.primary.withOpacity(0.5),
+                  trackColor: Colors.white,
+                  thumbColor: AppColors.secondary,
+                ),
               )),
         ),
       ),

@@ -14,16 +14,16 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         backgroundColor: const Color(0XFFFAFAFA),
         body: Column(
           children: [
-            Expanded(flex: 2, child: Container()),
             Expanded(
               flex: 2,
-              child: Image.asset('assets/images/logo.png', scale: 2.8),
+              child: Image.asset('assets/images/logo.png', scale: 3),
             ),
             Expanded(
-              flex: 0,
+              flex: 1,
               // ignore: avoid_unnecessary_containers
               child: Container(
                 child: Column(
@@ -31,22 +31,27 @@ class _SearchScreenState extends State<SearchScreen> {
                     Align(
                       alignment: Alignment.centerRight,
                       child: SizedBox(
-                        width: 200,
-                        child: RangeSlider(
-                          inactiveColor: AppColors.primary,
-                          activeColor: AppColors.secondary,
-                          values: _currentRangeValues,
-                          divisions: 5,
-                          max: 50000000,
-                          labels: RangeLabels(
-                            _currentRangeValues.start.round().toString(),
-                            _currentRangeValues.end.round().toString(),
+                        width: 150,
+                        child: SliderTheme(
+                          data: const SliderThemeData(
+                              trackHeight: 5,
+                              overlayColor: AppColors.textColor),
+                          child: RangeSlider(
+                            inactiveColor: AppColors.primary,
+                            activeColor: AppColors.secondary,
+                            values: _currentRangeValues,
+                            divisions: 5,
+                            max: 50000000,
+                            labels: RangeLabels(
+                              _currentRangeValues.start.round().toString(),
+                              _currentRangeValues.end.round().toString(),
+                            ),
+                            onChanged: (RangeValues values) {
+                              setState(() {
+                                _currentRangeValues = values;
+                              });
+                            },
                           ),
-                          onChanged: (RangeValues values) {
-                            setState(() {
-                              _currentRangeValues = values;
-                            });
-                          },
                         ),
                       ),
                     ),

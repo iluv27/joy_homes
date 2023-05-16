@@ -20,26 +20,31 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: Text(title.toString()),
+      title: Text(
+        title.toString(),
+        style: const TextStyle(
+          fontWeight: FontWeight.w500,
+        ),
+      ),
       leading: leading,
       actions: [
         Padding(
-          padding: const EdgeInsets.only(right: 10.0),
+          padding: const EdgeInsets.only(right: 15.0),
           child: Container(
             decoration: BoxDecoration(
               border: Border.all(
                 color: AppColors.primary, // set border color
-                width: 1.5, // set border width
+                width: 1, // set border width
               ),
               shape: BoxShape.circle, // set container shape to circle
             ),
             child: const CircleAvatar(
-              maxRadius: 22,
+              maxRadius: 18,
               backgroundColor: Colors.transparent,
               child: Icon(
                 Icons.person,
                 color: AppColors.textColor,
-                size: 26,
+                size: 22,
               ),
             ),
           ),
@@ -52,7 +57,7 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
             border: Border(
               bottom: BorderSide(
                 color: AppColors.secondary,
-                width: 2.0,
+                width: 1.0,
               ),
             ),
           ),
