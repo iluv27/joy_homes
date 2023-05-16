@@ -1,3 +1,5 @@
+// ignore_for_file: unused_import
+
 import 'package:flutter/material.dart';
 import 'package:joy_homes/theme.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -60,12 +62,12 @@ class HouseItem extends StatelessWidget {
           ),
           child: Stack(
             children: [
-              Positioned(
+              const Positioned(
                 top: 20,
                 right: 10,
                 height: 100,
                 child: Column(
-                  children: const [
+                  children: [
                     Icon(
                       Icons.favorite,
                       size: 50,
@@ -140,11 +142,11 @@ class HouseItem extends StatelessWidget {
                         bottom: 0,
                         height: null,
                         width: MediaQuery.of(context).size.width * 0.94,
-                        child: Row(
+                        child: const Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Row(
-                              children: const [
+                              children: [
                                 Icon(
                                   Icons.bed,
                                   color: AppColors.smallIcons,
@@ -163,7 +165,7 @@ class HouseItem extends StatelessWidget {
                               ],
                             ),
                             Row(
-                              children: const [
+                              children: [
                                 Icon(
                                   Icons.pool,
                                   color: AppColors.smallIcons,
@@ -182,7 +184,7 @@ class HouseItem extends StatelessWidget {
                               ],
                             ),
                             Row(
-                              children: const [
+                              children: [
                                 Icon(
                                   Icons.room_service,
                                   color: AppColors.smallIcons,
@@ -201,7 +203,7 @@ class HouseItem extends StatelessWidget {
                               ],
                             ),
                             Row(
-                              children: const [
+                              children: [
                                 Icon(
                                   Icons.lightbulb,
                                   color: AppColors.smallIcons,

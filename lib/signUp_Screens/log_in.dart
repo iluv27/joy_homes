@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:joy_homes/theme.dart';
 import 'constants.dart';
@@ -81,9 +83,9 @@ class LoginScreen extends StatelessWidget {
                                 ),
                                 fixedSize: const Size(200, 50),
                               ),
-                              child: Row(
+                              child: const Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                children: const [
+                                children: [
                                   Icon(Icons.person),
                                   SizedBox(width: 10.0),
                                   Text('Log in',

@@ -49,36 +49,36 @@ class SettingsColumn extends StatefulWidget {
 class _SettingsColumnState extends State<SettingsColumn> {
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return const Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Padding(
+        Padding(
           padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 15),
           child: Text(
             'Phone',
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
           ),
         ),
-        const SettingsListile(
+        SettingsListile(
           mainTitle: 'Language',
           mainSubtitle: 'English',
           firstIcon: Icons.language,
         ),
-        const SizedBox(
+        SizedBox(
           height: 10,
         ),
-        const SettingsListile(
+        SettingsListile(
             mainTitle: 'Notification',
             mainSubtitle: 'Only when I\'m online',
             firstIcon: Icons.notifications_active),
-        const SizedBox(
+        SizedBox(
           height: 10,
         ),
         SettingsListile2(
             mainTitle: 'Location',
             mainSubtitle: 'On',
             firstIcon: Icons.location_on),
-        const SizedBox(
+        SizedBox(
           height: 10,
         ),
         SettingsListile2(
@@ -100,9 +100,9 @@ class SettingsColumn2 extends StatefulWidget {
 class _SettingsColumn2State extends State<SettingsColumn2> {
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return const Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: const [
+      children: [
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 15),
           child: Text(
@@ -210,7 +210,7 @@ class SettingsListile extends StatelessWidget {
 }
 
 class SettingsListile2 extends StatefulWidget {
-  SettingsListile2(
+  const SettingsListile2(
       {super.key,
       required this.mainTitle,
       required this.mainSubtitle,
