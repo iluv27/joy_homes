@@ -1,10 +1,26 @@
+// ignore_for_file: avoid_types_as_parameter_names
+
 import 'package:flutter/material.dart';
 import 'package:joy_homes/screens/screen_constants.dart';
+import 'package:joy_homes/theme.dart';
 
 class FavouriteScreen extends StatelessWidget {
   FavouriteScreen({super.key});
 
   final List favouriteContainer = [
+    const FavContainer(),
+    const FavContainer(),
+    const FavContainer(),
+    const FavContainer(),
+    const FavContainer(),
+    const FavContainer(),
+    const FavContainer(),
+    const FavContainer(),
+    const FavContainer(),
+    const FavContainer(),
+    const FavContainer(),
+    const FavContainer(),
+    const FavContainer(),
     const FavContainer(),
     const FavContainer(),
     const FavContainer(),
@@ -15,11 +31,25 @@ class FavouriteScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-          backgroundColor: const Color(0XFFFAFAFA),
-          appBar: const AppBarWidget(title: 'Favourites', height: 60),
-          body: Container(
-              padding: const EdgeInsets.only(top: 30, left: 20, right: 20),
-              child: const FavContainer())),
+        backgroundColor: const Color(0XFFFAFAFA),
+        appBar: const AppBarWidget(title: 'Favourites', height: 60),
+        body: Container(
+          padding: const EdgeInsets.only(top: 30, left: 18, right: 18),
+          child: GridView.builder(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                mainAxisSpacing: 0,
+                crossAxisSpacing: 14,
+                childAspectRatio: 0.6,
+                mainAxisExtent: 200),
+            itemCount: favouriteContainer.length,
+            // ignore: non_constant_identifier_names
+            itemBuilder: (BuildContext, index) {
+              return SizedBox(child: favouriteContainer[index]);
+            },
+          ),
+        ),
+      ),
     );
   }
 }
@@ -33,7 +63,6 @@ class FavContainer extends StatelessWidget {
       children: [
         Container(
           height: 170,
-          width: MediaQuery.of(context).size.width * 0.34,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
               color: Colors.white,
@@ -46,25 +75,47 @@ class FavContainer extends StatelessWidget {
                       const Offset(0, 1), // changes the position of the shadow
                 ),
               ]),
-          child: const Padding(
-            padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 14),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(
+                const SizedBox(
                   child: Text(
                     '2 Room Apartment',
-                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        fontSize: 11.5,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.textColor),
                   ),
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      '₦ 750K/Year',
+                      style: TextStyle(
+                          color: AppColors.textColor.withOpacity(0.8),
+                          fontSize: 10,
+                          fontWeight: FontWeight.w500),
+                    ),
+                    const Icon(
+                      Icons.favorite,
+                      size: 22,
+                      color: Colors.red,
+                    ),
+                  ],
                 )
               ],
             ),
           ),
         ),
         Container(
-          height: 120,
-          width: MediaQuery.of(context).size.width * 0.34,
+          height: 110,
           decoration: const BoxDecoration(
             image: DecorationImage(
               image: AssetImage('assets/images/house1.jpg'),
@@ -80,18 +131,3 @@ class FavContainer extends StatelessWidget {
     );
   }
 }
-
-
-//  GridView.builder(
-//             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-//               crossAxisCount: 3,
-//               mainAxisSpacing: 10,
-//               crossAxisSpacing: 10,
-//               childAspectRatio: 0.8,
-//             ),
-//             itemCount: favouriteContainer.length,
-//             itemBuilder: (context, index) {
-//               return Container(height: 200, child: favouriteContainer[index]);
-//             },
-//           ),
-//         ),
