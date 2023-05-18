@@ -12,6 +12,7 @@ import 'signUp_Screens/log_in.dart';
 import 'signUp_Screens/sign_up.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 
