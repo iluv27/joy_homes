@@ -32,7 +32,22 @@ class FavouriteScreen extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         backgroundColor: const Color(0XFFFAFAFA),
-        appBar: const AppBarWidget(title: 'Favourites', height: 60),
+        appBar: AppBarWidget(
+            preferredSize1: PreferredSize(
+              preferredSize: const Size.fromHeight(1.0),
+              child: Container(
+                decoration: const BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(
+                      color: AppColors.secondary,
+                      width: 1.0,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            title: 'Favourites',
+            height: 60),
         body: Container(
           padding: const EdgeInsets.only(top: 30, left: 18, right: 18),
           child: GridView.builder(

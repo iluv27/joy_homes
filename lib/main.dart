@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:joy_homes/theme.dart';
 import 'screens/search.dart';
 import 'screens/favourites.dart';
-import 'screens/home.dart';
+import 'screens/home_screen/home.dart';
 import 'screens/settings.dart';
 import 'screens/upload.dart';
 import 'signUp_Screens/register.dart';

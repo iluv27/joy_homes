@@ -8,14 +8,27 @@ class SettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const SafeArea(
+    return SafeArea(
       child: Scaffold(
-        backgroundColor: Color(0XFFFAFAFA),
+        backgroundColor: const Color(0XFFFAFAFA),
         appBar: AppBarWidget(
+          preferredSize1: PreferredSize(
+            preferredSize: const Size.fromHeight(1.0),
+            child: Container(
+              decoration: const BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(
+                    color: AppColors.secondary,
+                    width: 1.0,
+                  ),
+                ),
+              ),
+            ),
+          ),
           title: 'Settings',
           height: 60,
         ),
-        body: SettingsListview(),
+        body: const SettingsListview(),
       ),
     );
   }
