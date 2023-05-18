@@ -19,11 +19,11 @@ class _SearchScreenState extends State<SearchScreen> {
         body: Column(
           children: [
             Expanded(
-              flex: 2,
-              child: Image.asset('assets/images/logo.png', scale: 3),
+              flex: 1,
+              child: Image.asset('assets/images/logo.png', scale: 4.5),
             ),
             Expanded(
-              flex: 1,
+              flex: 0,
               // ignore: avoid_unnecessary_containers
               child: Container(
                 child: Column(
@@ -34,7 +34,7 @@ class _SearchScreenState extends State<SearchScreen> {
                         width: 150,
                         child: SliderTheme(
                           data: const SliderThemeData(
-                              trackHeight: 5,
+                              trackHeight: 4,
                               overlayColor: AppColors.textColor),
                           child: RangeSlider(
                             inactiveColor: AppColors.primary,
@@ -56,7 +56,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       ),
                     ),
                     Container(
-                      height: 50,
+                      height: 45,
                       margin: const EdgeInsets.symmetric(horizontal: 25),
                       decoration: BoxDecoration(
                         border: Border.all(
@@ -71,7 +71,7 @@ class _SearchScreenState extends State<SearchScreen> {
                             child: DropdownButton(
                               underline: Container(),
                               isExpanded: true,
-                              iconSize: 42,
+                              iconSize: 40,
                               iconEnabledColor:
                                   AppColors.textColor.withOpacity(0.5),
                               hint: Padding(
@@ -100,9 +100,9 @@ class _SearchScreenState extends State<SearchScreen> {
                             ),
                           ),
                           Container(
-                            height: 50,
+                            height: 45,
                             width: 1.2,
-                            color: Colors.brown,
+                            color: AppColors.secondary,
                           ),
                           Expanded(
                             child: DropdownButton(
@@ -147,7 +147,8 @@ class _SearchScreenState extends State<SearchScreen> {
               height: 20,
             ),
             Container(
-              margin: const EdgeInsets.only(left: 25, right: 20),
+              height: 47,
+              margin: const EdgeInsets.symmetric(horizontal: 25),
               decoration: BoxDecoration(
                 border: Border.all(
                   color: AppColors.primary,
@@ -156,7 +157,11 @@ class _SearchScreenState extends State<SearchScreen> {
                 borderRadius: BorderRadius.circular(10),
               ),
               child: TextField(
+                style:
+                    const TextStyle(fontSize: 16, color: AppColors.textColor),
                 cursorColor: AppColors.primary,
+                cursorHeight: 20,
+                cursorWidth: 1,
                 decoration: InputDecoration(
                     prefix: const SizedBox(
                       width: 20,
@@ -179,7 +184,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     )),
               ),
             ),
-            Expanded(flex: 3, child: Container())
+            Expanded(flex: 2, child: Container())
           ],
         ),
       ),

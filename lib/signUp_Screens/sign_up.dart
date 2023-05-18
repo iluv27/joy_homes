@@ -35,7 +35,7 @@ class SignupScreen extends StatelessWidget {
                     flex: 1,
                     child: Image.asset(
                       'assets/images/logo.png', // Replace with your image path
-                      scale: 3,
+                      scale: 4.5,
                     ),
                   ),
                   Expanded(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:joy_homes/theme.dart';
+import 'package:joy_homes/signUp_Screens/register.dart';
 
 class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   final String? title;
@@ -38,13 +39,21 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
               ),
               shape: BoxShape.circle, // set container shape to circle
             ),
-            child: const CircleAvatar(
-              maxRadius: 18,
-              backgroundColor: Colors.transparent,
-              child: Icon(
-                Icons.person,
-                color: AppColors.textColor,
-                size: 22,
+            child: GestureDetector(
+              onTap: () {
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) {
+                  return SignupOptions();
+                }));
+              },
+              child: const CircleAvatar(
+                maxRadius: 18,
+                backgroundColor: Colors.transparent,
+                child: Icon(
+                  Icons.person,
+                  color: AppColors.textColor,
+                  size: 22,
+                ),
               ),
             ),
           ),

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:joy_homes/theme.dart';
 import 'constants.dart';
 import 'package:flutter/gestures.dart';
+import 'sign_up.dart';
 
 class LoginScreen extends StatelessWidget {
   LoginScreen({super.key});
@@ -27,6 +28,9 @@ class LoginScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const LogoTag(),
+                  SizedBox(
+                    height: 30,
+                  ),
                   Expanded(
                     flex: 3,
                     child: Form(
@@ -45,7 +49,7 @@ class LoginScreen extends StatelessWidget {
                               validatorText: 'Please enter your email',
                             ),
                             const SizedBox(
-                              height: 10,
+                              height: 40,
                             ),
                             InputField(
                               textEditingController: password,
@@ -105,6 +109,7 @@ class LoginScreen extends StatelessWidget {
                     child: Text.rich(
                       TextSpan(
                         text: 'Don\'t have an account? ',
+                        style: const TextStyle(fontSize: 16),
                         children: [
                           TextSpan(
                             text: 'Sign up',
@@ -113,7 +118,10 @@ class LoginScreen extends StatelessWidget {
                             ),
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
-                                // Navigate to the About page
+                                Navigator.pushReplacement(context,
+                                    MaterialPageRoute(builder: (context) {
+                                  return SignupScreen();
+                                }));
                               },
                           ),
                           const TextSpan(text: '.'),

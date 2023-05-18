@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:joy_homes/theme.dart';
 import 'package:flutter/gestures.dart';
+import 'log_in.dart';
 
 class BackgroundImage extends StatelessWidget {
   const BackgroundImage({
@@ -32,14 +33,14 @@ class LogoTag extends StatelessWidget {
       children: [
         Image.asset(
           'assets/images/logo.png', // Replace with your image path
-          scale: 3,
+          scale: 4.5,
         ),
         const SizedBox(
-          height: 15,
+          height: 20,
         ),
         const Text(
           'Acquiring Your Dream Home With Ease',
-          style: TextStyle(fontSize: 16, letterSpacing: 1),
+          style: TextStyle(fontSize: 14, letterSpacing: 0.5),
         ),
       ],
     );
@@ -57,15 +58,17 @@ class LastText extends StatelessWidget {
     return Text.rich(
       TextSpan(
         text: 'Already have an account? ',
+        style: const TextStyle(fontSize: 16),
         children: [
           TextSpan(
             text: 'Log in',
-            style: const TextStyle(
-              color: AppColors.secondary,
-            ),
+            style: const TextStyle(color: AppColors.secondary, fontSize: 16),
             recognizer: TapGestureRecognizer()
               ..onTap = () {
-                // Navigate to the About page
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) {
+                  return LoginScreen();
+                }));
               },
           ),
           const TextSpan(text: '.'),

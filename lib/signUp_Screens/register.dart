@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'constants.dart';
+import 'sign_up.dart';
 
 class SignupOptions extends StatelessWidget {
   const SignupOptions({super.key});
@@ -17,11 +18,11 @@ class SignupOptions extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const SizedBox(
-                  height: 200,
+                  height: 150,
                 ),
                 const LogoTag(),
                 const SizedBox(
-                  height: 60,
+                  height: 100,
                 ),
                 SignupButtons(
                   icondata: Icons.fmd_good,
@@ -33,7 +34,7 @@ class SignupOptions extends StatelessWidget {
                 ),
                 const Text(
                   'Or',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                 ),
                 const SizedBox(
                   height: 20,
@@ -41,9 +42,14 @@ class SignupOptions extends StatelessWidget {
                 SignupButtons(
                     icondata: Icons.mail,
                     buttonWords: 'Sign up with Mail',
-                    onPressed: () {}),
+                    onPressed: () {
+                      Navigator.pushReplacement(context,
+                          MaterialPageRoute(builder: (context) {
+                        return SignupScreen();
+                      }));
+                    }),
                 const SizedBox(
-                  height: 60,
+                  height: 100,
                 ),
                 const LastText(),
               ],
