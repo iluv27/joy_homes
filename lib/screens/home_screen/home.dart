@@ -182,11 +182,9 @@ class _HouseItemState extends State<HouseItem> {
                               ),
 
                               //Bottom 4 Items
-                              Positioned(
-                                bottom: 0,
-                                height: null,
-                                width: MediaQuery.of(context).size.width * 0.93,
-                                child: const Row(
+                              const Align(
+                                alignment: Alignment.bottomCenter,
+                                child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
