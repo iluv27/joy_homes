@@ -37,11 +37,10 @@ class SignupScreen extends StatelessWidget {
               top: 200,
               height: MediaQuery.sizeOf(context).height,
               width: MediaQuery.sizeOf(context).width,
-              child: Form(
-                key: _formKey,
-                child: Padding(
-                  padding:
-                      const EdgeInsets.only(left: 30.0, right: 30, top: 30),
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.only(left: 30.0, right: 30, top: 30),
+                child: Form(
+                  key: _formKey,
                   child: Column(
                     children: [
                       InputField(

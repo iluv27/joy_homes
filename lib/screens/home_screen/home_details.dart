@@ -1,162 +1,7 @@
-// ignore_for_file: library_private_types_in_public_api
+// ignore_for_file: library_private_types_in_public_api, avoid_unnecessary_containers
 
 import 'package:flutter/material.dart';
-import '../screen_constants.dart';
 import 'package:joy_homes/theme.dart';
-
-class HomeDetailsScreen extends StatefulWidget {
-  const HomeDetailsScreen({super.key});
-
-  @override
-  State<HomeDetailsScreen> createState() => _HomeDetailsScreenState();
-}
-
-class _HomeDetailsScreenState extends State<HomeDetailsScreen> {
-  int selectedIndex = 0;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBarWidget(
-            leading: IconButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                icon: const Icon(
-                  Icons.arrow_back_ios,
-                  color: AppColors.textColor,
-                )),
-            title: 'House Info',
-            height: 60),
-        body: const HouseInfoToggle());
-  }
-}
-
-class HouseInfoToggle extends StatefulWidget {
-  const HouseInfoToggle({super.key});
-
-  @override
-  _HouseInfoToggleState createState() => _HouseInfoToggleState();
-}
-
-class _HouseInfoToggleState extends State<HouseInfoToggle>
-    with SingleTickerProviderStateMixin {
-  int selectedIndex = 0;
-  bool isContainerVisible = true;
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  void _handleButtonClick(int index) {
-    setState(() {
-      if (selectedIndex != index) {
-        selectedIndex = index;
-      }
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 5.0),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: OutlinedButton.icon(
-                  onPressed: () {
-                    _handleButtonClick(0);
-
-                    // Handle onPressed event for outlined button
-                  },
-                  icon: const Icon(
-                    Icons.info_outline,
-                    color: AppColors.primary,
-                    size: 20,
-                  ), // Add desired icon
-                  label: Text(
-                    'Details',
-                    style: TextStyle(
-                        color: selectedIndex == 0
-                            ? Colors.white
-                            : AppColors.textColor,
-                        fontSize: 16),
-                  ),
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor:
-                        selectedIndex == 0 ? Colors.white : Colors.black,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    side: BorderSide(
-                      color: selectedIndex == 0
-                          ? AppColors.secondary
-                          : AppColors.secondary,
-                    ),
-                    backgroundColor: selectedIndex == 0
-                        ? AppColors.secondary
-                        : Colors.transparent,
-                    minimumSize: const Size(150, 45),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: ElevatedButton.icon(
-                  onPressed: () {
-                    _handleButtonClick(1);
-
-                    // Handle onPressed event for filled button
-                  },
-                  icon: const Icon(
-                    Icons.share_location,
-                    size: 20,
-                    color: AppColors.primary,
-                  ), // Add desired icon
-                  label: Text(
-                    'Locate',
-                    style: TextStyle(
-                        fontSize: 16,
-                        color: selectedIndex == 1
-                            ? Colors.white
-                            : AppColors.textColor),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    side: BorderSide(
-                      color: selectedIndex == 1
-                          ? AppColors.secondary
-                          : AppColors.secondary,
-                    ),
-                    backgroundColor:
-                        selectedIndex == 1 ? AppColors.secondary : Colors.white,
-                    minimumSize: const Size(150, 45),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 20),
-          Expanded(
-            child: Stack(
-              children: [
-                selectedIndex == 0 ? const DetailsPage() : const LocatePage()
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
 
 class DetailsPage extends StatefulWidget {
   const DetailsPage({super.key});
@@ -173,7 +18,7 @@ class _DetailsPageState extends State<DetailsPage> {
         children: [
           Container(
             width: MediaQuery.of(context).size.width,
-            height: 260,
+            height: 250,
             decoration: const BoxDecoration(
               image: DecorationImage(
                 image: AssetImage('assets/images/house1.jpg'),
@@ -215,19 +60,19 @@ class _DetailsPageState extends State<DetailsPage> {
             ),
           ),
           const SizedBox(
-            height: 30,
+            height: 25,
           ),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            height: 110,
-            decoration: const BoxDecoration(
+            height: 200,
+            decoration: BoxDecoration(
               border: Border(
                 top: BorderSide(
-                  color: AppColors.secondary,
+                  color: AppColors.secondary.withOpacity(0.2),
                   width: 1.0,
                 ),
                 bottom: BorderSide(
-                  color: AppColors.secondary,
+                  color: AppColors.secondary.withOpacity(0.2),
                   width: 1.0,
                 ),
               ),
@@ -282,7 +127,8 @@ class _DetailsPageState extends State<DetailsPage> {
 
                 //Bottom 4 Items
                 const Align(
-                  alignment: Alignment.bottomCenter,
+                  alignment: Alignment.center,
+                  widthFactor: 1,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -356,7 +202,27 @@ class _DetailsPageState extends State<DetailsPage> {
                       ),
                     ],
                   ),
-                )
+                ),
+
+                Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 8.0),
+                      child: ElevatedButton(
+                          style: ButtonStyle(
+                            minimumSize: MaterialStateProperty.all<Size>(
+                              const Size(double.infinity, 45),
+                            ),
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                                AppColors.contactColor),
+                          ),
+                          onPressed: () {},
+                          child: const Text(
+                            'Contact Agent',
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.w600),
+                          )),
+                    ))
               ],
             ),
           ),
@@ -491,19 +357,5 @@ class IconContainer extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-class LocatePage extends StatefulWidget {
-  const LocatePage({super.key});
-
-  @override
-  State<LocatePage> createState() => _LocatePageState();
-}
-
-class _LocatePageState extends State<LocatePage> {
-  @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
   }
 }

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:joy_homes/theme.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import '../screen_constants.dart';
-import 'home_details.dart';
+import 'home_constants.dart';
 
 Map<String, List<String>> imageMap = {
   'Category 1': [

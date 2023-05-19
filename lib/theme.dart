@@ -8,4 +8,5 @@ abstract class AppColors {
   static const textColor = Color(0xff14100E);
   static const navColor = Color(0XFF472C18);
   static const smallIcons = Color(0XFF4F81C7);
+  static const contactColor = Color(0XFF009A3E);
 }
