@@ -2,6 +2,16 @@
 
 import 'package:flutter/material.dart';
 import 'package:joy_homes/theme.dart';
+import 'package:carousel_slider/carousel_slider.dart';
+
+final List<String> imgList = [
+  'https://cdn.pixabay.com/photo/2016/11/18/17/46/house-1836070_1280.jpg',
+  'https://cdn.pixabay.com/photo/2016/11/18/17/20/living-room-1835923_1280.jpg',
+  'https://cdn.pixabay.com/photo/2015/10/20/18/57/furniture-998265_1280.jpg',
+  'https://cdn.pixabay.com/photo/2017/08/27/10/16/interior-2685521_1280.jpg',
+  'https://cdn.pixabay.com/photo/2016/12/30/07/59/kitchen-1940174_1280.jpg',
+  'https://cdn.pixabay.com/photo/2014/07/10/17/17/bedroom-389254_1280.jpg'
+];
 
 class DetailsPage extends StatefulWidget {
   const DetailsPage({super.key});
@@ -11,56 +21,110 @@ class DetailsPage extends StatefulWidget {
 }
 
 class _DetailsPageState extends State<DetailsPage> {
+  final CarouselController _controller = CarouselController();
+  int pageIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     return Container(
       child: ListView(
         children: [
-          Container(
-            width: MediaQuery.of(context).size.width,
-            height: 250,
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('assets/images/house1.jpg'),
-                fit: BoxFit.cover,
+          Stack(
+            children: [
+              Container(
+                child: CarouselSlider(
+                  carouselController: _controller,
+                  options: CarouselOptions(
+                    aspectRatio: 16 / 10,
+                    viewportFraction: 1,
+                    onPageChanged: (index, _) {
+                      setState(() {
+                        pageIndex = index;
+                      });
+                    },
+                  ),
+                  items: imgList
+                      .map(
+                        (item) => Container(
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: NetworkImage(item),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                      )
+                      .toList(),
+                ),
               ),
+              SizedBox(
+                height: 255,
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        IconButton(
+                          onPressed: () => _controller.previousPage(),
+                          icon: const Icon(
+                            Icons.arrow_back_ios_new_rounded,
+                            size: 30,
+                            color: Colors.white,
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () => _controller.nextPage(),
+                          icon: const Icon(
+                            Icons.arrow_forward_ios_rounded,
+                            size: 30,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ]),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Container(
+            height: 70,
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              shrinkWrap: true,
+              itemCount: imgList.length,
+              itemBuilder: (BuildContext context, int index) {
+                return GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      pageIndex = index;
+                      _controller.animateToPage(pageIndex);
+                    });
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.all(6),
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: index == pageIndex
+                            ? AppColors.primary
+                            : Colors.grey,
+                        width: 2.0,
+                      ),
+                      borderRadius: BorderRadius.circular(5.0),
+                    ),
+                    child: Image.network(
+                      imgList[index],
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                );
+              },
             ),
           ),
           const SizedBox(
             height: 20,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: SizedBox(
-              height: 50,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: [
-                  Image.asset(
-                    'assets/images/house1.jpg',
-                  ),
-                  const SizedBox(
-                    width: 20,
-                  ),
-                  Image.asset('assets/images/house4.jpg'),
-                  const SizedBox(
-                    width: 20,
-                  ),
-                  Image.asset('assets/images/house2.jpg'),
-                  const SizedBox(
-                    width: 20,
-                  ),
-                  Image.asset('assets/images/house3.jpg'),
-                  const SizedBox(
-                    width: 20,
-                  ),
-                  Image.asset('assets/images/house4.jpg')
-                ],
-              ),
-            ),
-          ),
-          const SizedBox(
-            height: 25,
           ),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),

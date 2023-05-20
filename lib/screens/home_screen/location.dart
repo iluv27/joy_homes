@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, must_be_immutable
+// ignore_for_file: prefer_const_constructors, must_be_immutable, avoid_print
 
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';

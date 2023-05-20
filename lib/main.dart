@@ -54,8 +54,8 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
   int selectedIndex = 0;
 
   static List<Widget> pages = [
-    const SearchScreen(),
     const HomeScreen(),
+    const SearchScreen(),
     FavouriteScreen(),
     const UploadScreen(),
     const SettingsScreen(),
@@ -124,15 +124,15 @@ class _BottomBarItemsState extends State<_BottomBarItems> {
             children: [
               BottomBarItem(
                 selectedIndex: 0,
-                icon: Icons.search_rounded,
-                text: 'Search',
+                icon: Icons.house,
+                text: 'Home',
                 onTap: handleItemSelected,
                 isSelected: selIndex == 0,
               ),
               BottomBarItem(
                 selectedIndex: 1,
-                icon: Icons.house,
-                text: 'House',
+                icon: Icons.search_rounded,
+                text: 'Search',
                 onTap: handleItemSelected,
                 isSelected: selIndex == 1,
               ),

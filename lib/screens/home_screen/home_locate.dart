@@ -1,4 +1,4 @@
-// ignore_for_file: unused_import, avoid_unnecessary_containers
+// ignore_for_file: unused_import, avoid_unnecessary_containers, sized_box_for_whitespace
 
 import 'package:flutter/material.dart';
 import '../screen_constants.dart';
@@ -110,7 +110,7 @@ class _MapScreenState extends State<MapScreen> {
       body: ListView(
         children: [
           Container(
-            height: 300,
+            height: 450,
             child: FlutterMap(
               options: MapOptions(
                 center: brownLocation,
@@ -191,7 +191,7 @@ class _MapScreenState extends State<MapScreen> {
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           Container(
