@@ -3,12 +3,13 @@ import 'package:joy_homes/theme.dart';
 import 'package:joy_homes/signUp_Screens/register.dart';
 
 class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
-  final String? title;
+  final Widget? title;
   final Widget? leading;
   final List<Widget>? actions;
   final Color? backgroundColor;
   final double height;
   final PreferredSizeWidget? preferredSize1;
+  final double? leadingWidth1;
 
   const AppBarWidget(
       {super.key,
@@ -17,18 +18,16 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
       this.actions,
       this.backgroundColor,
       required this.height,
-      this.preferredSize1});
+      this.preferredSize1,
+      this.leadingWidth1});
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
-        title: Text(
-          title.toString(),
-          style: const TextStyle(
-            fontWeight: FontWeight.w500,
-          ),
-        ),
+        centerTitle: false,
+        title: title,
         leading: leading,
+        leadingWidth: leadingWidth1,
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 15.0),

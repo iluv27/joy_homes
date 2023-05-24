@@ -1,193 +1,142 @@
 import 'package:flutter/material.dart';
+import 'package:joy_homes/screens/screen_constants.dart';
 import 'package:joy_homes/theme.dart';
 
-class SearchScreen extends StatefulWidget {
+final List<String> imgList = [
+  'https://cdn.pixabay.com/photo/2016/11/18/17/46/house-1836070_1280.jpg',
+  'https://cdn.pixabay.com/photo/2016/11/18/17/20/living-room-1835923_1280.jpg',
+  'https://cdn.pixabay.com/photo/2015/10/20/18/57/furniture-998265_1280.jpg',
+  'https://cdn.pixabay.com/photo/2017/08/27/10/16/interior-2685521_1280.jpg',
+  'https://cdn.pixabay.com/photo/2016/12/30/07/59/kitchen-1940174_1280.jpg',
+  'https://cdn.pixabay.com/photo/2016/12/30/07/59/kitchen-1940174_1280.jpg',
+  'https://cdn.pixabay.com/photo/2016/12/30/07/59/kitchen-1940174_1280.jpg',
+  'https://cdn.pixabay.com/photo/2016/12/30/07/59/kitchen-1940174_1280.jpg',
+  'https://cdn.pixabay.com/photo/2016/12/30/07/59/kitchen-1940174_1280.jpg',
+  'https://cdn.pixabay.com/photo/2016/12/30/07/59/kitchen-1940174_1280.jpg',
+  'https://cdn.pixabay.com/photo/2016/12/30/07/59/kitchen-1940174_1280.jpg',
+  'https://cdn.pixabay.com/photo/2016/12/30/07/59/kitchen-1940174_1280.jpg',
+  'https://cdn.pixabay.com/photo/2014/07/10/17/17/bedroom-389254_1280.jpg'
+];
+
+class SearchScreen extends StatelessWidget {
   const SearchScreen({super.key});
 
   @override
-  State<SearchScreen> createState() => _SearchScreenState();
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBarWidget(
+          preferredSize1: PreferredSize(
+            preferredSize: const Size.fromHeight(1.0),
+            child: Container(
+              decoration: const BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(
+                    color: AppColors.secondary,
+                    width: 1.0,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          title: Padding(
+            padding: const EdgeInsets.only(left: 10.0),
+            child: Text(
+              'Search',
+              style: const TextStyle(
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+          height: 60),
+      body: SearchScreenDetails(),
+    );
+  }
 }
 
-class _SearchScreenState extends State<SearchScreen> {
-  RangeValues _currentRangeValues = const RangeValues(700000, 15000000);
+class SearchScreenDetails extends StatefulWidget {
+  const SearchScreenDetails({super.key});
+
+  @override
+  State<SearchScreenDetails> createState() => _SearchScreenDetailsState();
+}
+
+class _SearchScreenDetailsState extends State<SearchScreenDetails> {
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        backgroundColor: const Color(0XFFFAFAFA),
-        body: Column(
+    return Column(
+      children: [
+        Row(
           children: [
             Expanded(
-              flex: 1,
-              child: Image.asset('assets/images/logo.png', scale: 4.5),
-            ),
-            Expanded(
-              flex: 0,
-              // ignore: avoid_unnecessary_containers
               child: Container(
-                child: Column(
-                  children: [
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: SizedBox(
-                        width: 150,
-                        child: SliderTheme(
-                          data: const SliderThemeData(
-                              trackHeight: 4,
-                              overlayColor: AppColors.textColor),
-                          child: RangeSlider(
-                            inactiveColor: AppColors.primary,
-                            activeColor: AppColors.secondary,
-                            values: _currentRangeValues,
-                            divisions: 5,
-                            max: 50000000,
-                            labels: RangeLabels(
-                              _currentRangeValues.start.round().toString(),
-                              _currentRangeValues.end.round().toString(),
-                            ),
-                            onChanged: (RangeValues values) {
-                              setState(() {
-                                _currentRangeValues = values;
-                              });
-                            },
-                          ),
-                        ),
-                      ),
-                    ),
-                    Container(
-                      height: 45,
-                      margin: const EdgeInsets.symmetric(horizontal: 25),
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.brown,
-                          width: 1,
-                        ),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: DropdownButton(
-                              underline: Container(),
-                              isExpanded: true,
-                              iconSize: 40,
-                              iconEnabledColor:
-                                  AppColors.textColor.withOpacity(0.5),
-                              hint: Padding(
-                                padding: const EdgeInsets.only(left: 15.0),
-                                child: Text(
-                                  'State',
-                                  style: TextStyle(
-                                      color:
-                                          AppColors.textColor.withOpacity(0.7),
-                                      fontSize: 16),
-                                ),
-                              ),
-                              items: const [
-                                DropdownMenuItem(
-                                  value: 'option1',
-                                  child: Text('Option 1'),
-                                ),
-                                DropdownMenuItem(
-                                  value: 'option2',
-                                  child: Text('Option 2'),
-                                ),
-                              ],
-                              onChanged: (value) {
-                                // Do something with the selected value
-                              },
-                            ),
-                          ),
-                          Container(
-                            height: 45,
-                            width: 1.2,
-                            color: AppColors.secondary,
-                          ),
-                          Expanded(
-                            child: DropdownButton(
-                              underline: Container(),
-                              isExpanded: true,
-                              iconSize: 42,
-                              iconEnabledColor:
-                                  AppColors.textColor.withOpacity(0.5),
-                              hint: Padding(
-                                padding: const EdgeInsets.only(left: 15.0),
-                                child: Text(
-                                  'Area',
-                                  style: TextStyle(
-                                      color:
-                                          AppColors.textColor.withOpacity(0.7),
-                                      fontSize: 16),
-                                ),
-                              ),
-                              items: const [
-                                DropdownMenuItem(
-                                  value: 'option3',
-                                  child: Text('Option 3'),
-                                ),
-                                DropdownMenuItem(
-                                  value: 'option4',
-                                  child: Text('Option 4'),
-                                ),
-                              ],
-                              onChanged: (value) {
-                                // Do something with the selected value
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
+                height: 46,
+                margin: const EdgeInsets.only(
+                    left: 25, top: 30, bottom: 30, right: 0),
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: AppColors.secondary,
+                    width: 1,
+                  ),
+                  borderRadius: BorderRadius.circular(10),
                 ),
-              ),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            Container(
-              height: 47,
-              margin: const EdgeInsets.symmetric(horizontal: 25),
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: AppColors.primary,
-                  width: 1,
-                ),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: TextField(
-                style:
-                    const TextStyle(fontSize: 16, color: AppColors.textColor),
-                cursorColor: AppColors.primary,
-                cursorHeight: 20,
-                cursorWidth: 1,
-                decoration: InputDecoration(
-                    prefix: const SizedBox(
-                      width: 20,
-                    ),
-                    hintText: '2 bedroom apartment?',
-                    border: InputBorder.none,
-                    suffixIcon: Container(
-                      decoration: const BoxDecoration(
-                        color: AppColors.secondary,
-                        borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(10),
-                          bottomRight: Radius.circular(10),
-                        ),
+                child: TextField(
+                  style:
+                      const TextStyle(fontSize: 15, color: AppColors.textColor),
+                  cursorColor: AppColors.primary,
+                  cursorHeight: 20,
+                  cursorWidth: 1,
+                  decoration: InputDecoration(
+                      prefix: const SizedBox(
+                        width: 20,
                       ),
-                      width: 10,
-                      child: IconButton(
-                        icon: const Icon(Icons.search, color: Colors.white),
+                      hintText: '2 bedroom apartment?',
+                      border: InputBorder.none,
+                      suffixIcon: IconButton(
+                        icon:
+                            const Icon(Icons.search, color: AppColors.primary),
                         onPressed: () {},
-                      ),
-                    )),
+                      )),
+                ),
               ),
             ),
-            Expanded(flex: 2, child: Container())
+            Padding(
+              padding: const EdgeInsets.only(right: 10.0),
+              child: IconButton(
+                iconSize: 40,
+                icon: const Icon(Icons.more_vert,
+                    color: Color.fromARGB(255, 115, 57, 16)),
+                onPressed: () {},
+              ),
+            )
           ],
         ),
-      ),
+        Expanded(
+          child: Container(
+            padding: const EdgeInsets.only(left: 18, right: 18),
+            child: GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+                mainAxisSpacing: 10,
+                crossAxisSpacing: 10,
+                childAspectRatio: 0.8,
+              ),
+              itemCount: imgList.length,
+              // ignore: non_constant_identifier_names
+              itemBuilder: (BuildContext, index) {
+                return Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    image: DecorationImage(
+                      image: NetworkImage(imgList[index]),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

@@ -36,7 +36,10 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
           ),
-          title: 'Apartments',
+          title: Image.asset(
+            'assets/images/logo.png',
+            scale: 6.3,
+          ),
           height: 60,
         ),
         body: const HouseContainer(),
@@ -202,12 +205,39 @@ class _HouseItemState extends State<HouseItem> {
                                       ),
                                     ],
                                   ),
-                                  const Text(
-                                    '₦ 750K/Year',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w700),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      const Text(
+                                        '₦ 750K/Year',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w700),
+                                      ),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      Row(
+                                        children: [
+                                          Icon(
+                                            Icons.circle,
+                                            color: const Color.fromARGB(
+                                                255, 9, 255, 108),
+                                            size: 14,
+                                          ),
+                                          const SizedBox(
+                                            width: 5,
+                                          ),
+                                          Text(
+                                            'Available',
+                                            style: TextStyle(
+                                                color: Colors.white
+                                                    .withOpacity(0.7)),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),

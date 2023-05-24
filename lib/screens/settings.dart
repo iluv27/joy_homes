@@ -25,7 +25,15 @@ class SettingsScreen extends StatelessWidget {
               ),
             ),
           ),
-          title: 'Settings',
+          title: Padding(
+            padding: const EdgeInsets.only(left: 10.0),
+            child: Text(
+              'Settings',
+              style: const TextStyle(
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
           height: 60,
         ),
         body: const SettingsListview(),

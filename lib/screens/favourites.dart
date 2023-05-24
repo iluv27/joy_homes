@@ -46,7 +46,15 @@ class FavouriteScreen extends StatelessWidget {
                 ),
               ),
             ),
-            title: 'Favourites',
+            title: Padding(
+              padding: const EdgeInsets.only(left: 10.0),
+              child: Text(
+                'Favourites',
+                style: const TextStyle(
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
             height: 60),
         body: Container(
           padding: const EdgeInsets.only(top: 30, left: 18, right: 18),

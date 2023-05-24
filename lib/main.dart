@@ -56,8 +56,8 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
   static List<Widget> pages = [
     const HomeScreen(),
     const SearchScreen(),
-    FavouriteScreen(),
     const UploadScreen(),
+    FavouriteScreen(),
     const SettingsScreen(),
   ];
 
@@ -138,15 +138,15 @@ class _BottomBarItemsState extends State<_BottomBarItems> {
               ),
               BottomBarItem(
                 selectedIndex: 2,
-                icon: Icons.favorite_border_outlined,
-                text: 'Faves',
+                icon: Icons.add_box_outlined,
+                text: 'Upload',
                 onTap: handleItemSelected,
                 isSelected: selIndex == 2,
               ),
               BottomBarItem(
                 selectedIndex: 3,
-                icon: Icons.add_box_outlined,
-                text: 'Upload',
+                icon: Icons.favorite_border_outlined,
+                text: 'Faves',
                 onTap: handleItemSelected,
                 isSelected: selIndex == 3,
               ),

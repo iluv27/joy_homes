@@ -179,12 +179,37 @@ class _DetailsPageState extends State<DetailsPage> {
                         ),
                       ],
                     ),
-                    const Text(
-                      '₦ 750K/Year',
-                      style: TextStyle(
-                          color: AppColors.textColor,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w700),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        const Text(
+                          '₦ 750K/Year',
+                          style: TextStyle(
+                              color: AppColors.textColor,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w700),
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.circle,
+                              color: const Color.fromARGB(255, 4, 202, 83),
+                              size: 14,
+                            ),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            Text(
+                              'Available',
+                              style: TextStyle(
+                                  color: AppColors.textColor.withOpacity(0.8)),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ],
                 ),
