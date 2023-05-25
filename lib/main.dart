@@ -10,6 +10,7 @@ import 'screens/upload.dart';
 import 'signUp_Screens/register.dart';
 import 'signUp_Screens/log_in.dart';
 import 'signUp_Screens/sign_up.dart';
+import 'profile/profile_main.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,7 +24,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: const MainMenuScreen(),
+      home: SafeArea(child: const MainMenuScreen()),
       theme: ThemeData(
         appBarTheme: const AppBarTheme(
             backgroundColor: Colors.transparent,

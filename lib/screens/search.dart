@@ -69,7 +69,7 @@ class _SearchScreenDetailsState extends State<SearchScreenDetails> {
           children: [
             Expanded(
               child: Container(
-                height: 46,
+                height: 47,
                 margin: const EdgeInsets.only(
                     left: 25, top: 30, bottom: 30, right: 0),
                 decoration: BoxDecoration(
@@ -81,7 +81,7 @@ class _SearchScreenDetailsState extends State<SearchScreenDetails> {
                 ),
                 child: TextField(
                   style:
-                      const TextStyle(fontSize: 15, color: AppColors.textColor),
+                      const TextStyle(fontSize: 16, color: AppColors.textColor),
                   cursorColor: AppColors.primary,
                   cursorHeight: 20,
                   cursorWidth: 1,
