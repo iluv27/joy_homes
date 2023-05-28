@@ -6,7 +6,7 @@ import 'screens/search.dart';
 import 'screens/favourites.dart';
 import 'screens/home_screen/home.dart';
 import 'screens/settings.dart';
-import 'screens/upload.dart';
+import 'screens/upload_screen/upload.dart';
 import 'signUp_Screens/register.dart';
 import 'signUp_Screens/log_in.dart';
 import 'signUp_Screens/sign_up.dart';

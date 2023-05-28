@@ -36,10 +36,10 @@ class FavouriteScreen extends StatelessWidget {
             preferredSize1: PreferredSize(
               preferredSize: const Size.fromHeight(1.0),
               child: Container(
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   border: Border(
                     bottom: BorderSide(
-                      color: AppColors.secondary,
+                      color: AppColors.secondary.withOpacity(0.4),
                       width: 1.0,
                     ),
                   ),
