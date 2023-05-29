@@ -79,52 +79,264 @@ class InputField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      child: TextFormField(
-        controller: textEditingController,
-        onChanged: onInputChanged,
-        cursorWidth: 1.5,
-        cursorHeight: 20,
-        cursorColor: AppColors.primary,
-        style: const TextStyle(color: AppColors.textColor, fontSize: 16),
-        decoration: InputDecoration(
-          labelStyle: TextStyle(color: AppColors.textColor),
-          counterText: '0/100',
-          contentPadding:
-              const EdgeInsets.symmetric(vertical: 14, horizontal: 20),
-          hintText: innerText,
-          hintStyle: TextStyle(color: AppColors.textColor.withOpacity(0.3)),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: AppColors.primary.withOpacity(0.3),
-              width: 1.0,
-            ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(
+            'Tag line',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
           ),
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: AppColors.primary,
-              width: 1.0,
-            ),
+          SizedBox(
+            height: 10,
           ),
-          errorBorder: const OutlineInputBorder(
-            borderSide: BorderSide(
-              color: Color.fromARGB(66, 235, 62, 62),
-              width: 1.0,
+          TextFormField(
+            maxLength: 50,
+            controller: textEditingController,
+            onChanged: onInputChanged,
+            cursorWidth: 1.5,
+            cursorHeight: 20,
+            cursorColor: AppColors.primary,
+            style: const TextStyle(color: AppColors.textColor, fontSize: 16),
+            decoration: InputDecoration(
+              labelStyle: TextStyle(color: AppColors.textColor),
+              counterText: '0/50',
+              contentPadding:
+                  const EdgeInsets.symmetric(vertical: 14, horizontal: 20),
+              hintText: innerText,
+              hintStyle: TextStyle(color: AppColors.textColor.withOpacity(0.3)),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: AppColors.primary.withOpacity(0.8),
+                  width: 1.0,
+                ),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: AppColors.primary.withOpacity(0.3),
+                  width: 1.0,
+                ),
+              ),
+              errorBorder: const OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: Color.fromARGB(66, 235, 62, 62),
+                  width: 1.0,
+                ),
+              ),
+              focusedErrorBorder: const OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: Color.fromARGB(66, 235, 62, 62),
+                  width: 1.0,
+                ),
+              ),
             ),
+            validator: (value) {
+              if (value!.isEmpty) {
+                return validatorText;
+              }
+              return null;
+            },
           ),
-          focusedErrorBorder: const OutlineInputBorder(
-            borderSide: BorderSide(
-              color: Color.fromARGB(66, 235, 62, 62),
-              width: 1.0,
-            ),
-          ),
-        ),
-        validator: (value) {
-          if (value!.isEmpty) {
-            return validatorText;
-          }
-          return null;
-        },
+        ],
       ),
+    );
+  }
+}
+
+class DescriptionTextField extends StatelessWidget {
+  final TextEditingController controller;
+
+  const DescriptionTextField({required this.controller});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Description',
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+        ),
+        SizedBox(height: 8),
+        TextFormField(
+          textAlignVertical: TextAlignVertical.top,
+          textAlign: TextAlign.justify,
+          cursorColor: AppColors.secondary,
+          cursorWidth: 1,
+          expands: true,
+          controller: controller,
+          keyboardType: TextInputType.multiline,
+          maxLines: null,
+          maxLength: 200,
+          decoration: InputDecoration(
+            constraints: BoxConstraints.tightFor(height: 100),
+            contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                width: 1,
+                color: AppColors.primary.withOpacity(0.8),
+              ),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                width: 1,
+                color: AppColors.primary.withOpacity(0.3),
+              ),
+            ),
+            border: OutlineInputBorder(
+              borderSide: BorderSide(
+                width: 1,
+                color: AppColors.primary.withOpacity(0.3),
+              ),
+            ),
+            counterText: '0/200', // Disable the default character counter
+          ),
+          style:
+              TextStyle(fontSize: 16, color: AppColors.textColor, height: 1.3),
+        ),
+      ],
+    );
+  }
+}
+
+class RentTextField extends StatelessWidget {
+  final TextEditingController controller;
+
+  const RentTextField({required this.controller});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Rent',
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+        ),
+        SizedBox(height: 8),
+        Row(
+          children: [
+            Expanded(
+              flex: 4,
+              child: Container(
+                height: 50,
+                child: TextFormField(
+                  cursorColor: AppColors.secondary,
+                  cursorWidth: 1,
+                  controller: controller,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    prefix: Text(
+                      '₦  ',
+                      style: TextStyle(
+                          color: AppColors.contactColor.withOpacity(0.6)),
+                    ),
+                    contentPadding:
+                        EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        width: 1,
+                        color: AppColors.primary.withOpacity(0.8),
+                      ),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        width: 1,
+                        color: AppColors.primary.withOpacity(0.3),
+                      ),
+                    ),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        width: 1,
+                        color: AppColors.primary.withOpacity(0.3),
+                      ),
+                    ),
+                  ),
+                  style: TextStyle(
+                      fontSize: 16, color: AppColors.textColor, height: 1.3),
+                ),
+              ),
+            ),
+            Expanded(
+              flex: 1,
+              child: Center(
+                child: Text(
+                  '/',
+                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.w300),
+                ),
+              ),
+            ),
+            Expanded(
+              flex: 2,
+              child: Container(
+                height: 50,
+                child: TextFormField(
+                  cursorWidth: 1,
+                  decoration: InputDecoration(
+                    contentPadding:
+                        EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        width: 1,
+                        color: AppColors.primary.withOpacity(0.8),
+                      ),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        width: 1,
+                        color: AppColors.primary.withOpacity(0.3),
+                      ),
+                    ),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        width: 1,
+                        color: AppColors.primary.withOpacity(0.3),
+                      ),
+                    ),
+                  ),
+                  style: TextStyle(
+                      fontSize: 16, color: AppColors.textColor, height: 1.3),
+                ),
+              ),
+            ),
+            SizedBox(
+              width: 10,
+            ),
+            Expanded(
+              flex: 2,
+              child: Container(
+                height: 50,
+                child: TextFormField(
+                  cursorWidth: 1,
+                  decoration: InputDecoration(
+                    contentPadding:
+                        EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        width: 1,
+                        color: AppColors.primary.withOpacity(0.8),
+                      ),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        width: 1,
+                        color: AppColors.primary.withOpacity(0.3),
+                      ),
+                    ),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        width: 1,
+                        color: AppColors.primary.withOpacity(0.3),
+                      ),
+                    ),
+                  ),
+                  style: TextStyle(
+                      fontSize: 16, color: AppColors.textColor, height: 1.3),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

@@ -29,7 +29,7 @@ class UploadDetails extends StatelessWidget {
 }
 
 class UploadDetailsEntry extends StatefulWidget {
-  const UploadDetailsEntry({super.key});
+  const UploadDetailsEntry({Key? key});
 
   @override
   State<UploadDetailsEntry> createState() => _UploadDetailsEntryState();
@@ -37,41 +37,42 @@ class UploadDetailsEntry extends StatefulWidget {
 
 class _UploadDetailsEntryState extends State<UploadDetailsEntry> {
   final CarouselController _controller = CarouselController();
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(
-          height: MediaQuery.of(context).size.width * 0.75,
-          child: Stack(children: [
-            Container(
-              child: CarouselSlider(
-                carouselController: _controller,
-                options: CarouselOptions(
-                  aspectRatio: 16 / 12,
-                  viewportFraction: 1,
-                ),
-                items: selectedImages
-                    .map(
-                      (item) => Container(
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: FileImage(item),
-                            fit: BoxFit.cover,
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          SizedBox(
+            height: MediaQuery.of(context).size.width * 0.75,
+            child: Stack(
+              children: [
+                Container(
+                  height: MediaQuery.of(context).size.width * 0.75,
+                  child: CarouselSlider(
+                    carouselController: _controller,
+                    options: CarouselOptions(
+                      aspectRatio: 16 / 12,
+                      viewportFraction: 1,
+                    ),
+                    items: selectedImages
+                        .map(
+                          (item) => Container(
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: FileImage(item),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                    )
-                    .toList(),
-              ),
-            ),
-            SizedBox(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.width,
-              child: Stack(children: [
-                Align(
-                  alignment: Alignment(0, -0.1),
-                  child: Row(
+                        )
+                        .toList(),
+                  ),
+                ),
+                Positioned.fill(
+                  child: Align(
+                    alignment: Alignment(0, -0.1),
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         IconButton(
@@ -90,14 +91,16 @@ class _UploadDetailsEntryState extends State<UploadDetailsEntry> {
                             color: Colors.white,
                           ),
                         ),
-                      ]),
+                      ],
+                    ),
+                  ),
                 ),
-              ]),
+              ],
             ),
-          ]),
-        ),
-        UploadDetailsForm()
-      ],
+          ),
+          UploadDetailsForm(),
+        ],
+      ),
     );
   }
 }
@@ -111,65 +114,70 @@ class UploadDetailsForm extends StatefulWidget {
 
 class _UploadDetailsFormState extends State<UploadDetailsForm> {
   ScrollController? scrollController;
+
   final _formKey = GlobalKey<FormState>();
-  TextEditingController email = TextEditingController();
-  TextEditingController password = TextEditingController();
+
+  TextEditingController tagLine = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
+  TextEditingController rentController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: MediaQuery.of(context).size.width * 1,
-      child: ListView(
-        controller: scrollController,
-        children: [
-          Form(
+      height: MediaQuery.of(context).size.height * 0.8,
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 50),
+          child: Form(
             key: _formKey,
-            child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 30.0, vertical: 50),
-              child: Column(
-                children: [
-                  InputField(
-                    textEditingController: email,
-                    onInputChanged: ((value) {
-                      value = email.text;
-                    }),
-                    innerText: '2 bedroom flat',
-                    validatorText: 'Please enter your email',
+            child: Column(
+              children: [
+                InputField(
+                  textEditingController: tagLine,
+                  onInputChanged: ((value) {
+                    value = tagLine.text;
+                  }),
+                  innerText: '2 bedroom flat',
+                  validatorText: 'Please enter your email',
+                ),
+                const SizedBox(height: 10),
+                DescriptionTextField(controller: descriptionController),
+                const SizedBox(height: 10),
+                RentTextField(controller: rentController),
+                const SizedBox(height: 10),
+                ElevatedButton(
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      _formKey.currentState!.save();
+                      // Send data to the server
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.secondary,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    fixedSize: const Size(200, 50),
                   ),
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        _formKey.currentState!.save();
-                        // Send data to the server
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.secondary,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
+                  child: const Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.person),
+                      SizedBox(width: 10.0),
+                      Text(
+                        'Log in',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
-                      fixedSize: const Size(200, 50),
-                    ),
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.person),
-                        SizedBox(width: 10.0),
-                        Text('Log in',
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.w600)),
-                      ],
-                    ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
-        ],
+        ),
       ),
     );
   }
