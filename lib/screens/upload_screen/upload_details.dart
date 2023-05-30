@@ -257,8 +257,9 @@ class _UploadDetailsFormState extends State<UploadDetailsForm> {
                     toggleTitle: 'Is this apartment currently available?'),
 
                 const SizedBox(height: 40),
-                ElevatedButton(
-                  onPressed: () {
+                BottomNavButton(
+                  formKey: _formKey,
+                  bottomFunctionality: () {
                     if (_formKey.currentState!.validate()) {
                       _formKey.currentState!.save();
                       // Send data to the server
@@ -268,27 +269,8 @@ class _UploadDetailsFormState extends State<UploadDetailsForm> {
                       return UploadLocate();
                     }));
                   },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.secondary,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    fixedSize: const Size(double.infinity, 55),
-                  ),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Next',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      SizedBox(width: 5.0),
-                      Icon(Icons.navigate_next),
-                    ],
-                  ),
+                  buttonTitle: 'Next',
+                  buttonIcon: Icon(Icons.navigate_next),
                 ),
               ],
             ),

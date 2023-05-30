@@ -178,24 +178,297 @@ class _MapScreenState extends State<_MapScreen> {
               padding:
                   const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10),
               child: Form(
-                  key: _formKey,
-                  child: Column(
-                    children: [
-                      InputField(
-                        inputTitle: 'Address 1',
-                        textEditingController: address,
-                        onInputChanged: ((value) {
-                          value = address.text;
-                        }),
-                        innerText: 'House Location?',
-                        validatorText: 'Please enter the address',
-                      ),
-                    ],
-                  )),
+                key: _formKey,
+                child: Column(
+                  children: [
+                    InputField(
+                      inputTitle: 'Address 1',
+                      textEditingController: address,
+                      onInputChanged: ((value) {
+                        value = address.text;
+                      }),
+                      innerText: 'House Location?',
+                      validatorText: 'Please enter the address',
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    _LocateDropdownBtn(),
+                    SizedBox(
+                      height: 40,
+                    ),
+                    BottomNavButton(
+                      formKey: _formKey,
+                      bottomFunctionality: () {
+                        if (_formKey.currentState!.validate()) {
+                          _formKey.currentState!.save();
+                          // Send data to the server
+                        }
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (Context) {
+                          return UploadLocate();
+                        }));
+                      },
+                      buttonTitle: 'Locate House',
+                      buttonIcon: Container(),
+                    ),
+                    SizedBox(
+                      height: 40,
+                    ),
+                    InputField(
+                      inputTitle: 'Address 2 (Optional)',
+                      textEditingController: address,
+                      onInputChanged: ((value) {
+                        value = address.text;
+                      }),
+                      innerText: 'No 2, Bola Street, Wuse',
+                      validatorText: 'Please enter the address',
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Expanded(
+                          child: _ButtonCode(
+                            buttonTitle: 'Longitude',
+                            buttonHint: '102.30',
+                          ),
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Expanded(
+                          child: _ButtonCode(
+                            buttonTitle: 'Latitude',
+                            buttonHint: '203.45',
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 40,
+                    ),
+                    BottomNavButton(
+                      formKey: _formKey,
+                      bottomFunctionality: () {
+                        if (_formKey.currentState!.validate()) {
+                          _formKey.currentState!.save();
+                          // Send data to the server
+                        }
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (Context) {
+                          return UploadLocate();
+                        }));
+                      },
+                      buttonTitle: 'Upload',
+                      buttonIcon: Container(),
+                    ),
+                  ],
+                ),
+              ),
             ),
           )
         ],
       ),
+    );
+  }
+}
+
+// SIDE BY SIDE BUTTON CODE
+class _ButtonCode extends StatefulWidget {
+  _ButtonCode({super.key, required this.buttonTitle, required this.buttonHint});
+
+  final TextEditingController controller = TextEditingController();
+  final String buttonTitle;
+  final String buttonHint;
+
+  @override
+  State<_ButtonCode> createState() => __ButtonCodeState();
+}
+
+class __ButtonCodeState extends State<_ButtonCode> {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          widget.buttonTitle,
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+        ),
+        SizedBox(height: 8),
+        Container(
+          height: 50,
+          child: TextFormField(
+            cursorColor: AppColors.secondary,
+            cursorWidth: 1,
+            controller: widget.controller,
+            keyboardType: TextInputType.number,
+            decoration: InputDecoration(
+              hintText: widget.buttonHint,
+              hintStyle: TextStyle(color: AppColors.textColor.withOpacity(0.3)),
+              contentPadding:
+                  EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  width: 1,
+                  color: AppColors.primary.withOpacity(0.8),
+                ),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  width: 1,
+                  color: AppColors.primary.withOpacity(0.3),
+                ),
+              ),
+              border: OutlineInputBorder(
+                borderSide: BorderSide(
+                  width: 1,
+                  color: AppColors.primary.withOpacity(0.3),
+                ),
+              ),
+            ),
+            style: TextStyle(
+                fontSize: 16, color: AppColors.textColor, height: 1.3),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+// DROPDOWN BUTTON CODE
+
+class _LocateDropdownBtn extends StatefulWidget {
+  const _LocateDropdownBtn({super.key});
+
+  @override
+  State<_LocateDropdownBtn> createState() => __LocateDropdownBtnState();
+}
+
+class __LocateDropdownBtnState extends State<_LocateDropdownBtn> {
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          flex: 1,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'State',
+                style: TextStyle(
+                    fontSize: 16,
+                    color: AppColors.textColor,
+                    fontWeight: FontWeight.w500),
+              ),
+              SizedBox(
+                height: 8,
+              ),
+              Container(
+                height: 50,
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: AppColors.primary,
+                    width: 1,
+                  ),
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: DropdownButton(
+                  underline: Container(),
+                  isExpanded: true,
+                  iconSize: 40,
+                  iconEnabledColor: AppColors.textColor.withOpacity(0.5),
+                  hint: Padding(
+                    padding: const EdgeInsets.only(left: 15.0),
+                    child: Text(
+                      'FCT',
+                      style: TextStyle(
+                          color: AppColors.textColor.withOpacity(0.3),
+                          fontSize: 16),
+                    ),
+                  ),
+                  items: const [
+                    DropdownMenuItem(
+                      value: 'option1',
+                      child: Text('Option 1'),
+                    ),
+                    DropdownMenuItem(
+                      value: 'option2',
+                      child: Text('Option 2'),
+                    ),
+                  ],
+                  onChanged: (value) {
+                    // Do something with the selected value
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+        SizedBox(
+          width: 10,
+        ),
+        Expanded(
+          flex: 1,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'LGA',
+                style: TextStyle(
+                    fontSize: 16,
+                    color: AppColors.textColor,
+                    fontWeight: FontWeight.w500),
+              ),
+              SizedBox(
+                height: 8,
+              ),
+              Container(
+                height: 50,
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: AppColors.primary,
+                    width: 1,
+                  ),
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: DropdownButton(
+                  underline: Container(),
+                  isExpanded: true,
+                  iconSize: 42,
+                  iconEnabledColor: AppColors.textColor.withOpacity(0.5),
+                  hint: Padding(
+                    padding: const EdgeInsets.only(left: 15.0),
+                    child: Text(
+                      'Municipal Area',
+                      style: TextStyle(
+                          color: AppColors.textColor.withOpacity(0.3),
+                          fontSize: 16),
+                    ),
+                  ),
+                  items: const [
+                    DropdownMenuItem(
+                      value: 'option3',
+                      child: Text('Option 3'),
+                    ),
+                    DropdownMenuItem(
+                      value: 'option4',
+                      child: Text('Option 4'),
+                    ),
+                  ],
+                  onChanged: (value) {
+                    // Do something with the selected value
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

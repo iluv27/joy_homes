@@ -86,7 +86,10 @@ class InputField extends StatelessWidget {
         children: [
           Text(
             inputTitle,
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+            style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                color: AppColors.textColor),
           ),
           SizedBox(
             height: 8,
@@ -603,6 +606,51 @@ class _ToggleDetailsButtonsState extends State<ToggleDetailsButtons> {
           ],
         ),
       ],
+    );
+  }
+}
+
+// BOTTOM NAV BUTTON
+class BottomNavButton extends StatelessWidget {
+  BottomNavButton(
+      {super.key,
+      required GlobalKey<FormState> formKey,
+      required this.bottomFunctionality,
+      required this.buttonTitle,
+      required this.buttonIcon})
+      : _formKey = formKey;
+
+  final GlobalKey<FormState> _formKey;
+
+  final Function()? bottomFunctionality;
+  final String buttonTitle;
+  final Widget buttonIcon;
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: bottomFunctionality,
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AppColors.secondary,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(5.0),
+        ),
+        fixedSize: const Size(double.infinity, 55),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            buttonTitle,
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          SizedBox(width: 5.0),
+          buttonIcon,
+        ],
+      ),
     );
   }
 }
