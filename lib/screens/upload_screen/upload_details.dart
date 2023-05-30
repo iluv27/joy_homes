@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:joy_homes/screens/upload_screen/upload_constants.dart';
+import 'package:joy_homes/screens/upload_screen/upload_locate.dart';
 import 'package:joy_homes/theme.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
@@ -124,15 +125,16 @@ class _UploadDetailsFormState extends State<UploadDetailsForm> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.8,
+      height: MediaQuery.of(context).size.height * 0.9,
       child: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 50),
+          padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 30),
           child: Form(
             key: _formKey,
             child: Column(
               children: [
                 InputField(
+                  inputTitle: 'Tag line',
                   textEditingController: tagLine,
                   onInputChanged: ((value) {
                     value = tagLine.text;
@@ -140,37 +142,151 @@ class _UploadDetailsFormState extends State<UploadDetailsForm> {
                   innerText: '2 bedroom flat',
                   validatorText: 'Please enter your email',
                 ),
-                const SizedBox(height: 10),
                 DescriptionTextField(controller: descriptionController),
-                const SizedBox(height: 10),
                 RentTextField(controller: rentController),
-                const SizedBox(height: 10),
+                SizedBox(
+                  height: 30,
+                ),
+
+                // THIS IS THE FIRST ROW
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Expanded(
+                      child: CountFormField(
+                        labelText: 'Bedroom',
+                        initialValue: 2,
+                        minValue: 0,
+                        maxValue: 10,
+                      ),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Expanded(
+                      child: CountFormField(
+                        labelText: 'Bathroom',
+                        initialValue: 3,
+                        minValue: 0,
+                        maxValue: 10,
+                      ),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Expanded(
+                      child: CountFormField(
+                        labelText: 'Toilet',
+                        initialValue: 1,
+                        minValue: 0,
+                        maxValue: 10,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+
+                // THIS IS THE SECOND ROW
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Expanded(
+                      child: CountFormField(
+                        labelText: 'Water Heater',
+                        initialValue: 1,
+                        minValue: 0,
+                        maxValue: 10,
+                      ),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Expanded(
+                      child: CountFormField(
+                        labelText: 'Wardrobe',
+                        initialValue: 1,
+                        minValue: 0,
+                        maxValue: 10,
+                      ),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Expanded(
+                      child: CountFormField(
+                        labelText: 'Balcony',
+                        initialValue: 0,
+                        minValue: 0,
+                        maxValue: 10,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+
+                // WATER HEATER AND PARKING SPACE CODE
+
+                Row(
+                  children: [
+                    Expanded(
+                        child: ToggleDetailsButtons(
+                      sizedBoxWidth: 5,
+                      toggleTitle: 'Fences',
+                    )),
+                    SizedBox(
+                      width: 25,
+                    ),
+                    Expanded(
+                        child: ToggleDetailsButtons(
+                      toggleTitle: 'Parking Space',
+                      sizedBoxWidth: 5,
+                    )),
+                  ],
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+
+                // AVAILABE SPACE CODE
+                ToggleDetailsButtons(
+                    sizedBoxWidth: 10,
+                    toggleTitle: 'Is this apartment currently available?'),
+
+                const SizedBox(height: 40),
                 ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
                       _formKey.currentState!.save();
                       // Send data to the server
                     }
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (Context) {
+                      return UploadLocate();
+                    }));
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.secondary,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
-                    fixedSize: const Size(200, 50),
+                    fixedSize: const Size(double.infinity, 55),
                   ),
                   child: const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.person),
-                      SizedBox(width: 10.0),
                       Text(
-                        'Log in',
+                        'Next',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
+                      SizedBox(width: 5.0),
+                      Icon(Icons.navigate_next),
                     ],
                   ),
                 ),

@@ -68,9 +68,11 @@ class InputField extends StatelessWidget {
       required this.innerText,
       required this.validatorText,
       this.onInputChanged,
-      this.textEditingController})
+      this.textEditingController,
+      required this.inputTitle})
       : super(key: key);
 
+  final String inputTitle;
   final String innerText;
   final String validatorText;
   final Function(String)? onInputChanged;
@@ -83,11 +85,11 @@ class InputField extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(
-            'Tag line',
+            inputTitle,
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
           ),
           SizedBox(
-            height: 10,
+            height: 8,
           ),
           TextFormField(
             maxLength: 50,
@@ -168,6 +170,8 @@ class DescriptionTextField extends StatelessWidget {
           maxLines: null,
           maxLength: 200,
           decoration: InputDecoration(
+            hintText: 'Write a short decription',
+            hintStyle: TextStyle(color: AppColors.textColor.withOpacity(0.3)),
             constraints: BoxConstraints.tightFor(height: 100),
             contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
             focusedBorder: OutlineInputBorder(
@@ -198,10 +202,25 @@ class DescriptionTextField extends StatelessWidget {
   }
 }
 
-class RentTextField extends StatelessWidget {
+class RentTextField extends StatefulWidget {
   final TextEditingController controller;
 
   const RentTextField({required this.controller});
+
+  @override
+  State<RentTextField> createState() => _RentTextFieldState();
+}
+
+class _RentTextFieldState extends State<RentTextField> {
+  int selectedIndex = 0;
+
+  void _handleButtonClick(int index) {
+    setState(() {
+      if (selectedIndex != index) {
+        selectedIndex = index;
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -222,7 +241,7 @@ class RentTextField extends StatelessWidget {
                 child: TextFormField(
                   cursorColor: AppColors.secondary,
                   cursorWidth: 1,
-                  controller: controller,
+                  controller: widget.controller,
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                     prefix: Text(
@@ -269,32 +288,35 @@ class RentTextField extends StatelessWidget {
               flex: 2,
               child: Container(
                 height: 50,
-                child: TextFormField(
-                  cursorWidth: 1,
-                  decoration: InputDecoration(
-                    contentPadding:
-                        EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        width: 1,
-                        color: AppColors.primary.withOpacity(0.8),
-                      ),
+                child: OutlinedButton(
+                  onPressed: () {
+                    _handleButtonClick(0);
+                  },
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor:
+                        selectedIndex == 0 ? Colors.white : Colors.black,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5),
                     ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        width: 1,
-                        color: AppColors.primary.withOpacity(0.3),
-                      ),
+                    side: BorderSide(
+                      color: selectedIndex == 0
+                          ? AppColors.secondary
+                          : AppColors.primary.withOpacity(0.3),
                     ),
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        width: 1,
-                        color: AppColors.primary.withOpacity(0.3),
-                      ),
-                    ),
+                    backgroundColor: selectedIndex == 0
+                        ? AppColors.secondary
+                        : Colors.transparent,
+                    minimumSize: const Size(150, 45),
                   ),
-                  style: TextStyle(
-                      fontSize: 16, color: AppColors.textColor, height: 1.3),
+                  child: Text(
+                    'Year',
+                    style: TextStyle(
+                        color: selectedIndex == 0
+                            ? Colors.white
+                            : AppColors.textColor,
+                        fontSize: 14.5,
+                        fontWeight: FontWeight.w600),
+                  ),
                 ),
               ),
             ),
@@ -305,32 +327,276 @@ class RentTextField extends StatelessWidget {
               flex: 2,
               child: Container(
                 height: 50,
-                child: TextFormField(
-                  cursorWidth: 1,
-                  decoration: InputDecoration(
-                    contentPadding:
-                        EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        width: 1,
-                        color: AppColors.primary.withOpacity(0.8),
-                      ),
+                child: OutlinedButton(
+                  onPressed: () {
+                    _handleButtonClick(1);
+                  },
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor:
+                        selectedIndex == 1 ? Colors.white : Colors.black,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5),
                     ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        width: 1,
-                        color: AppColors.primary.withOpacity(0.3),
-                      ),
+                    side: BorderSide(
+                      color: selectedIndex == 1
+                          ? AppColors.secondary
+                          : AppColors.primary.withOpacity(0.3),
                     ),
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        width: 1,
-                        color: AppColors.primary.withOpacity(0.3),
-                      ),
-                    ),
+                    backgroundColor: selectedIndex == 1
+                        ? AppColors.secondary
+                        : Colors.transparent,
+                    minimumSize: const Size(150, 45),
                   ),
-                  style: TextStyle(
-                      fontSize: 16, color: AppColors.textColor, height: 1.3),
+                  child: Text(
+                    'Month',
+                    style: TextStyle(
+                        color: selectedIndex == 1
+                            ? Colors.white
+                            : AppColors.textColor,
+                        fontSize: 14.5,
+                        fontWeight: FontWeight.w600),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class CountFormField extends StatefulWidget {
+  final String labelText;
+  final int initialValue;
+  final int minValue;
+  final int maxValue;
+
+  const CountFormField({
+    required this.labelText,
+    required this.initialValue,
+    required this.minValue,
+    required this.maxValue,
+  });
+
+  @override
+  _CountFormFieldState createState() => _CountFormFieldState();
+}
+
+class _CountFormFieldState extends State<CountFormField> {
+  late TextEditingController _controller;
+  late int _count;
+  bool _isValueSelected = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _count = widget.initialValue;
+    _isValueSelected = false;
+    _controller = TextEditingController(text: _count.toString());
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _incrementCount() {
+    setState(() {
+      _count = (_count < widget.maxValue) ? _count + 1 : _count;
+      _controller.text = _count.toString();
+      _isValueSelected = true;
+    });
+  }
+
+  void _decrementCount() {
+    setState(() {
+      _count = (_count > widget.minValue) ? _count - 1 : _count;
+      _controller.text = _count.toString();
+      _isValueSelected = true;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final textStyle = TextStyle(
+      fontSize: 18,
+      color: _isValueSelected ? AppColors.textColor : Colors.grey,
+    );
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          widget.labelText,
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+        ),
+        SizedBox(height: 8),
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: 20),
+          decoration: BoxDecoration(
+            border: Border.all(
+                color: _isValueSelected
+                    ? AppColors.primary.withOpacity(0.7)
+                    : AppColors.primary.withOpacity(0.3),
+                width: 1),
+            borderRadius: BorderRadius.circular(5),
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: TextFormField(
+                  controller: _controller,
+                  keyboardType: TextInputType.number,
+                  style: textStyle, // Apply the textStyle
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                  ),
+                  readOnly: true,
+                ),
+              ),
+              Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IconButton(
+                      padding: EdgeInsets.zero,
+                      visualDensity:
+                          VisualDensity(horizontal: -4.0, vertical: -4.0),
+                      onPressed: _incrementCount,
+                      icon: Icon(
+                        Icons.arrow_drop_up_rounded,
+                        size: 40,
+                      ),
+                    ),
+                    IconButton(
+                      padding: EdgeInsets.zero,
+                      visualDensity:
+                          VisualDensity(horizontal: -4.0, vertical: -4.0),
+                      onPressed: _decrementCount,
+                      icon: Icon(
+                        Icons.arrow_drop_down_rounded,
+                        size: 40,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class ToggleDetailsButtons extends StatefulWidget {
+  const ToggleDetailsButtons(
+      {super.key, required this.toggleTitle, required this.sizedBoxWidth});
+
+  final String toggleTitle;
+  final double sizedBoxWidth;
+
+  @override
+  State<ToggleDetailsButtons> createState() => _ToggleDetailsButtonsState();
+}
+
+class _ToggleDetailsButtonsState extends State<ToggleDetailsButtons> {
+  int selectedIndex = 0;
+
+  void _handleButtonClick(int index) {
+    setState(() {
+      if (selectedIndex != index) {
+        selectedIndex = index;
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          widget.toggleTitle,
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+        ),
+        SizedBox(height: 8),
+        Row(
+          children: [
+            Expanded(
+              flex: 1,
+              child: Container(
+                height: 50,
+                child: OutlinedButton(
+                  onPressed: () {
+                    _handleButtonClick(0);
+                  },
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor:
+                        selectedIndex == 0 ? Colors.white : Colors.black,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    side: BorderSide(
+                      color: selectedIndex == 0
+                          ? AppColors.secondary
+                          : AppColors.primary.withOpacity(0.3),
+                    ),
+                    backgroundColor: selectedIndex == 0
+                        ? AppColors.secondary
+                        : Colors.transparent,
+                    minimumSize: const Size(150, 45),
+                  ),
+                  child: Text(
+                    'Yes',
+                    style: TextStyle(
+                        color: selectedIndex == 0
+                            ? Colors.white
+                            : AppColors.textColor,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+              width: widget.sizedBoxWidth,
+            ),
+            Expanded(
+              flex: 1,
+              child: Container(
+                height: 50,
+                child: OutlinedButton(
+                  onPressed: () {
+                    _handleButtonClick(1);
+                  },
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor:
+                        selectedIndex == 1 ? Colors.white : Colors.black,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    side: BorderSide(
+                      color: selectedIndex == 1
+                          ? AppColors.secondary
+                          : AppColors.primary.withOpacity(0.3),
+                    ),
+                    backgroundColor: selectedIndex == 1
+                        ? AppColors.secondary
+                        : Colors.transparent,
+                    minimumSize: const Size(150, 45),
+                  ),
+                  child: Text(
+                    'No',
+                    style: TextStyle(
+                        color: selectedIndex == 1
+                            ? Colors.white
+                            : AppColors.textColor,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500),
+                  ),
                 ),
               ),
             ),

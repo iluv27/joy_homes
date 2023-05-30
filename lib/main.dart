@@ -33,7 +33,6 @@ class MyApp extends StatelessWidget {
                 color: AppColors.textColor,
                 fontSize: 22,
                 fontWeight: FontWeight.w600),
-            centerTitle: true,
             toolbarHeight: 60),
       ),
     );
