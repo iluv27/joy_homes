@@ -326,9 +326,9 @@ class _DetailsPageState extends State<DetailsPage> {
                 const Text(
                   'Information',
                   style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                  ),
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.textColor),
                 ),
                 const SizedBox(height: 10),
                 Text(

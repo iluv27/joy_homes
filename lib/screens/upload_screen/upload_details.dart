@@ -3,6 +3,7 @@ import 'package:joy_homes/screens/upload_screen/upload_constants.dart';
 import 'package:joy_homes/screens/upload_screen/upload_locate.dart';
 import 'package:joy_homes/theme.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'upload_popUp.dart';
 
 class UploadDetails extends StatelessWidget {
   const UploadDetails({super.key});
@@ -24,7 +25,19 @@ class UploadDetails extends StatelessWidget {
         title: Text('Go back'),
         centerTitle: false,
       ),
-      body: UploadDetailsEntry(),
+      body: Builder(
+        builder: (BuildContext context) {
+          Future.delayed(Duration.zero, () {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return RegisterWidget();
+              },
+            );
+          });
+          return UploadDetailsEntry();
+        },
+      ),
     );
   }
 }
