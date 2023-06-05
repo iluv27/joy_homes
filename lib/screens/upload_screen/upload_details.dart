@@ -6,39 +6,39 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'upload_popUp.dart';
 
 class UploadDetails extends StatelessWidget {
-  const UploadDetails({super.key});
+  UploadDetails({super.key});
+
+  bool _dialogShown = false;
 
   @override
   Widget build(BuildContext context) {
+    if (!_dialogShown) {
+      _dialogShown = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return RegisterWidget();
+          },
+        );
+      });
+    }
     return Scaffold(
-      appBar: AppBar(
-        leadingWidth: 40,
-        leading: IconButton(
-            padding: EdgeInsets.only(left: 20),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: Icon(
-              Icons.arrow_back_ios,
-              color: AppColors.textColor,
-            )),
-        title: Text('Go back'),
-        centerTitle: false,
-      ),
-      body: Builder(
-        builder: (BuildContext context) {
-          Future.delayed(Duration.zero, () {
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return RegisterWidget();
+        appBar: AppBar(
+          leadingWidth: 40,
+          leading: IconButton(
+              padding: EdgeInsets.only(left: 20),
+              onPressed: () {
+                Navigator.pop(context);
               },
-            );
-          });
-          return UploadDetailsEntry();
-        },
-      ),
-    );
+              icon: Icon(
+                Icons.arrow_back_ios,
+                color: AppColors.textColor,
+              )),
+          title: Text('Go back'),
+          centerTitle: false,
+        ),
+        body: UploadDetailsEntry());
   }
 }
 

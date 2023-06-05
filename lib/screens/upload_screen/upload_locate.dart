@@ -15,7 +15,7 @@ class UploadLocate extends StatelessWidget {
 }
 
 class _MapScreen extends StatefulWidget {
-  const _MapScreen({super.key});
+  const _MapScreen();
 
   @override
   // ignore: library_private_types_in_public_api
@@ -278,7 +278,7 @@ class _MapScreenState extends State<_MapScreen> {
 
 // SIDE BY SIDE BUTTON CODE
 class _ButtonCode extends StatefulWidget {
-  _ButtonCode({super.key, required this.buttonTitle, required this.buttonHint});
+  _ButtonCode({required this.buttonTitle, required this.buttonHint});
 
   final TextEditingController controller = TextEditingController();
   final String buttonTitle;
@@ -342,7 +342,7 @@ class __ButtonCodeState extends State<_ButtonCode> {
 // DROPDOWN BUTTON CODE
 
 class _LocateDropdownBtn extends StatefulWidget {
-  const _LocateDropdownBtn({super.key});
+  const _LocateDropdownBtn();
 
   @override
   State<_LocateDropdownBtn> createState() => __LocateDropdownBtnState();

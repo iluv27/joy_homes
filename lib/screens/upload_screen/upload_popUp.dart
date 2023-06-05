@@ -22,7 +22,7 @@ class RegisterWidget extends StatelessWidget {
               padding: EdgeInsets.all(0),
               icon: Icon(Icons.close),
               onPressed: () {
-                Navigator.of(context).pop();
+                Navigator.popUntil(context, (route) => route.isFirst);
               },
             ),
           ),

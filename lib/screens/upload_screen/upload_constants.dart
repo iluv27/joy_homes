@@ -41,7 +41,7 @@ class AppBarWidget2 extends StatelessWidget implements PreferredSizeWidget {
             child: GestureDetector(
               onTap: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return const UploadDetails();
+                  return UploadDetails();
                 }));
               },
               child: Icon(
@@ -620,6 +620,7 @@ class BottomNavButton extends StatelessWidget {
       required this.buttonIcon})
       : _formKey = formKey;
 
+  // ignore: unused_field
   final GlobalKey<FormState> _formKey;
 
   final Function()? bottomFunctionality;
