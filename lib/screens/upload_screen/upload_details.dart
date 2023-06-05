@@ -12,17 +12,23 @@ class UploadDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (!_dialogShown) {
-      _dialogShown = true;
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return RegisterWidget();
-          },
-        );
-      });
-    }
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return RegisterWidget();
+      },
+    );
+    // if (!_dialogShown) {
+    //   _dialogShown = true;
+    //   WidgetsBinding.instance.addPostFrameCallback((_) {
+    //     showDialog(
+    //       context: context,
+    //       builder: (BuildContext context) {
+    //         return RegisterWidget();
+    //       },
+    //     );
+    //   });
+    // }
     return Scaffold(
         appBar: AppBar(
           leadingWidth: 40,

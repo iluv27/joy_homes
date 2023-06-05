@@ -1,17 +1,11 @@
 // ignore_for_file: library_private_types_in_public_api, avoid_unnecessary_containers
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:joy_homes/theme.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-
-final List<String> imgList = [
-  'https://cdn.pixabay.com/photo/2016/11/18/17/46/house-1836070_1280.jpg',
-  'https://cdn.pixabay.com/photo/2016/11/18/17/20/living-room-1835923_1280.jpg',
-  'https://cdn.pixabay.com/photo/2015/10/20/18/57/furniture-998265_1280.jpg',
-  'https://cdn.pixabay.com/photo/2017/08/27/10/16/interior-2685521_1280.jpg',
-  'https://cdn.pixabay.com/photo/2016/12/30/07/59/kitchen-1940174_1280.jpg',
-  'https://cdn.pixabay.com/photo/2014/07/10/17/17/bedroom-389254_1280.jpg'
-];
+import 'home_snipts.dart';
+import 'review.dart';
 
 class DetailsPage extends StatefulWidget {
   const DetailsPage({super.key});
@@ -23,6 +17,7 @@ class DetailsPage extends StatefulWidget {
 class _DetailsPageState extends State<DetailsPage> {
   final CarouselController _controller = CarouselController();
   int pageIndex = 0;
+  bool toggleSwitch = true;
 
   @override
   Widget build(BuildContext context) {
@@ -305,7 +300,14 @@ class _DetailsPageState extends State<DetailsPage> {
                             backgroundColor: MaterialStateProperty.all<Color>(
                                 AppColors.contactColor),
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return _Popup();
+                              },
+                            );
+                          },
                           child: const Text(
                             'Contact Agent',
                             style: TextStyle(
@@ -323,20 +325,12 @@ class _DetailsPageState extends State<DetailsPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Information',
-                  style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.textColor),
-                ),
+                DetailHeadings(detailHeading: 'Information'),
                 const SizedBox(height: 10),
-                Text(
-                  'It is a fully functioning two bedroom flat, all just to accommodate your needs. It has two bedrooms, 3 bathrooms (each with heaters)',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: AppColors.textColor.withOpacity(0.8),
-                  ),
+                ExpandableText(
+                  text:
+                      'It is a fully functioning two bedroom flat, all just to accommodate your needs. It has two bedrooms, 3 bathrooms (each with heaters). There is a spacious garage for 3 cars and a pool where both children and adults can swim.',
+                  maxLines: 3,
                 ),
               ],
             ),
@@ -349,13 +343,7 @@ class _DetailsPageState extends State<DetailsPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Features',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 22,
-                  ),
-                ),
+                DetailHeadings(detailHeading: 'Features'),
                 const SizedBox(height: 8),
                 ListView(
                   shrinkWrap: true,
@@ -387,35 +375,120 @@ class _DetailsPageState extends State<DetailsPage> {
                 ),
               ],
             ),
-          )
-        ],
-      ),
-    );
-  }
-}
-
-class FeaturesItems extends StatelessWidget {
-  const FeaturesItems({super.key, required this.featuresListItem});
-
-  final String featuresListItem;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 5.0),
-      child: Row(
-        children: [
-          const Icon(
-            Icons.circle,
-            size: 8,
           ),
           const SizedBox(
-            width: 10,
+            height: 10,
           ),
-          Text(
-            featuresListItem,
-            style: TextStyle(
-                fontSize: 16, color: AppColors.textColor.withOpacity(0.8)),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
+            decoration: BoxDecoration(
+              border: Border(
+                top: BorderSide(
+                  color: AppColors.secondary.withOpacity(0.2),
+                  width: 1.0,
+                ),
+                bottom: BorderSide(
+                  color: AppColors.secondary.withOpacity(0.2),
+                  width: 1.0,
+                ),
+              ),
+            ),
+            child: Wrap(
+              children: [
+                Row(
+                  children: [
+                    DetailHeadings(
+                      detailHeading: 'Reviews',
+                    ),
+                    SizedBox(
+                      width: 6,
+                    ),
+                    Icon(
+                      Icons.rate_review_outlined,
+                      size: 18,
+                    )
+                  ],
+                ),
+                const SizedBox(height: 8),
+                ReviewSection(
+                  userName: 'Ashanti',
+                  starRating: 5,
+                  reviewContent:
+                      'Saw this house today and I must say, it was even more beautiful than the picture. I’ll definitely love to rent it sometime.',
+                ),
+                ReviewSection(
+                  userName: 'Bola Ahmed',
+                  starRating: 3,
+                  reviewContent:
+                      'A Lovely house indeed. I just wanted to stay there immediately. I’ll give it 4 stars just because it did not have a pool.',
+                ),
+                ReviewSection(
+                  userName: 'Rita190',
+                  starRating: 1,
+                  reviewContent:
+                      'I did not like the colour of the inner walls but that’s something that can be easily fixed anyway. 1 star. A nice house overall. I’ll give it 1 stars just because it did not have light.',
+                ),
+              ],
+            ),
+          ),
+          ListTile(
+            leading: SizedBox(
+              width: 200,
+              child: Row(children: [
+                DetailHeadings(detailHeading: 'Availability'),
+                SizedBox(
+                  width: 7,
+                ),
+                GestureDetector(
+                  child: Container(
+                      height: 25,
+                      width: 40,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: AppColors.primary,
+                          width: 1.0,
+                        ),
+                        borderRadius: BorderRadius.circular(1000),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(1000),
+                        child: CupertinoSwitch(
+                          value: toggleSwitch,
+                          onChanged: (bool value) {
+                            setState(() {
+                              toggleSwitch = value;
+                            });
+                          },
+                          activeColor: AppColors.secondary,
+                          trackColor: Colors.white,
+                          thumbColor:
+                              toggleSwitch ? Colors.white : AppColors.secondary,
+                        ),
+                      )),
+                ),
+              ]),
+            ),
+            trailing: SizedBox(
+              width: 60,
+              child: Row(
+                children: [
+                  Text(
+                    'Edit',
+                    style: TextStyle(
+                      color: AppColors.textColor,
+                    ),
+                  ),
+                  SizedBox(
+                    width: 5,
+                  ),
+                  Icon(
+                    Icons.border_color_outlined,
+                    size: 16,
+                    color: AppColors.secondary,
+                  ),
+                ],
+              ),
+            ),
           )
         ],
       ),
@@ -423,28 +496,100 @@ class FeaturesItems extends StatelessWidget {
   }
 }
 
-class IconContainer extends StatelessWidget {
-  const IconContainer({super.key, required this.iconData});
-
-  final IconData iconData;
+class _Popup extends StatelessWidget {
+  const _Popup();
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 25,
-      width: 25,
-      decoration: const BoxDecoration(
-        shape: BoxShape.circle,
-        color: AppColors.primary,
-      ),
-      child: CircleAvatar(
-        backgroundColor: Colors.transparent,
-        child: Icon(
-          iconData,
-          color: Colors.white,
-          size: 16,
+    // final screenHeight = MediaQuery.of(context).size.height;
+    // final popupHeight = screenHeight / 1.9;
+
+    return Stack(
+      children: [
+        Container(
+          color: Colors.black54,
         ),
-      ),
+        AlertDialog(
+          title: Align(
+            alignment: Alignment.topRight,
+            child: IconButton(
+              padding: EdgeInsets.all(0),
+              icon: Icon(Icons.close),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: AppColors.primary, // set border color
+                      width: 1, // set border width
+                    ),
+                    shape: BoxShape.circle, // set container shape to circle
+                  ),
+                  child: CircleAvatar(
+                    maxRadius: 50,
+                    backgroundColor: Colors.transparent,
+                    child: Icon(
+                      Icons.person,
+                      color: AppColors.textColor,
+                      size: 22,
+                    ),
+                  ),
+                ),
+              ),
+              Text(
+                'Mr John Will',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    height: 1.4,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.textColor),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 10),
+                child: Text(
+                  '08023456789',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
+                      color: AppColors.textColor.withOpacity(0.7)),
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 35.0),
+                child: ElevatedButton(
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.contactColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5.0),
+                    ),
+                    fixedSize: const Size(200, 50),
+                  ),
+                  child: Text('Call',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                ),
+              ),
+            ),
+          ],
+          backgroundColor: Colors.white,
+        ),
+      ],
     );
   }
 }
