@@ -320,6 +320,8 @@ class _DetailsPageState extends State<DetailsPage> {
           const SizedBox(
             height: 30,
           ),
+
+          // THE INFORMATION SECTION
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
             child: Column(
@@ -338,6 +340,8 @@ class _DetailsPageState extends State<DetailsPage> {
           const SizedBox(
             height: 30,
           ),
+
+          // THE FEATURES SECTION
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
             child: Column(
@@ -379,6 +383,8 @@ class _DetailsPageState extends State<DetailsPage> {
           const SizedBox(
             height: 10,
           ),
+
+          // THE REVIEW SECTION
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
             decoration: BoxDecoration(
@@ -397,8 +403,16 @@ class _DetailsPageState extends State<DetailsPage> {
               children: [
                 Row(
                   children: [
-                    DetailHeadings(
-                      detailHeading: 'Reviews',
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                          return ReviewPage();
+                        }));
+                      },
+                      child: DetailHeadings(
+                        detailHeading: 'Reviews',
+                      ),
                     ),
                     SizedBox(
                       width: 6,
@@ -410,27 +424,29 @@ class _DetailsPageState extends State<DetailsPage> {
                   ],
                 ),
                 const SizedBox(height: 8),
-                ReviewSection(
-                  userName: 'Ashanti',
-                  starRating: 5,
-                  reviewContent:
-                      'Saw this house today and I must say, it was even more beautiful than the picture. I’ll definitely love to rent it sometime.',
-                ),
-                ReviewSection(
-                  userName: 'Bola Ahmed',
-                  starRating: 3,
-                  reviewContent:
-                      'A Lovely house indeed. I just wanted to stay there immediately. I’ll give it 4 stars just because it did not have a pool.',
-                ),
-                ReviewSection(
-                  userName: 'Rita190',
-                  starRating: 1,
-                  reviewContent:
-                      'I did not like the colour of the inner walls but that’s something that can be easily fixed anyway. 1 star. A nice house overall. I’ll give it 1 stars just because it did not have light.',
-                ),
+                // ReviewSection(
+                //   userName: 'Ashanti',
+                //   starRating: 5,
+                //   reviewContent:
+                //       'Saw this house today and I must say, it was even more beautiful than the picture. I’ll definitely love to rent it sometime.',
+                // ),
+                // ReviewSection(
+                //   userName: 'Bola Ahmed',
+                //   starRating: 3,
+                //   reviewContent:
+                //       'A Lovely house indeed. I just wanted to stay there immediately. I’ll give it 4 stars just because it did not have a pool.',
+                // ),
+                // ReviewSection(
+                //   userName: 'Rita190',
+                //   starRating: 1,
+                //   reviewContent:
+                //       'I did not like the colour of the inner walls but that’s something that can be easily fixed anyway. 1 star. A nice house overall. I’ll give it 1 stars just because it did not have light.',
+                // ),
               ],
             ),
           ),
+
+          //  THE AVAILABILITY LISTILE
           ListTile(
             leading: SizedBox(
               width: 200,

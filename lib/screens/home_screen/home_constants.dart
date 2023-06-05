@@ -21,17 +21,15 @@ class _HomeDetailsScreenState extends State<HomeDetailsScreen> {
     return Scaffold(
         appBar: AppBarWidget(
             leadingWidth1: 36,
-            leading: Padding(
-              padding: const EdgeInsets.only(left: 10.0),
-              child: IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  icon: const Icon(
-                    Icons.arrow_back_ios,
-                    color: AppColors.textColor,
-                  )),
-            ),
+            leading: IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: const Icon(
+                  Icons.navigate_before_rounded,
+                  color: AppColors.textColor,
+                  size: 36,
+                )),
             title: Text(
               'House Info',
               style: const TextStyle(

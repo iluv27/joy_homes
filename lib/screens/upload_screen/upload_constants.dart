@@ -374,13 +374,14 @@ class CountFormField extends StatefulWidget {
   final int initialValue;
   final int minValue;
   final int maxValue;
+  void Function(String)? onTapped;
 
-  const CountFormField({
-    required this.labelText,
-    required this.initialValue,
-    required this.minValue,
-    required this.maxValue,
-  });
+  CountFormField(
+      {required this.labelText,
+      required this.initialValue,
+      required this.minValue,
+      required this.maxValue,
+      this.onTapped});
 
   @override
   _CountFormFieldState createState() => _CountFormFieldState();
@@ -451,6 +452,7 @@ class _CountFormFieldState extends State<CountFormField> {
               Expanded(
                 child: TextFormField(
                   controller: _controller,
+                  onChanged: widget.onTapped,
                   keyboardType: TextInputType.number,
                   style: textStyle, // Apply the textStyle
                   decoration: InputDecoration(

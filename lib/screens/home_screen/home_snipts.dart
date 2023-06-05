@@ -74,17 +74,45 @@ class _ExpandableTextState extends State<ExpandableText> {
                 isExpanded = !isExpanded;
               });
             },
-            child: Padding(
-              padding: const EdgeInsets.only(top: 8.0),
-              child: Text(
-                isExpanded ? 'Read Less' : 'Read More',
-                style: TextStyle(
-                  color: Color.fromARGB(255, 13, 192, 82),
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
+            child: Container(
+                width: 100,
+                height: 30,
+                padding: const EdgeInsets.only(top: 8.0),
+                child: isExpanded
+                    ? Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Read Less',
+                            style: TextStyle(
+                              color: Color.fromARGB(255, 13, 192, 82),
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          Icon(
+                            Icons.keyboard_arrow_up_rounded,
+                            color: Color.fromARGB(255, 13, 192, 82),
+                          ),
+                        ],
+                      )
+                    : Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Read More',
+                            style: TextStyle(
+                              color: Color.fromARGB(255, 13, 192, 82),
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          Icon(
+                            Icons.expand_more_rounded,
+                            color: Color.fromARGB(255, 13, 192, 82),
+                          ),
+                        ],
+                      )),
           ),
         ),
       ],
