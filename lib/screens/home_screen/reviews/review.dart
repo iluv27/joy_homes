@@ -3,11 +3,10 @@
 import 'package:flutter/material.dart';
 import 'package:joy_homes/theme.dart';
 import 'package:joy_homes/screens/upload_screen/upload_constants.dart';
+import 'review_terms.dart';
 
 class ReviewPage extends StatefulWidget {
   ReviewPage({super.key});
-
-  ReviewSection? _reviewSection;
 
   @override
   _ReviewPageState createState() => _ReviewPageState();
@@ -16,7 +15,6 @@ class ReviewPage extends StatefulWidget {
 class _ReviewPageState extends State<ReviewPage> {
   int starRating = 0;
   String reviewContent = '';
-  List<ReviewSection> _reviewSections = [];
 
   void submitReview() {
     //  if (_formKey.currentState!.validate()) {
@@ -29,7 +27,7 @@ class _ReviewPageState extends State<ReviewPage> {
     );
     final newReviewSection = ReviewSection(review: review);
     setState(() {
-      _reviewSections.add(newReviewSection);
+      reviewSections.insert(0, newReviewSection); // Insert at index 0
     });
   }
 
@@ -91,29 +89,26 @@ class _ReviewPageState extends State<ReviewPage> {
                                     initialValue: 1,
                                     minValue: 1,
                                     maxValue: 5,
-                                    onTapped: (value) {
+                                    onCountChanged: (_count) {
                                       setState(() {
-                                        starRating = int.tryParse(value) ?? 1;
+                                        starRating = _count;
                                       });
                                     },
                                   ),
                                 ),
                                 SizedBox(
-                                  width: 120,
+                                  width: 130,
                                 ),
                                 Row(
                                   children: List.generate(5, (index) {
-                                    final isSelected = index < starRating;
                                     return Icon(
-                                      isSelected
+                                      index < starRating
                                           ? Icons.star
                                           : Icons.star_border,
-                                      color: isSelected
-                                          ? Colors.black
-                                          : Colors.grey,
-                                      size: 20,
+                                      color: Colors.black,
+                                      size: 18,
                                     );
-                                  }).toList(),
+                                  }),
                                 ),
                               ],
                             ),
@@ -130,7 +125,7 @@ class _ReviewPageState extends State<ReviewPage> {
                                 reviewContent = value;
                               });
                             },
-                            textAlignVertical: TextAlignVertical.top,
+                            textAlignVertical: TextAlignVertical.center,
                             textAlign: TextAlign.justify,
                             cursorColor: AppColors.secondary,
                             decoration: InputDecoration(
@@ -140,7 +135,7 @@ class _ReviewPageState extends State<ReviewPage> {
                                 vertical: 0,
                               ),
                               hintText: 'Give a review',
-                              suffix: Icon(
+                              suffixIcon: Icon(
                                 Icons.border_color_rounded,
                                 size: 18,
                                 color: AppColors.secondary,
@@ -155,7 +150,7 @@ class _ReviewPageState extends State<ReviewPage> {
                               enabledBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
                                   width: 0.5,
-                                  color: AppColors.textColor.withOpacity(0.5),
+                                  color: AppColors.primary.withOpacity(0.5),
                                 ),
                                 borderRadius: BorderRadius.circular(5),
                               ),
@@ -198,9 +193,9 @@ class _ReviewPageState extends State<ReviewPage> {
             Expanded(
               flex: 2,
               child: ListView.builder(
-                itemCount: _reviewSections.length,
+                itemCount: reviewSections.length,
                 itemBuilder: (context, index) {
-                  return _reviewSections[index];
+                  return reviewSections[index];
                 },
               ),
             ),
@@ -209,80 +204,4 @@ class _ReviewPageState extends State<ReviewPage> {
       ),
     );
   }
-}
-
-class ReviewSection extends StatelessWidget {
-  final Review review;
-
-  const ReviewSection({required this.review});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 15.0),
-      child: Container(
-        padding: EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(5),
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.textColor.withOpacity(0.05),
-              blurRadius: 5,
-              offset: Offset(0, 1),
-            ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  review.userName,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                Row(
-                  children: List.generate(5, (index) {
-                    return Icon(
-                      index < review.starRating
-                          ? Icons.star
-                          : Icons.star_border,
-                      color: Colors.black,
-                      size: 18,
-                    );
-                  }),
-                ),
-              ],
-            ),
-            SizedBox(height: 10),
-            Text(
-              review.reviewContent,
-              style: TextStyle(
-                fontSize: 16,
-                height: 1.4,
-                color: AppColors.textColor.withOpacity(0.8),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class Review {
-  final String userName;
-  final int starRating;
-  final String reviewContent;
-
-  Review({
-    required this.userName,
-    required this.starRating,
-    required this.reviewContent,
-  });
 }

@@ -157,9 +157,7 @@ class _HouseInfoToggleState extends State<HouseInfoToggle>
           Expanded(
             child: Stack(
               children: [
-                selectedIndex == 0
-                    ? const DetailsPage()
-                    : const HomeLocateScreen()
+                selectedIndex == 0 ? DetailsPage() : const HomeLocateScreen()
               ],
             ),
           ),

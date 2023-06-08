@@ -374,14 +374,15 @@ class CountFormField extends StatefulWidget {
   final int initialValue;
   final int minValue;
   final int maxValue;
-  void Function(String)? onTapped;
+  final void Function(int)? onCountChanged;
 
-  CountFormField(
-      {required this.labelText,
-      required this.initialValue,
-      required this.minValue,
-      required this.maxValue,
-      this.onTapped});
+  CountFormField({
+    required this.labelText,
+    required this.initialValue,
+    required this.minValue,
+    required this.maxValue,
+    this.onCountChanged,
+  });
 
   @override
   _CountFormFieldState createState() => _CountFormFieldState();
@@ -411,6 +412,9 @@ class _CountFormFieldState extends State<CountFormField> {
       _count = (_count < widget.maxValue) ? _count + 1 : _count;
       _controller.text = _count.toString();
       _isValueSelected = true;
+      if (widget.onCountChanged != null) {
+        widget.onCountChanged!(_count);
+      }
     });
   }
 
@@ -419,6 +423,9 @@ class _CountFormFieldState extends State<CountFormField> {
       _count = (_count > widget.minValue) ? _count - 1 : _count;
       _controller.text = _count.toString();
       _isValueSelected = true;
+      if (widget.onCountChanged != null) {
+        widget.onCountChanged!(_count);
+      }
     });
   }
 
@@ -441,10 +448,11 @@ class _CountFormFieldState extends State<CountFormField> {
           padding: EdgeInsets.symmetric(horizontal: 20),
           decoration: BoxDecoration(
             border: Border.all(
-                color: _isValueSelected
-                    ? AppColors.primary.withOpacity(0.7)
-                    : AppColors.primary.withOpacity(0.3),
-                width: 1),
+              color: _isValueSelected
+                  ? AppColors.primary.withOpacity(0.7)
+                  : AppColors.primary.withOpacity(0.3),
+              width: 1,
+            ),
             borderRadius: BorderRadius.circular(5),
           ),
           child: Row(
@@ -452,7 +460,16 @@ class _CountFormFieldState extends State<CountFormField> {
               Expanded(
                 child: TextFormField(
                   controller: _controller,
-                  onChanged: widget.onTapped,
+                  onChanged: widget.onCountChanged != null
+                      ? (value) {
+                          if (int.tryParse(value) != null) {
+                            setState(() {
+                              _count = int.parse(value);
+                            });
+                            widget.onCountChanged!(_count);
+                          }
+                        }
+                      : null,
                   keyboardType: TextInputType.number,
                   style: textStyle, // Apply the textStyle
                   decoration: InputDecoration(

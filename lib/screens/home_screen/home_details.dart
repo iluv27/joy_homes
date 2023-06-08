@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:joy_homes/theme.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'home_snipts.dart';
-import 'review.dart';
+import 'reviews/review.dart';
+import 'reviews/review_terms.dart';
 
 class DetailsPage extends StatefulWidget {
   const DetailsPage({super.key});
@@ -18,6 +19,31 @@ class _DetailsPageState extends State<DetailsPage> {
   final CarouselController _controller = CarouselController();
   int pageIndex = 0;
   bool toggleSwitch = true;
+
+  List<Widget> getTopReviewSection(List<ReviewSection> reviewSections) {
+    List<Widget> topReviewWidgets = [];
+
+    if (reviewSections.isEmpty) {
+      return topReviewWidgets;
+    }
+
+    List<ReviewSection> topReviews = List.from(reviewSections);
+    topReviews
+        .sort((a, b) => b.review.starRating.compareTo(a.review.starRating));
+    topReviews = topReviews.take(3).toList();
+
+    // Iterate over the top review sections and create widgets
+    for (ReviewSection reviewSection in topReviews) {
+      Widget reviewWidget = buildReviewWidget(reviewSection);
+      // Replace with your own widget builder function
+
+      setState(() {
+        topReviewWidgets.insert(0, reviewWidget);
+      });
+    }
+
+    return topReviewWidgets;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -121,6 +147,8 @@ class _DetailsPageState extends State<DetailsPage> {
           const SizedBox(
             height: 20,
           ),
+
+          // THE DETAILS SECTION
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             height: 200,
@@ -424,24 +452,9 @@ class _DetailsPageState extends State<DetailsPage> {
                   ],
                 ),
                 const SizedBox(height: 8),
-                // ReviewSection(
-                //   userName: 'Ashanti',
-                //   starRating: 5,
-                //   reviewContent:
-                //       'Saw this house today and I must say, it was even more beautiful than the picture. I’ll definitely love to rent it sometime.',
-                // ),
-                // ReviewSection(
-                //   userName: 'Bola Ahmed',
-                //   starRating: 3,
-                //   reviewContent:
-                //       'A Lovely house indeed. I just wanted to stay there immediately. I’ll give it 4 stars just because it did not have a pool.',
-                // ),
-                // ReviewSection(
-                //   userName: 'Rita190',
-                //   starRating: 1,
-                //   reviewContent:
-                //       'I did not like the colour of the inner walls but that’s something that can be easily fixed anyway. 1 star. A nice house overall. I’ll give it 1 stars just because it did not have light.',
-                // ),
+                Column(
+                  children: getTopReviewSection(reviewSections),
+                ),
               ],
             ),
           ),

@@ -289,8 +289,8 @@ class _SettingsListile2State extends State<SettingsListile2> {
         ),
         trailing: GestureDetector(
           child: Container(
-              height: 30,
-              width: 50,
+              height: 25,
+              width: 40,
               decoration: BoxDecoration(
                 border: Border.all(
                   color: AppColors.primary,
@@ -307,9 +307,9 @@ class _SettingsListile2State extends State<SettingsListile2> {
                       toggleSwitch = value;
                     });
                   },
-                  activeColor: AppColors.primary.withOpacity(0.5),
+                  activeColor: AppColors.secondary,
                   trackColor: Colors.white,
-                  thumbColor: AppColors.secondary,
+                  thumbColor: toggleSwitch ? Colors.white : AppColors.secondary,
                 ),
               )),
         ),
