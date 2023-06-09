@@ -10,8 +10,7 @@ class AppBarWidget2 extends StatelessWidget implements PreferredSizeWidget {
   final Widget? leading;
   final List<Widget>? actions;
   final Color? backgroundColor;
-  final double height;
-  final PreferredSizeWidget? preferredSize1;
+
   final double? leadingWidth1;
   final bool showForwardIcon; // New property
 
@@ -21,8 +20,6 @@ class AppBarWidget2 extends StatelessWidget implements PreferredSizeWidget {
     this.leading,
     this.actions,
     this.backgroundColor,
-    required this.height,
-    this.preferredSize1,
     this.leadingWidth1,
     this.showForwardIcon = true, // Default value is true
   });
@@ -30,6 +27,7 @@ class AppBarWidget2 extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      automaticallyImplyLeading: false,
       centerTitle: false,
       title: title,
       leading: leading,
@@ -52,12 +50,24 @@ class AppBarWidget2 extends StatelessWidget implements PreferredSizeWidget {
             ),
           ),
       ],
-      bottom: preferredSize1,
+      bottom: PreferredSize(
+        preferredSize: const Size.fromHeight(1.0),
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border(
+              bottom: BorderSide(
+                color: AppColors.secondary.withOpacity(0.4),
+                width: 1.0,
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(height);
+  Size get preferredSize => Size.fromHeight(60);
 }
 
 // THIS IS THE INPUT FIELDS

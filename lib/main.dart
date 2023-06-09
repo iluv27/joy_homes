@@ -2,10 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:joy_homes/theme.dart';
-import 'screens/search.dart';
+import 'screens/search_screen/search.dart';
 import 'screens/favourites.dart';
 import 'screens/home_screen/home.dart';
-import 'screens/settings.dart';
+import 'screens/settings_screen/settings.dart';
 import 'screens/upload_screen/upload.dart';
 import 'signUp_Screens/register.dart';
 import 'signUp_Screens/log_in.dart';

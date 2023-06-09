@@ -110,19 +110,6 @@ class _UploadImagesState extends State<UploadImages> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBarWidget2(
-          preferredSize1: PreferredSize(
-            preferredSize: const Size.fromHeight(1.0),
-            child: Container(
-              decoration: BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(
-                    color: AppColors.secondary.withOpacity(0.4),
-                    width: 1.0,
-                  ),
-                ),
-              ),
-            ),
-          ),
           title: Padding(
             padding: const EdgeInsets.only(left: 10.0),
             child: Text(
@@ -132,7 +119,6 @@ class _UploadImagesState extends State<UploadImages> {
               ),
             ),
           ),
-          height: 60,
           showForwardIcon: selectedImages.isNotEmpty,
         ),
         body: Padding(
