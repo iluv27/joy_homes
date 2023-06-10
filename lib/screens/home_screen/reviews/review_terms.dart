@@ -2,26 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:joy_homes/theme.dart';
 import 'package:joy_homes/screens/upload_screen/upload_constants.dart';
 
-// ReviewSection? getTopReviewSection() {
-
-//   ReviewSection? topReviewSection;
-//   int? highestStarRating;
-
-//   for (var reviewSection in reviewSections) {
-//     if (highestStarRating == null || reviewSection.review.starRating > highestStarRating!) {
-//       highestStarRating = reviewSection.review.starRating;
-//       topReviewSection = reviewSection;
-//     }
-//   }
-
-//   if (topReviewSection != null) {
-//     int topStarRating = topReviewSection.review.starRating;
-//     print('Top star rating: $topStarRating');
-//   }
-// }
-
 Widget buildReviewWidget(ReviewSection reviewSection) {
-  // Replace this code with your own implementation to build the review widget
   return ReviewSection(review: reviewSection.review);
 }
 
