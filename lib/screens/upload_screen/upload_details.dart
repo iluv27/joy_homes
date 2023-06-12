@@ -5,10 +5,9 @@ import 'package:joy_homes/theme.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'upload_popUp.dart';
 
+// ignore: must_be_immutable
 class UploadDetails extends StatelessWidget {
   UploadDetails({super.key});
-
-  bool _dialogShown = false;
 
   @override
   Widget build(BuildContext context) {

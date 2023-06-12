@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:joy_homes/theme.dart';
 import '../screen_constants.dart';
 import 'terms.dart';
+import 'versions.dart';
+import 'privacy.dart';
+import 'help.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -69,19 +72,27 @@ class SettingsColumn extends StatefulWidget {
 }
 
 class _SettingsColumnState extends State<SettingsColumn> {
-  bool toggleButton = true;
-  String mainSubtitle = '';
+  bool toggleButtonLocation = true;
+  bool toggleButtonNotification = true;
+  String mainSubtitleLocation = 'On';
+  String mainSubtitleNotification = 'On';
 
   @override
   void initState() {
     super.initState();
-    mainSubtitle = toggleButton ? 'On' : 'Off';
   }
 
-  void toggleSwitch() {
+  void toggleSwitchLocation() {
     setState(() {
-      toggleButton = !toggleButton;
-      mainSubtitle = toggleButton ? 'On' : 'Off';
+      toggleButtonLocation = !toggleButtonLocation;
+      mainSubtitleLocation = toggleButtonLocation ? 'On' : 'Off';
+    });
+  }
+
+  void toggleSwitchNotification() {
+    setState(() {
+      toggleButtonNotification = !toggleButtonNotification;
+      mainSubtitleNotification = toggleButtonNotification ? 'On' : 'Off';
     });
   }
 
@@ -98,26 +109,34 @@ class _SettingsColumnState extends State<SettingsColumn> {
           ),
         ),
         SettingsListile2(
-          toggleSwitch: toggleButton,
-          onTapped: toggleSwitch,
+          toggleSwitch: toggleButtonLocation,
+          onTapped: toggleSwitchLocation,
           mainTitle: 'Location',
-          mainSubtitle: mainSubtitle,
+          mainSubtitle: mainSubtitleLocation,
           firstIcon: Icons.location_on,
         ),
         const SizedBox(
           height: 10,
         ),
         SettingsListile2(
-          toggleSwitch: toggleButton,
+          toggleSwitch: toggleButtonNotification,
           mainTitle: 'Notification',
-          mainSubtitle: mainSubtitle,
-          onTapped: toggleSwitch,
+          mainSubtitle: mainSubtitleNotification,
+          onTapped: toggleSwitchNotification,
           firstIcon: Icons.notifications_active,
         ),
         const SizedBox(
           height: 10,
         ),
         SettingsListTile(
+          onTapped: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (BuildContext context) {
+                return HelpCenterScreen();
+              }),
+            );
+          },
           mainTitle: 'Help Center',
           mainSubtitle: 'Need some guidance?',
           firstIcon: Icons.help_center,
@@ -159,6 +178,14 @@ class _SettingsColumn2State extends State<SettingsColumn2> {
           mainTitle: 'Privacy Policy',
           mainSubtitle: 'Read',
           firstIcon: Icons.privacy_tip_outlined,
+          onTapped: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (BuildContext context) {
+                return PrivacyScreen();
+              }),
+            );
+          },
         ),
         SizedBox(
           height: 10,
@@ -184,7 +211,7 @@ class _SettingsColumn2State extends State<SettingsColumn2> {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (BuildContext context) {
-                return Container();
+                return VersionsScreen();
               }),
             );
           },

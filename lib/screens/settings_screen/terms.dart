@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:joy_homes/screens/upload_screen/upload_constants.dart';
 import 'package:joy_homes/theme.dart';
+import 'settings_constants.dart';
 
 class TermsOfServiceScreen extends StatelessWidget {
   @override
@@ -51,178 +52,92 @@ class TermsAndConditionsScreen extends StatelessWidget {
             Text(
               'Welcome to Joyhomes!',
               style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+                  fontSize: 18,
+                  color: const Color.fromARGB(255, 109, 109, 109)),
             ),
-            SizedBox(height: 16),
-            Text(
+            SizedBox(height: 24),
+            body(
               'By accessing or using our app, you signify that you have read, understood, and agree to be bound by the following terms and conditions:',
-              style: TextStyle(fontSize: 16),
             ),
-            SizedBox(height: 16),
-            Text(
-              '1. User Responsibilities',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+            SizedBox(height: 24),
+            heading('1. User Responsibilities'),
             SizedBox(height: 8),
-            Text(
+            body(
               '1.1 You are responsible for maintaining the confidentiality of any login information associated with your account.',
-              style: TextStyle(fontSize: 16),
             ),
             SizedBox(height: 8),
-            Text(
+            body(
               '1.2 You are responsible for all activities that occur under your account.',
-              style: TextStyle(fontSize: 16),
             ),
-            SizedBox(height: 16),
-            Text(
-              '2. Privacy',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+            SizedBox(height: 24),
+            heading('2. Privacy'),
             SizedBox(height: 8),
-            Text(
+            body(
               '2.1 We respect your privacy and handle your personal information in accordance with our Privacy Policy.',
-              style: TextStyle(fontSize: 16),
             ),
-            SizedBox(height: 16),
-            Text(
-              '3. Contact Information',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(height: 8),
-            Text(
-              '3.1 If you have any questions or concerns regarding these terms and conditions, please contact us at [Your contact email].',
-              style: TextStyle(fontSize: 16),
-            ),
-            SizedBox(height: 16),
-            Text(
-              '4. Changes to the Terms and Conditions',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(height: 8),
-            Text(
-              '4.1 We reserve the right to modify or update these terms and conditions at any time without prior notice. Please review this page periodically to stay informed of any changes.',
-              style: TextStyle(fontSize: 16),
-            ),
-            Text(
-              '1. Introduction',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+            SizedBox(height: 24),
+            heading('3. App Usage'),
+            SizedBox(height: 8.0),
+            body(
+              '3.1. Our app allows users to search for homes and view agent/landlord contact information. Users may use this information to contact agents/landlords directly.',
             ),
             SizedBox(height: 8.0),
-            Text(
-              'Welcome to our home search app. By accessing or using our app, you agree to comply with and be bound by the following terms and conditions. If you do not agree to these terms and conditions, you should not use the app.',
+            body(
+              '3.2. Users are solely responsible for their interactions with agents/landlords. We do not endorse or guarantee the accuracy of any information provided by agents/landlords.',
             ),
             SizedBox(height: 16.0),
-            Text(
-              '2. App Usage',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+            heading('4. User Accounts'),
+            SizedBox(height: 8.0),
+            body(
+              '4.1. Users may sign up for an account to access additional features of the app.',
             ),
             SizedBox(height: 8.0),
-            Text(
-              'a. Our app allows users to search for homes and view agent/landlord contact information. Users may use this information to contact agents/landlords directly.',
-            ),
-            Text(
-              'b. Users are solely responsible for their interactions with agents/landlords. We do not endorse or guarantee the accuracy of any information provided by agents/landlords.',
+            body(
+              '4.2. Users are responsible for maintaining the confidentiality of their account credentials and are liable for any activities that occur under their account.',
             ),
             SizedBox(height: 16.0),
-            Text(
-              '3. User Accounts',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+            heading('5. Agent Uploads'),
+            SizedBox(height: 8.0),
+            body(
+              '5.1. Agents may upload property pictures to showcase their listings.',
             ),
             SizedBox(height: 8.0),
-            Text(
-              'a. Users may sign up for an account to access additional features of the app.',
-            ),
-            Text(
-              'b. Users are responsible for maintaining the confidentiality of their account credentials and are liable for any activities that occur under their account.',
+            body(
+              '5.2. Agents are solely responsible for the content they upload and must ensure that they have the necessary rights and permissions to use and display the content.',
             ),
             SizedBox(height: 16.0),
-            Text(
-              '4. Agent Uploads',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+            heading('6. Disclaimer'),
+            SizedBox(height: 8.0),
+            body(
+              '6.1. The information provided on the app is for general informational purposes only and should not be considered as professional advice.',
             ),
             SizedBox(height: 8.0),
-            Text(
-              'a. Agents may upload property pictures to showcase their listings.',
-            ),
-            Text(
-              'b. Agents are solely responsible for the content they upload and must ensure that they have the necessary rights and permissions to use and display the content.',
+            body(
+              '6.2. We do not warrant the accuracy, completeness, or reliability of any information on the app.',
             ),
             SizedBox(height: 16.0),
-            Text(
-              '5. Disclaimer',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+            heading('7. Limitation of Liability'),
             SizedBox(height: 8.0),
-            Text(
-              'a. The information provided on the app is for general informational purposes only and should not be considered as professional advice.',
-            ),
-            Text(
-              'b. We do not warrant the accuracy, completeness, or reliability of any information on the app.',
+            body(
+              'We shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including but not limited to loss of profits, data, or use.',
             ),
             SizedBox(height: 16.0),
-            Text(
-              '6. Limitation of Liability',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+            heading('8. Governing Law'),
             SizedBox(height: 8.0),
-            Text(
-              'a. We shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including but not limited to loss of profits, data, or use.',
-            ),
-            SizedBox(height: 16.0),
-            Text(
-              '7. Governing Law',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(height: 8.0),
-            Text(
+            body(
               'These terms and conditions shall be governed by and construed in accordance with the laws of [your jurisdiction].',
             ),
             SizedBox(height: 16.0),
-            Text(
-              '8. Contact Us',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+            heading('9. Contact Information'),
             SizedBox(height: 8.0),
-            Text(
-              'If you have any questions or concerns regarding these terms and conditions, please contact us at [your contact information].',
+            body(
+              'If you have any questions or concerns regarding these terms and conditions, please contact us at admin.joyhomes.com.',
+            ),
+            SizedBox(height: 16.0),
+            heading('10. Changes to the Terms and Conditions'),
+            SizedBox(height: 8),
+            body(
+              'We reserve the right to modify or update these terms and conditions at any time without prior notice. Please review this page periodically to stay informed of any changes.',
             ),
           ],
         ),
