@@ -62,51 +62,66 @@ class SettingsListview extends StatelessWidget {
 }
 
 class SettingsColumn extends StatefulWidget {
-  const SettingsColumn({super.key});
+  const SettingsColumn({Key? key}) : super(key: key);
 
   @override
   State<SettingsColumn> createState() => _SettingsColumnState();
 }
 
 class _SettingsColumnState extends State<SettingsColumn> {
+  bool toggleButton = true;
+  String mainSubtitle = '';
+
+  @override
+  void initState() {
+    super.initState();
+    mainSubtitle = toggleButton ? 'On' : 'Off';
+  }
+
+  void toggleSwitch() {
+    setState(() {
+      toggleButton = !toggleButton;
+      mainSubtitle = toggleButton ? 'On' : 'Off';
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 15),
+          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 15),
           child: Text(
             'Phone',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
           ),
         ),
-        SettingsListTile(
-          mainTitle: 'Language',
-          mainSubtitle: 'English',
-          firstIcon: Icons.language,
+        SettingsListile2(
+          toggleSwitch: toggleButton,
+          onTapped: toggleSwitch,
+          mainTitle: 'Location',
+          mainSubtitle: mainSubtitle,
+          firstIcon: Icons.location_on,
         ),
-        SizedBox(
-          height: 10,
-        ),
-        SettingsListTile(
-            mainTitle: 'Notification',
-            mainSubtitle: 'Only when I\'m online',
-            firstIcon: Icons.notifications_active),
-        SizedBox(
+        const SizedBox(
           height: 10,
         ),
         SettingsListile2(
-            mainTitle: 'Location',
-            mainSubtitle: 'On',
-            firstIcon: Icons.location_on),
-        SizedBox(
+          toggleSwitch: toggleButton,
+          mainTitle: 'Notification',
+          mainSubtitle: mainSubtitle,
+          onTapped: toggleSwitch,
+          firstIcon: Icons.notifications_active,
+        ),
+        const SizedBox(
           height: 10,
         ),
-        SettingsListile2(
-            mainTitle: 'Darkmode',
-            mainSubtitle: 'Off',
-            firstIcon: Icons.dark_mode_rounded),
+        SettingsListTile(
+          mainTitle: 'Help Center',
+          mainSubtitle: 'Need some guidance?',
+          firstIcon: Icons.help_center,
+        ),
       ],
     );
   }
@@ -133,25 +148,17 @@ class _SettingsColumn2State extends State<SettingsColumn2> {
           ),
         ),
         SettingsListTile(
-          mainTitle: 'Sounds & Vibrations',
-          mainSubtitle: 'Off',
-          firstIcon: Icons.vibration_rounded,
+          mainTitle: 'Language',
+          mainSubtitle: 'English',
+          firstIcon: Icons.language,
         ),
         SizedBox(
           height: 10,
         ),
         SettingsListTile(
-          mainTitle: 'Password',
-          mainSubtitle: 'Fingerprint',
-          firstIcon: Icons.password_rounded,
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        SettingsListTile(
-          mainTitle: 'Help Center',
-          mainSubtitle: 'Need some guidance?',
-          firstIcon: Icons.help_center,
+          mainTitle: 'Privacy Policy',
+          mainSubtitle: 'Read',
+          firstIcon: Icons.privacy_tip_outlined,
         ),
         SizedBox(
           height: 10,
@@ -168,6 +175,22 @@ class _SettingsColumn2State extends State<SettingsColumn2> {
           mainTitle: 'Terms and Conditions',
           mainSubtitle: 'Read',
           firstIcon: Icons.sticky_note_2_sharp,
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        SettingsListTile(
+          onTapped: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (BuildContext context) {
+                return Container();
+              }),
+            );
+          },
+          mainTitle: 'App version and Updates',
+          mainSubtitle: 'V1.0.0',
+          firstIcon: Icons.phone_android_outlined,
         ),
       ],
     );
@@ -250,35 +273,33 @@ class SettingsListTile extends StatelessWidget {
   }
 }
 
-class SettingsListile2 extends StatefulWidget {
-  const SettingsListile2(
-      {super.key,
-      required this.mainTitle,
-      required this.mainSubtitle,
-      required this.firstIcon,
-      this.onTapped});
+// ignore: must_be_immutable
+class SettingsListile2 extends StatelessWidget {
+  const SettingsListile2({
+    Key? key,
+    required this.mainTitle,
+    required this.mainSubtitle,
+    required this.firstIcon,
+    required this.toggleSwitch,
+    required this.onTapped,
+  }) : super(key: key);
+
   final String mainTitle;
   final String mainSubtitle;
   final IconData firstIcon;
-  final Function()? onTapped;
-
-  @override
-  State<SettingsListile2> createState() => _SettingsListile2State();
-}
-
-class _SettingsListile2State extends State<SettingsListile2> {
-  bool toggleSwitch = false;
+  final bool toggleSwitch;
+  final VoidCallback onTapped;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: widget.onTapped,
+      onTap: onTapped,
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white, // set the background color
+          color: Colors.white,
           border: Border.all(
-            color: AppColors.primary.withOpacity(0.2), // set the border color
-            width: 1.0, // set the border width
+            color: AppColors.primary.withOpacity(0.2),
+            width: 1.0,
           ),
         ),
         child: ListTile(
@@ -290,13 +311,13 @@ class _SettingsListile2State extends State<SettingsListile2> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Icon(
-                widget.firstIcon,
+                firstIcon,
                 size: 40,
               ),
             ],
           ),
           title: Text(
-            widget.mainTitle,
+            mainTitle,
             style: const TextStyle(
               fontWeight: FontWeight.w500,
               color: AppColors.textColor,
@@ -305,39 +326,35 @@ class _SettingsListile2State extends State<SettingsListile2> {
           subtitle: Padding(
             padding: const EdgeInsets.only(top: 8.0),
             child: Text(
-              widget.mainSubtitle,
+              mainSubtitle,
               style: TextStyle(
                 fontWeight: FontWeight.w400,
                 color: AppColors.textColor.withOpacity(0.7),
               ),
             ),
           ),
-          trailing: GestureDetector(
-            child: Container(
-                height: 25,
-                width: 40,
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: AppColors.primary,
-                    width: 1.0,
-                  ),
-                  borderRadius: BorderRadius.circular(1000),
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(1000),
-                  child: CupertinoSwitch(
-                    value: toggleSwitch,
-                    onChanged: (bool value) {
-                      setState(() {
-                        toggleSwitch = value;
-                      });
-                    },
-                    activeColor: AppColors.secondary,
-                    trackColor: Colors.white,
-                    thumbColor:
-                        toggleSwitch ? Colors.white : AppColors.secondary,
-                  ),
-                )),
+          trailing: Container(
+            height: 25,
+            width: 40,
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: AppColors.primary,
+                width: 1.0,
+              ),
+              borderRadius: BorderRadius.circular(1000),
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(1000),
+              child: CupertinoSwitch(
+                value: toggleSwitch,
+                onChanged: (bool value) {
+                  onTapped();
+                },
+                activeColor: AppColors.secondary,
+                trackColor: Colors.white,
+                thumbColor: toggleSwitch ? Colors.white : AppColors.secondary,
+              ),
+            ),
           ),
         ),
       ),
