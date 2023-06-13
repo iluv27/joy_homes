@@ -159,6 +159,8 @@ class _CheckBoxListTileState extends State<CheckBoxListTile> {
   @override
   Widget build(BuildContext context) {
     return CheckboxListTile(
+      activeColor: AppColors.secondary,
+      checkColor: Colors.white,
       side: const BorderSide(color: Colors.black),
       contentPadding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
       selected: true,
