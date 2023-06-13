@@ -7,6 +7,8 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'home_snipts.dart';
 import 'reviews/review.dart';
 import 'reviews/review_terms.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:shimmer/shimmer.dart';
 
 class DetailsPage extends StatefulWidget {
   const DetailsPage({super.key});
@@ -67,11 +69,19 @@ class _DetailsPageState extends State<DetailsPage> {
                   items: imgList
                       .map(
                         (item) => Container(
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: NetworkImage(item),
-                              fit: BoxFit.cover,
+                          child: CachedNetworkImage(
+                            imageUrl: item,
+                            fit: BoxFit.cover,
+                            placeholder: (context, url) => Shimmer.fromColors(
+                              child: Container(
+                                color: Colors.white,
+                              ),
+                              baseColor: Colors.grey[300]!,
+                              highlightColor: Colors.grey[100]!,
+                              direction: ShimmerDirection.ltr,
                             ),
+                            errorWidget: (context, url, error) =>
+                                Icon(Icons.error),
                           ),
                         ),
                       )
@@ -135,9 +145,20 @@ class _DetailsPageState extends State<DetailsPage> {
                       ),
                       borderRadius: BorderRadius.circular(5.0),
                     ),
-                    child: Image.network(
-                      imgList[index],
-                      fit: BoxFit.cover,
+                    child: Container(
+                      child: CachedNetworkImage(
+                        imageUrl: imgList[index],
+                        fit: BoxFit.cover,
+                        placeholder: (context, url) => Shimmer.fromColors(
+                          child: Container(
+                            color: Colors.white,
+                          ),
+                          baseColor: Colors.grey[300]!,
+                          highlightColor: Colors.grey[100]!,
+                          direction: ShimmerDirection.ltr,
+                        ),
+                        errorWidget: (context, url, error) => Icon(Icons.error),
+                      ),
                     ),
                   ),
                 );

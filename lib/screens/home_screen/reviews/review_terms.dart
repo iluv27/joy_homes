@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:joy_homes/theme.dart';
-import 'package:joy_homes/screens/upload_screen/upload_constants.dart';
 
 Widget buildReviewWidget(ReviewSection reviewSection) {
   return ReviewSection(review: reviewSection.review);

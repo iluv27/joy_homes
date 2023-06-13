@@ -5,6 +5,8 @@ import 'package:joy_homes/theme.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import '../screen_constants.dart';
 import 'home_constants.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:shimmer/shimmer.dart';
 
 final List<String> imgList = [
   'https://cdn.pixabay.com/photo/2016/11/18/17/46/house-1836070_1280.jpg',
@@ -96,11 +98,19 @@ class _HouseItemState extends State<HouseItem> {
                   items: imgList
                       .map(
                         (item) => Container(
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: NetworkImage(item),
-                              fit: BoxFit.cover,
+                          child: CachedNetworkImage(
+                            imageUrl: item,
+                            fit: BoxFit.cover,
+                            placeholder: (context, url) => Shimmer.fromColors(
+                              child: Container(
+                                color: Colors.white,
+                              ),
+                              baseColor: Colors.grey[300]!,
+                              highlightColor: Colors.grey[100]!,
+                              direction: ShimmerDirection.ltr,
                             ),
+                            errorWidget: (context, url, error) =>
+                                Icon(Icons.error),
                           ),
                         ),
                       )
