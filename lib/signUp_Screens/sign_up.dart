@@ -9,22 +9,17 @@ class SignupScreen extends StatefulWidget {
   SignupScreen({super.key});
 
   @override
-  State<SignupScreen> createState() => _SignupScreenState();
+  _SignupScreenState createState() => _SignupScreenState();
 }
 
 class _SignupScreenState extends State<SignupScreen> {
   final _formKey = GlobalKey<FormState>();
 
   TextEditingController fullName = TextEditingController();
-
   TextEditingController lastName = TextEditingController();
-
   TextEditingController phoneNo = TextEditingController();
-
   TextEditingController email = TextEditingController();
-
   TextEditingController password = TextEditingController();
-
   TextEditingController confirmPassword = TextEditingController();
 
   void _signUpWithEmail() {
@@ -60,109 +55,99 @@ class _SignupScreenState extends State<SignupScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: Stack(
-          children: <Widget>[
-            const BackgroundImage(),
-            Stack(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 80.0),
-                  child: Image.asset(
-                    'assets/images/logo.png', // Replace with your image path
-                    scale: 4.5,
-                  ),
+    return Scaffold(
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+        child: Column(
+          children: [
+            Expanded(
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                width: MediaQuery.of(context).size.width * 1,
+                height: MediaQuery.of(context).size.width * 1,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(5),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColors.textColor.withOpacity(0.05),
+                      blurRadius: 5,
+                      offset: Offset(0, 1),
+                    ),
+                  ],
                 ),
-                Form(
-                  key: _formKey,
-                  child: Padding(
-                    padding:
-                        const EdgeInsets.only(left: 30.0, right: 30, top: 30),
+                child: SingleChildScrollView(
+                  child: Form(
                     child: Column(
                       children: [
-                        Expanded(
-                          child: InputField(
-                            textEditingController: fullName,
-                            onInputChanged: ((value) {
-                              value = fullName.text;
-                            }),
-                            innerText: 'First Name',
-                            validatorText: 'Please enter your first name',
-                          ),
+                        InputField(
+                          textEditingController: fullName,
+                          onInputChanged: ((value) {
+                            value = fullName.text;
+                          }),
+                          innerText: 'First Name',
+                          validatorText: 'Please enter your first name',
                         ),
                         const SizedBox(
                           height: 25,
                         ),
-                        Expanded(
-                          child: InputField(
-                            textEditingController: lastName,
-                            onInputChanged: ((value) {
-                              value = lastName.text;
-                            }),
-                            innerText: 'Last Name',
-                            validatorText: 'Please enter your last name',
-                          ),
+                        InputField(
+                          textEditingController: lastName,
+                          onInputChanged: ((value) {
+                            value = lastName.text;
+                          }),
+                          innerText: 'Last Name',
+                          validatorText: 'Please enter your last name',
                         ),
                         const SizedBox(
                           height: 25,
                         ),
-                        Expanded(
-                          child: InputField(
-                            textEditingController: phoneNo,
-                            onInputChanged: ((value) {
-                              value = phoneNo.text;
-                            }),
-                            innerText: 'Phone No.',
-                            validatorText: 'Please enter your phone no.',
-                          ),
+                        InputField(
+                          textEditingController: phoneNo,
+                          onInputChanged: ((value) {
+                            value = phoneNo.text;
+                          }),
+                          innerText: 'Phone No.',
+                          validatorText: 'Please enter your phone no.',
                         ),
                         const SizedBox(
                           height: 25,
                         ),
-                        Expanded(
-                          child: InputField(
-                            textEditingController: email,
-                            onInputChanged: ((value) {
-                              value = email.text;
-                            }),
-                            innerText: 'Email',
-                            validatorText: 'Please enter your email',
-                          ),
+                        InputField(
+                          textEditingController: email,
+                          onInputChanged: ((value) {
+                            value = email.text;
+                          }),
+                          innerText: 'Email',
+                          validatorText: 'Please enter your email',
                         ),
                         const SizedBox(
                           height: 25,
                         ),
-                        Expanded(
-                          child: InputField(
-                            textEditingController: password,
-                            onInputChanged: ((value) {
-                              value = password.text;
-                            }),
-                            innerText: 'Enter Password',
-                            validatorText: 'Please enter your password',
-                          ),
+                        InputField(
+                          textEditingController: password,
+                          onInputChanged: ((value) {
+                            value = password.text;
+                          }),
+                          innerText: 'Enter Password',
+                          validatorText: 'Please enter your password',
                         ),
                         const SizedBox(
                           height: 25,
                         ),
-                        Expanded(
-                          child: InputField(
-                            textEditingController: confirmPassword,
-                            onInputChanged: (value) {
-                              value = confirmPassword.text;
-                            },
-                            innerText: 'Confirm Password',
-                            validatorText: 'Please confirm your password',
-                          ),
+                        InputField(
+                          textEditingController: confirmPassword,
+                          onInputChanged: (value) {
+                            value = confirmPassword.text;
+                          },
+                          innerText: 'Confirm Password',
+                          validatorText: 'Please confirm your password',
                         ),
-                        Expanded(
-                          child: const CheckBoxListTile(
-                            text: Text(
-                              "I accept the terms and conditions  of Joyhomes",
-                              style: TextStyle(
-                                  fontSize: 12, color: Colors.black54),
-                            ),
+                        const CheckBoxListTile(
+                          text: Text(
+                            "I accept the terms and conditions  of Joyhomes",
+                            style:
+                                TextStyle(fontSize: 12, color: Colors.black54),
                           ),
                         ),
                         const SizedBox(
@@ -199,20 +184,44 @@ class _SignupScreenState extends State<SignupScreen> {
                     ),
                   ),
                 ),
-                Align(
+              ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 80.0),
+                child: Image.asset(
+                  'assets/images/logo.png', // Replace with your image path
+                  scale: 4.5,
+                ),
+              ),
+            ),
+            Expanded(
+                child: Align(
                     alignment: Alignment.bottomCenter,
                     child: Padding(
                       padding: const EdgeInsets.only(bottom: 20.0),
                       child: const LastText(),
-                    ))
-              ],
-            )
+                    ))),
           ],
         ),
       ),
     );
   }
 }
+
+@override
+Widget build(BuildContext context) {
+  // TODO: implement build
+  throw UnimplementedError();
+}
+
+// DEMACATION
+
+// children: <Widget>[
+//   const BackgroundImage(),
 
 class SignUpScreen1 extends StatefulWidget {
   @override
