@@ -52,11 +52,11 @@ class SettingsListview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView(
-      padding: const EdgeInsets.symmetric(horizontal: 23, vertical: 15),
+      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 13),
       children: const [
         SettingsColumn(),
         SizedBox(
-          height: 20,
+          height: 10,
         ),
         SettingsColumn2()
       ],
@@ -166,7 +166,7 @@ class _SettingsColumn2State extends State<SettingsColumn2> {
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
           ),
         ),
-        SettingsListTile(
+        SettingsListTile3(
           mainTitle: 'Language',
           mainSubtitle: 'English',
           firstIcon: Icons.language,
@@ -244,6 +244,7 @@ class SettingsListTile extends StatelessWidget {
       onTap: onTapped,
       child: Container(
         decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5),
           color: Colors.white, // set the background color
           border: Border.all(
             color: AppColors.primary.withOpacity(0.2), // set the border color
@@ -252,7 +253,7 @@ class SettingsListTile extends StatelessWidget {
         ),
         child: ListTile(
           contentPadding:
-              const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+              const EdgeInsets.symmetric(vertical: 4, horizontal: 13),
           horizontalTitleGap: 15,
           iconColor: AppColors.primary,
           leading: Column(
@@ -323,6 +324,7 @@ class SettingsListile2 extends StatelessWidget {
       onTap: onTapped,
       child: Container(
         decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5),
           color: Colors.white,
           border: Border.all(
             color: AppColors.primary.withOpacity(0.2),
@@ -331,7 +333,7 @@ class SettingsListile2 extends StatelessWidget {
         ),
         child: ListTile(
           contentPadding:
-              const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+              const EdgeInsets.symmetric(vertical: 4, horizontal: 13),
           horizontalTitleGap: 15,
           iconColor: AppColors.primary,
           leading: Column(
@@ -380,6 +382,71 @@ class SettingsListile2 extends StatelessWidget {
                 activeColor: AppColors.secondary,
                 trackColor: Colors.white,
                 thumbColor: toggleSwitch ? Colors.white : AppColors.secondary,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// THE LANGUAGE OWN IS DIFFERENT
+class SettingsListTile3 extends StatelessWidget {
+  const SettingsListTile3({
+    Key? key,
+    required this.mainTitle,
+    required this.mainSubtitle,
+    required this.firstIcon,
+    this.onTapped,
+  }) : super(key: key);
+
+  final String mainTitle;
+  final String mainSubtitle;
+  final IconData firstIcon;
+  final Function()? onTapped;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTapped,
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5),
+          color: Colors.white, // set the background color
+          border: Border.all(
+            color: AppColors.primary.withOpacity(0.2), // set the border color
+            width: 1.0, // set the border width
+          ),
+        ),
+        child: ListTile(
+          contentPadding:
+              const EdgeInsets.symmetric(vertical: 4, horizontal: 13),
+          horizontalTitleGap: 15,
+          iconColor: AppColors.primary,
+          leading: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Icon(
+                firstIcon,
+                size: 40,
+              ),
+            ],
+          ),
+          title: Text(
+            mainTitle,
+            style: const TextStyle(
+              fontWeight: FontWeight.w500,
+              color: AppColors.textColor,
+            ),
+          ),
+          subtitle: Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: Text(
+              mainSubtitle,
+              style: TextStyle(
+                fontWeight: FontWeight.w400,
+                color: AppColors.textColor.withOpacity(0.7),
               ),
             ),
           ),

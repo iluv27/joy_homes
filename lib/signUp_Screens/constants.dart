@@ -195,24 +195,78 @@ class SignupButtons extends StatelessWidget {
             elevation: MaterialStateProperty.all(0),
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(5),
               ),
             ),
             backgroundColor:
                 MaterialStateProperty.all<Color>(AppColors.secondary),
             fixedSize: MaterialStateProperty.all<Size>(
-                const Size(double.infinity, 48))),
+                const Size(double.infinity, 50))),
         onPressed: onPressed,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(icondata),
             const SizedBox(
-              width: 10,
+              width: 15,
             ),
             Text(
               buttonWords,
-              style: const TextStyle(fontSize: 16),
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class SignupButtons2 extends StatelessWidget {
+  const SignupButtons2(
+      {super.key,
+      required this.icondata,
+      required this.buttonWords,
+      required this.onPressed});
+
+  final IconData icondata;
+  final String buttonWords;
+  final Function()? onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 30.0),
+      child: OutlinedButton(
+        style: ButtonStyle(
+            side: MaterialStateProperty.all<BorderSide>(
+              BorderSide(color: AppColors.secondary, width: 1),
+            ),
+            elevation: MaterialStateProperty.all(0),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5),
+              ),
+            ),
+            backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
+            fixedSize: MaterialStateProperty.all<Size>(
+                const Size(double.infinity, 50))),
+        onPressed: onPressed,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              'assets/icons/google.png',
+              scale: 2,
+            ),
+            const SizedBox(
+              width: 15,
+            ),
+            Text(
+              buttonWords,
+              style: const TextStyle(
+                  fontSize: 16,
+                  color: AppColors.textColor,
+                  fontWeight: FontWeight.w500),
             )
           ],
         ),

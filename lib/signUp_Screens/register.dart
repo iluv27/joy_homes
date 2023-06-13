@@ -24,7 +24,7 @@ class SignupOptions extends StatelessWidget {
                 const SizedBox(
                   height: 100,
                 ),
-                SignupButtons(
+                SignupButtons2(
                   icondata: Icons.fmd_good,
                   buttonWords: 'Sign up with Google',
                   onPressed: () {},
