@@ -216,20 +216,11 @@ class _SimpleDropdownButtonState extends State<SimpleDropdownButton> {
         child: Container(
           height: 50,
           decoration: BoxDecoration(
-            boxShadow: [
-              BoxShadow(
-                color: AppColors.textColor.withOpacity(0.03),
-                offset: Offset(0, 0.5),
-                spreadRadius: 0.5,
-                blurRadius: 5,
-              ),
-            ],
+            borderRadius: BorderRadius.circular(5),
             color: Colors.white,
-            border: Border(
-              bottom: BorderSide(
-                color: AppColors.primary.withOpacity(0.3),
-                width: 1,
-              ),
+            border: Border.all(
+              color: AppColors.primary.withOpacity(0.8),
+              width: 1,
             ),
           ),
           child: DropdownButton<String>(

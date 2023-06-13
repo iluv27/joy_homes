@@ -47,12 +47,19 @@ class _HelpCenterPage extends StatefulWidget {
 }
 
 class __HelpCenterPageState extends State<_HelpCenterPage> {
-  String _selectedCategory = 'General';
+  String _selectedCategory = 'Categories';
   String _selectedSubCategory = '';
 
-  List<String> _categories = ['General', 'Account', 'Payments', 'Technical'];
+  List<String> _categories = [
+    'Categories',
+    'General',
+    'Account',
+    'Payments',
+    'Technical'
+  ];
 
   Map<String, List<String>> _subCategories1 = {
+    'Categories': [''],
     'General': ['', 'Feedback', 'Suggestions', 'Other'],
     'Account': ['', 'Login Issues', 'Profile Management', 'Account Deletion'],
     'Payments': ['', 'Payment Methods', 'Billing Issues', 'Refunds'],
@@ -93,17 +100,10 @@ class __HelpCenterPageState extends State<_HelpCenterPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'Contact Us',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+            heading('Contact Us'),
             SizedBox(height: 16),
-            Text(
+            body(
               'If you have any questions or need assistance, please fill out the form below and we will get back to you as soon as possible. Alternatively, you can also reach us via email or phone call, and we will respond within the next 24 hours.',
-              style: TextStyle(fontSize: 16),
             ),
             SizedBox(height: 24),
             Form(
@@ -115,7 +115,7 @@ class __HelpCenterPageState extends State<_HelpCenterPage> {
                     'Fill the Form Below',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(height: 24),
+                  SizedBox(height: 16),
                   DropDownButton(
                     categories: _categories,
                     selectedCategory: _selectedCategory,
@@ -151,6 +151,13 @@ class __HelpCenterPageState extends State<_HelpCenterPage> {
                     ),
                   SizedBox(height: 16),
                   TextFormField(
+                    textAlignVertical: TextAlignVertical.top,
+                    textAlign: TextAlign.justify,
+                    cursorColor: AppColors.secondary,
+                    cursorWidth: 1,
+                    expands: true,
+                    maxLines: null,
+                    maxLength: 500,
                     controller: _messageController,
                     validator: (value) {
                       if (value!.isEmpty) {
@@ -158,16 +165,50 @@ class __HelpCenterPageState extends State<_HelpCenterPage> {
                       }
                       return null;
                     },
-                    maxLines: 5,
                     decoration: InputDecoration(
-                      labelText: 'Message',
-                      border: OutlineInputBorder(),
+                      hintText: 'Message',
+                      hintStyle: TextStyle(
+                          color: AppColors.textColor.withOpacity(0.7)),
+                      constraints: BoxConstraints.tightFor(height: 150),
+                      contentPadding:
+                          EdgeInsets.symmetric(horizontal: 17, vertical: 15),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          width: 1,
+                          color: AppColors.primary.withOpacity(0.8),
+                        ),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          width: 1,
+                          color: AppColors.primary.withOpacity(0.8),
+                        ),
+                      ),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          width: 1,
+                          color: AppColors.primary.withOpacity(0.8),
+                        ),
+                      ),
+                      counterText:
+                          '0/500', // Disable the default character counter
                     ),
+                    style: TextStyle(
+                        fontSize: 16, color: AppColors.textColor, height: 1.4),
                   ),
                   SizedBox(height: 24),
                   ElevatedButton(
                     onPressed: _submitForm,
-                    child: Text('Submit'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.secondary,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
+                      fixedSize: const Size(200, 50),
+                    ),
+                    child: Text('Submit',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w600)),
                   ),
                 ],
               ),
@@ -197,38 +238,51 @@ class DropDownButton extends StatefulWidget {
 class _DropDownButtonState extends State<DropDownButton> {
   @override
   Widget build(BuildContext context) {
-    return DropdownButtonFormField<String>(
-      isExpanded: true,
-      iconSize: 40,
-      iconEnabledColor: AppColors.textColor.withOpacity(0.5),
-      hint: Padding(
-        padding: const EdgeInsets.only(left: 15.0),
-        child: Text(
-          'Category',
-          style: TextStyle(
-            color: AppColors.textColor.withOpacity(0.3),
-            fontSize: 16,
-          ),
-        ),
-      ),
-      value: widget.selectedCategory,
-      onChanged: widget.changed,
-      items: widget.categories.map<DropdownMenuItem<String>>(
-        (String value) {
-          return DropdownMenuItem<String>(
-            value: value,
-            child: Text(value),
-          );
-        },
-      ).toList(),
+    return InputDecorator(
       decoration: InputDecoration(
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(5),
-          borderSide: BorderSide(color: AppColors.primary, width: 1),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(5),
-          borderSide: BorderSide(color: AppColors.secondary, width: 1),
+        contentPadding: EdgeInsets.all(0),
+        border: InputBorder.none,
+      ),
+      child: DropdownButtonHideUnderline(
+        child: Container(
+          height: 50,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5),
+            color: Colors.white,
+            border: Border.all(
+              color: AppColors.primary.withOpacity(0.8),
+              width: 1,
+            ),
+          ),
+          child: DropdownButtonFormField<String>(
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.only(left: 15),
+              border: InputBorder.none,
+            ),
+            isExpanded: true,
+            iconSize: 40,
+            iconEnabledColor: AppColors.textColor.withOpacity(0.5),
+            hint: Padding(
+              padding: const EdgeInsets.only(left: 15.0),
+              child: Text(
+                'Category',
+                style: TextStyle(
+                  color: AppColors.textColor.withOpacity(0.3),
+                  fontSize: 16,
+                ),
+              ),
+            ),
+            value: widget.selectedCategory,
+            onChanged: widget.changed,
+            items: widget.categories.map<DropdownMenuItem<String>>(
+              (String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              },
+            ).toList(),
+          ),
         ),
       ),
     );
