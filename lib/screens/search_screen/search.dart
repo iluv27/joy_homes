@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:joy_homes/screens/screen_constants.dart';
 import 'package:joy_homes/theme.dart';
+import 'filter_screen.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:shimmer/shimmer.dart';
+import 'package:joy_homes/screens/upload_screen/upload_constants.dart';
 
 final List<String> imgList = [
   'https://cdn.pixabay.com/photo/2016/11/18/17/46/house-1836070_1280.jpg',
@@ -18,12 +22,133 @@ final List<String> imgList = [
   'https://cdn.pixabay.com/photo/2014/07/10/17/17/bedroom-389254_1280.jpg'
 ];
 
+// ignore: must_be_immutable
 class SearchScreen extends StatelessWidget {
-  const SearchScreen({super.key});
+  SearchScreen({super.key});
+
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  TextEditingController price = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
+      endDrawer: Directionality(
+        textDirection: TextDirection.ltr,
+        child: Drawer(
+          child: ListView(
+            children: [
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.88,
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          children: [
+                            Container(
+                              padding: EdgeInsets.symmetric(vertical: 15),
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'Filter',
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                    SizedBox(width: 5.0),
+                                    Icon(
+                                      Icons.filter_list_rounded,
+                                      color: AppColors.secondary,
+                                      size: 20,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            InputField(
+                              inputTitle: 'Price',
+                              textEditingController: price,
+                              onInputChanged: ((value) {
+                                value = price.text;
+                              }),
+                              innerText: '100 000',
+                              validatorText: 'Please enter the price',
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            CountFormField(
+                              labelText: 'Bathroom',
+                              initialValue: 3,
+                              minValue: 0,
+                              maxValue: 10,
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            CountFormField(
+                              labelText: 'Bedroom',
+                              initialValue: 3,
+                              minValue: 0,
+                              maxValue: 10,
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            ToggleDetailsButtons(
+                              sizedBoxWidth: 5,
+                              toggleTitle: 'Parking Space',
+                            ),
+                            SizedBox(
+                              height: 60,
+                            ),
+                            ElevatedButton(
+                              onPressed: () {
+                                // if (_formKey.currentState!.validate()) {
+                                //   _formKey.currentState!.save();
+                                //   // Send data to the server
+                                // }
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColors.secondary,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                fixedSize: const Size(200, 50),
+                              ),
+                              child: Text(
+                                '102 Results',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Divider(
+                              color: AppColors.textColor,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
       appBar: AppBarWidget(
           preferredSize1: PreferredSize(
             preferredSize: const Size.fromHeight(1.0),
@@ -48,19 +173,26 @@ class SearchScreen extends StatelessWidget {
             ),
           ),
           height: 60),
-      body: SearchScreenDetails(),
+      body: SearchScreenDetails(
+        scaffoldKey: _scaffoldKey,
+      ),
     );
   }
 }
 
+// ignore: must_be_immutable
 class SearchScreenDetails extends StatefulWidget {
-  const SearchScreenDetails({super.key});
-
+  SearchScreenDetails({super.key, required this.scaffoldKey});
+  GlobalKey<ScaffoldState> scaffoldKey;
   @override
   State<SearchScreenDetails> createState() => _SearchScreenDetailsState();
 }
 
 class _SearchScreenDetailsState extends State<SearchScreenDetails> {
+  void openEndDrawer() {
+    widget.scaffoldKey.currentState?.openEndDrawer();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -105,7 +237,11 @@ class _SearchScreenDetailsState extends State<SearchScreenDetails> {
                 iconSize: 40,
                 icon: const Icon(Icons.more_vert,
                     color: Color.fromARGB(255, 115, 57, 16)),
-                onPressed: () {},
+                onPressed: () {
+                  setState(() {
+                    openEndDrawer();
+                  });
+                },
               ),
             )
           ],
@@ -126,10 +262,19 @@ class _SearchScreenDetailsState extends State<SearchScreenDetails> {
                 return Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(5),
-                    image: DecorationImage(
-                      image: NetworkImage(imgList[index]),
-                      fit: BoxFit.cover,
+                  ),
+                  child: CachedNetworkImage(
+                    imageUrl: imgList[index],
+                    fit: BoxFit.cover,
+                    placeholder: (context, url) => Shimmer.fromColors(
+                      child: Container(
+                        color: Colors.white,
+                      ),
+                      baseColor: Colors.grey[500]!,
+                      highlightColor: Colors.grey[100]!,
+                      direction: ShimmerDirection.ltr,
                     ),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
                   ),
                 );
               },

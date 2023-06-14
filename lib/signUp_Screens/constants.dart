@@ -65,8 +65,7 @@ class LastText extends StatelessWidget {
             style: const TextStyle(color: AppColors.secondary, fontSize: 16),
             recognizer: TapGestureRecognizer()
               ..onTap = () {
-                Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) {
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
                   return LoginScreen();
                 }));
               },

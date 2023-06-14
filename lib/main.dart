@@ -55,7 +55,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
 
   static List<Widget> pages = [
     const HomeScreen(),
-    const SearchScreen(),
+    SearchScreen(),
     const UploadScreen(),
     FavouriteScreen(),
     const SettingsScreen(),

@@ -43,7 +43,7 @@ class SignupOptions extends StatelessWidget {
                     icondata: Icons.mail,
                     buttonWords: 'Sign up with Mail',
                     onPressed: () {
-                      Navigator.pushReplacement(context,
+                      Navigator.push(context,
                           MaterialPageRoute(builder: (context) {
                         return SignupScreen();
                       }));
