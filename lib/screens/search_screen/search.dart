@@ -23,11 +23,21 @@ final List<String> imgList = [
 ];
 
 // ignore: must_be_immutable
-class SearchScreen extends StatelessWidget {
-  SearchScreen({super.key});
+class SearchScreen extends StatefulWidget {
+  SearchScreen({
+    super.key,
+  });
 
+  @override
+  State<SearchScreen> createState() => _SearchScreenState();
+}
+
+class _SearchScreenState extends State<SearchScreen> {
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   TextEditingController price = TextEditingController();
+
+  RangeValues _sliderValue = RangeValues(700000, 2000000);
 
   @override
   Widget build(BuildContext context) {
@@ -74,17 +84,37 @@ class SearchScreen extends StatelessWidget {
                             SizedBox(
                               height: 15,
                             ),
-                            InputField(
-                              inputTitle: 'Price',
-                              textEditingController: price,
-                              onInputChanged: ((value) {
-                                value = price.text;
-                              }),
-                              innerText: '100 000',
-                              validatorText: 'Please enter the price',
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Price',
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                                RangeSlider(
+                                  values: _sliderValue,
+                                  divisions: 5,
+                                  min: 200000.0,
+                                  max: 3000000.0,
+                                  onChanged: (RangeValues values) {
+                                    setState(() {
+                                      _sliderValue = values;
+                                    });
+                                  },
+                                  activeColor: AppColors.secondary,
+                                  inactiveColor:
+                                      AppColors.primary.withOpacity(0.5),
+                                  labels: RangeLabels(
+                                    _sliderValue.start.round().toString(),
+                                    _sliderValue.end.round().toString(),
+                                  ),
+                                ),
+                              ],
                             ),
                             SizedBox(
-                              height: 5,
+                              height: 10,
                             ),
                             CountFormField(
                               labelText: 'Bathroom',
@@ -261,20 +291,26 @@ class _SearchScreenDetailsState extends State<SearchScreenDetails> {
               itemBuilder: (BuildContext, index) {
                 return Container(
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
+                    borderRadius: BorderRadius.circular(5.0),
                   ),
-                  child: CachedNetworkImage(
-                    imageUrl: imgList[index],
-                    fit: BoxFit.cover,
-                    placeholder: (context, url) => Shimmer.fromColors(
-                      child: Container(
-                        color: Colors.white,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(5.0),
+                    child: CachedNetworkImage(
+                      imageUrl: imgList[index],
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => Shimmer.fromColors(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5.0),
+                            color: Colors.white,
+                          ),
+                        ),
+                        baseColor: Colors.grey[400]!,
+                        highlightColor: Colors.grey[100]!,
+                        direction: ShimmerDirection.ltr,
                       ),
-                      baseColor: Colors.grey[500]!,
-                      highlightColor: Colors.grey[100]!,
-                      direction: ShimmerDirection.ltr,
+                      errorWidget: (context, url, error) => Icon(Icons.error),
                     ),
-                    errorWidget: (context, url, error) => Icon(Icons.error),
                   ),
                 );
               },
