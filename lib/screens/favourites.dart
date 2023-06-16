@@ -1,7 +1,7 @@
 // ignore_for_file: avoid_types_as_parameter_names
 
 import 'package:flutter/material.dart';
-import 'package:joy_homes/screens/screen_constants.dart';
+import 'package:joy_homes/profile/profile_constants.dart';
 import 'package:joy_homes/theme.dart';
 
 class FavouriteScreen extends StatelessWidget {

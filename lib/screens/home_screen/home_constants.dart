@@ -1,10 +1,12 @@
 // ignore_for_file: library_private_types_in_public_api
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import '../screen_constants.dart';
+import '../../profile/profile_constants.dart';
 import 'package:joy_homes/theme.dart';
 import 'home_locate.dart';
 import 'home_details.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class HomeDetailsScreen extends StatefulWidget {
   const HomeDetailsScreen({super.key});
@@ -14,7 +16,27 @@ class HomeDetailsScreen extends StatefulWidget {
 }
 
 class _HomeDetailsScreenState extends State<HomeDetailsScreen> {
+  @override
+  void initState() {
+    getCurrentUser();
+    super.initState();
+  }
+
   int selectedIndex = 0;
+  final _auth = FirebaseAuth.instance;
+  Firebase? loggedinUser;
+
+  void getCurrentUser() async {
+    try {
+      final user = await _auth.currentUser;
+      if (user != null) {
+        loggedinUser = user as Firebase;
+        print(user.email);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:joy_homes/screens/screen_constants.dart';
+import 'package:joy_homes/profile/profile_constants.dart';
 import 'package:joy_homes/theme.dart';
-import 'filter_screen.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:joy_homes/screens/upload_screen/upload_constants.dart';

@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "313393562689",
+    "project_id": "joyhomes-c81f2",
+    "storage_bucket": "joyhomes-c81f2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:313393562689:android:01628553d430e2f53ef2c0",
+        "android_client_info": {
+          "package_name": "com.oghogho_ehiedu.joy_homes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "313393562689-vrg7ajhm32i986lbrc72t2upu6foo95m.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.oghogho_ehiedu.joy_homes",
+            "certificate_hash": "666f5c129a9ac8312a23cb04f8528805570e9b3e"
+          }
+        },
+        {
+          "client_id": "313393562689-4pr7pbkgki0iam6vio4n38apla26vkp8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBkaxwQVe3A-4Uj1CpYKpIYJtH52y3lyNs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "313393562689-4pr7pbkgki0iam6vio4n38apla26vkp8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

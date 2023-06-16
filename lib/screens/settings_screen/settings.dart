@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:joy_homes/theme.dart';
-import '../screen_constants.dart';
+import '../../profile/profile_constants.dart';
 import 'terms.dart';
 import 'versions.dart';
 import 'privacy.dart';

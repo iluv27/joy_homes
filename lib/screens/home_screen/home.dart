@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:joy_homes/theme.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import '../screen_constants.dart';
+import '../../profile/profile_constants.dart';
 import 'home_constants.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:shimmer/shimmer.dart';
@@ -25,6 +25,7 @@ class HomeScreen extends StatelessWidget {
       child: Scaffold(
         backgroundColor: const Color(0XFFFAFAFA),
         appBar: AppBarWidget(
+          leadingWidth1: 0,
           preferredSize1: PreferredSize(
             preferredSize: const Size.fromHeight(1.0),
             child: Container(

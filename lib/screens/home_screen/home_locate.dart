@@ -1,7 +1,7 @@
 // ignore_for_file: unused_import, avoid_unnecessary_containers, sized_box_for_whitespace
 
 import 'package:flutter/material.dart';
-import '../screen_constants.dart';
+import '../../profile/profile_constants.dart';
 import 'package:joy_homes/theme.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
