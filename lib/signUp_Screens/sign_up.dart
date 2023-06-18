@@ -1,13 +1,14 @@
 // ignore_for_file: unused_local_variable, unused_element
 
 import 'package:flutter/material.dart';
+import 'package:joy_homes/main.dart';
 import 'package:joy_homes/theme.dart';
 import 'constants.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'log_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
-import 'package:joy_homes/profile/profile_constants.dart';
+import 'package:provider/provider.dart';
 
 class SignupScreen extends StatefulWidget {
   SignupScreen({super.key});
@@ -211,6 +212,13 @@ class _SignupScreenState extends State<SignupScreen> {
                               ),
                               ElevatedButton(
                                 onPressed: () async {
+                                  Provider.of<AuthenticationProvider>(context,
+                                          listen: false)
+                                      .firstName = firstName.text;
+
+                                  Provider.of<AuthenticationProvider>(context,
+                                          listen: false)
+                                      .lastName = lastName.text;
                                   setState(() {
                                     showSpinner = true;
                                   });
@@ -224,6 +232,14 @@ class _SignupScreenState extends State<SignupScreen> {
                                         .createUserWithEmailAndPassword(
                                             email: email.text,
                                             password: password.text);
+
+                                    Provider.of<AuthenticationProvider>(context,
+                                            listen: false)
+                                        .firstName = firstName.text;
+
+                                    Provider.of<AuthenticationProvider>(context,
+                                            listen: false)
+                                        .lastName = lastName.text;
 
                                     // SETTING DIAPLAY NAME
                                     String displayName =

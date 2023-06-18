@@ -1,12 +1,10 @@
 import 'dart:math';
 import 'package:joy_homes/main.dart';
 import 'package:provider/provider.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:joy_homes/profile/profile_main.dart';
 import 'package:joy_homes/theme.dart';
 import 'package:joy_homes/signUp_Screens/register.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 // class UserInfo {
 //   final String newUser;
@@ -44,8 +42,6 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return Consumer<AuthenticationProvider>(
       builder: (context, authenticationProvider, _) {
-        final isLoggedIn = authenticationProvider.isLoggedIn;
-
         return AppBar(
           centerTitle: false,
           title: title,
@@ -95,10 +91,13 @@ class ProfileSection extends StatelessWidget {
             child: CircleAvatar(
               maxRadius: 20,
               backgroundColor: _getRandomColor(),
-              child: Icon(
-                Icons.favorite_rounded,
-                color: AppColors.textColor,
-                size: 22,
+              child: Text(
+                authProvider.getUserInitials(),
+                style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    letterSpacing: -1,
+                    fontWeight: FontWeight.w600),
               ),
             ),
           );
@@ -127,50 +126,14 @@ class ProfileSection extends StatelessWidget {
     );
   }
 
-  Widget _getUserInitialsWidget() {
-    return Consumer<AuthenticationProvider>(
-      builder: (context, authenticationProvider, _) {
-        try {
-          final user = authenticationProvider.currentUser;
-
-          if (user != null) {
-            final String? firstName = user.displayName?.split(' ')[0];
-            final String? lastName = user.displayName?.split(' ')[1];
-            final userInitials = _getUserInitials(firstName, lastName);
-
-            return Text(
-              userInitials,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 18,
-              ),
-            );
-          }
-        } catch (e) {
-          print(e);
-        }
-
-        return Container();
-      },
-    );
-  }
-
-  String _getUserInitials(String? firstName, String? lastName) {
-    final String? firstInitial =
-        firstName?.isNotEmpty == true ? firstName![0] : null;
-    final String? lastInitial =
-        lastName?.isNotEmpty == true ? lastName![0] : null;
-    return '$firstInitial $lastInitial';
-  }
-
   Color _getRandomColor() {
     final List<Color> colors = [
-      Colors.red,
-      Colors.blue,
-      Colors.green,
-      Colors.yellow,
-      Colors.orange,
-      Colors.purple,
+      const Color.fromARGB(255, 133, 20, 12),
+      const Color.fromARGB(255, 15, 85, 143),
+      const Color.fromARGB(255, 9, 107, 12),
+      const Color.fromARGB(255, 123, 112, 13),
+      Color.fromARGB(255, 87, 55, 7),
+      const Color.fromARGB(255, 90, 8, 104),
     ];
 
     return colors[Random().nextInt(colors.length)];

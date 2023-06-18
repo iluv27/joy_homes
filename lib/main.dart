@@ -49,6 +49,26 @@ class AuthenticationProvider extends ChangeNotifier {
   User? get currentUser => _currentUser;
 
   bool get isLoggedIn => _currentUser != null;
+  String? firstName;
+  String? lastName;
+
+  String getUserInitials() {
+    final String? firstInitial =
+        firstName?.isNotEmpty == true ? firstName![0] : null;
+    final String? lastInitial =
+        lastName?.isNotEmpty == true ? lastName![0] : null;
+    return '$firstInitial $lastInitial';
+  }
+
+  void user() {
+    final user = _currentUser;
+    if (user != null) {
+      firstName = user.displayName?.split(' ')[0];
+      lastName = user.displayName?.split(' ')[1];
+      // ignore: unused_local_variable
+      final userInitials = getUserInitials();
+    }
+  }
 
   void login(String email, String password) async {
     try {

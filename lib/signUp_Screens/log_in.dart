@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:joy_homes/main.dart';
-import 'package:joy_homes/screens/home_screen/home.dart';
 import 'package:joy_homes/signUp_Screens/register.dart';
 import 'package:joy_homes/theme.dart';
 import 'constants.dart';
