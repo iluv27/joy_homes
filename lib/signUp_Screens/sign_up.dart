@@ -7,6 +7,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'log_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:joy_homes/profile/profile_constants.dart';
 
 class SignupScreen extends StatefulWidget {
   SignupScreen({super.key});
@@ -223,6 +224,13 @@ class _SignupScreenState extends State<SignupScreen> {
                                         .createUserWithEmailAndPassword(
                                             email: email.text,
                                             password: password.text);
+
+                                    // SETTING DIAPLAY NAME
+                                    String displayName =
+                                        '${firstName.text} ${lastName.text}';
+                                    await newUser.user!
+                                        .updateDisplayName(displayName);
+
                                     // ignore: unnecessary_null_comparison
                                     if (newUser != null) {
                                       Navigator.pushReplacement(

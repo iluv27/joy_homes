@@ -38,6 +38,8 @@ class _HomeDetailsScreenState extends State<HomeDetailsScreen> {
     }
   }
 
+  late bool isLoggedIn;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

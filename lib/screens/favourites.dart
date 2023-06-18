@@ -4,8 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:joy_homes/profile/profile_constants.dart';
 import 'package:joy_homes/theme.dart';
 
+// ignore: must_be_immutable
 class FavouriteScreen extends StatelessWidget {
-  FavouriteScreen({super.key});
+  FavouriteScreen({
+    super.key,
+  });
 
   final List favouriteContainer = [
     const FavContainer(),

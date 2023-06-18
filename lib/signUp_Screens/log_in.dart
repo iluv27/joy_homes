@@ -1,6 +1,7 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:flutter/material.dart';
+import 'package:joy_homes/main.dart';
 import 'package:joy_homes/screens/home_screen/home.dart';
 import 'package:joy_homes/signUp_Screens/register.dart';
 import 'package:joy_homes/theme.dart';
@@ -8,6 +9,7 @@ import 'constants.dart';
 import 'package:flutter/gestures.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
   LoginScreen({super.key});
@@ -87,6 +89,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           ElevatedButton(
                             onPressed: () async {
+                              Provider.of<AuthenticationProvider>(context,
+                                      listen: false)
+                                  .login(email.text, password.text);
                               setState(() {
                                 showSpinner = true;
                               });
@@ -99,13 +104,18 @@ class _LoginScreenState extends State<LoginScreen> {
                                     await _auth.signInWithEmailAndPassword(
                                         email: email.text,
                                         password: password.text);
+                                Provider.of<AuthenticationProvider>(context,
+                                        listen: false)
+                                    .login(email.text, password.text);
+
                                 // ignore: unnecessary_null_comparison
                                 if (user != null) {
                                   // ignore: use_build_context_synchronously
+
                                   Navigator.pushReplacement(context,
                                       MaterialPageRoute(
                                           builder: ((BuildContext) {
-                                    return const HomeScreen();
+                                    return MainMenuScreen();
                                   })));
                                 }
                                 setState(() {

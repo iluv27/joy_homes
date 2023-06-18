@@ -17,8 +17,10 @@ final List<String> imgList = [
   'https://cdn.pixabay.com/photo/2014/07/10/17/17/bedroom-389254_1280.jpg'
 ];
 
+// ignore: must_be_immutable
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+  HomeScreen({super.key, this.isLoggedIn = false});
+  bool isLoggedIn;
   @override
   Widget build(BuildContext context) {
     return SafeArea(

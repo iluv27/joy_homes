@@ -11,7 +11,14 @@ class ProfileScreen extends StatelessWidget {
   }
 }
 
+// ignore: must_be_immutable
 class ProfileDetails extends StatefulWidget {
+  ProfileDetails({
+    super.key,
+    this.isLoggedIn = false,
+  });
+
+  bool isLoggedIn;
   @override
   _ProfileDetailsState createState() => _ProfileDetailsState();
 }

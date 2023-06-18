@@ -7,8 +7,11 @@ import 'versions.dart';
 import 'privacy.dart';
 import 'help.dart';
 
+// ignore: must_be_immutable
 class SettingsScreen extends StatelessWidget {
-  const SettingsScreen({super.key});
+  SettingsScreen({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

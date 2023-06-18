@@ -8,6 +8,8 @@ import 'screens/home_screen/home.dart';
 import 'screens/settings_screen/settings.dart';
 import 'screens/upload_screen/upload.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:provider/provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,20 +22,54 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: SafeArea(child: const MainMenuScreen()),
-      theme: ThemeData(
-        appBarTheme: const AppBarTheme(
-            backgroundColor: Colors.transparent,
-            shadowColor: Colors.transparent,
-            titleTextStyle: TextStyle(
-                color: AppColors.textColor,
-                fontSize: 22,
-                fontWeight: FontWeight.w600),
-            toolbarHeight: 60),
+    return ChangeNotifierProvider(
+      create: (context) => AuthenticationProvider(),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: SafeArea(child: const MainMenuScreen()),
+        theme: ThemeData(
+          appBarTheme: const AppBarTheme(
+              backgroundColor: Colors.transparent,
+              shadowColor: Colors.transparent,
+              titleTextStyle: TextStyle(
+                  color: AppColors.textColor,
+                  fontSize: 22,
+                  fontWeight: FontWeight.w600),
+              toolbarHeight: 60),
+        ),
       ),
     );
+  }
+}
+
+class AuthenticationProvider extends ChangeNotifier {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  User? _currentUser;
+  User? get currentUser => _currentUser;
+
+  bool get isLoggedIn => _currentUser != null;
+
+  void login(String email, String password) async {
+    try {
+      final userCredential = await _auth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      _currentUser = userCredential.user;
+
+      notifyListeners();
+    } catch (e) {
+      print('Sign in error: $e');
+    }
+  }
+
+  void logout() {
+    // Add your logout logic here
+    _currentUser = null;
+
+    notifyListeners();
   }
 }
 
@@ -52,22 +88,34 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
   int selectedIndex = 0;
 
   static List<Widget> pages = [
-    const HomeScreen(),
+    HomeScreen(),
     SearchScreen(),
     const UploadScreen(),
     FavouriteScreen(),
-    const SettingsScreen(),
+    SettingsScreen(),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: ValueListenableBuilder(
-          valueListenable: pageIndex,
-          builder: ((context, value, child) {
-            return pages[value];
-          })),
+      body: Consumer<AuthenticationProvider>(
+        builder: (context, authProvider, child) {
+          if (authProvider.isLoggedIn) {
+            return ValueListenableBuilder(
+                valueListenable: pageIndex,
+                builder: ((context, value, child) {
+                  return pages[value];
+                }));
+          } else {
+            return ValueListenableBuilder(
+                valueListenable: pageIndex,
+                builder: ((context, value, child) {
+                  return pages[value];
+                }));
+          }
+        },
+      ),
       bottomNavigationBar: _BottomBarItems(
         onItemSelected: (selectedIndex) {
           pageIndex.value = selectedIndex;
