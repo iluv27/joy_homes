@@ -26,42 +26,48 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   final PreferredSizeWidget? preferredSize1;
   final double? leadingWidth1;
 
-  AppBarWidget({
-    Key? key,
-    required this.title,
-    this.nameInitials,
-    this.leading,
-    this.actions,
-    this.backgroundColor,
-    required this.height,
-    this.preferredSize1,
-    this.leadingWidth1,
-  });
+  AppBarWidget(
+      {Key? key,
+      required this.title,
+      this.nameInitials,
+      this.leading,
+      this.actions,
+      this.backgroundColor,
+      required this.height,
+      this.preferredSize1,
+      this.leadingWidth1,
+      required this.openEndDrawer});
+
+  void Function() openEndDrawer;
 
   @override
   Widget build(BuildContext context) {
     return Consumer<AuthenticationProvider>(
       builder: (context, authenticationProvider, _) {
-        return AppBar(
-          centerTitle: false,
-          title: title,
-          leading: leading,
-          leadingWidth: leadingWidth1,
-          actions: [
-            Padding(
-              padding: const EdgeInsets.only(right: 15.0),
-              child: Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: AppColors.primary,
-                      width: 1,
+        return Scaffold(
+          appBar: AppBar(
+            centerTitle: false,
+            title: title,
+            leading: leading,
+            leadingWidth: leadingWidth1,
+            actions: [
+              Padding(
+                padding: const EdgeInsets.only(right: 15.0),
+                child: Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: AppColors.primary,
+                        width: 1,
+                      ),
+                      shape: BoxShape.circle,
                     ),
-                    shape: BoxShape.circle,
-                  ),
-                  child: ProfileSection()),
-            ),
-          ],
-          bottom: preferredSize1,
+                    child: ProfileSection(
+                      openEndDrawer: openEndDrawer,
+                    )),
+              ),
+            ],
+            bottom: preferredSize1,
+          ),
         );
       },
     );
@@ -71,9 +77,17 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   Size get preferredSize => Size.fromHeight(height);
 }
 
-class ProfileSection extends StatelessWidget {
-  ProfileSection({Key? key});
+// ignore: must_be_immutable
+class ProfileSection extends StatefulWidget {
+  ProfileSection({Key? key, required this.openEndDrawer});
 
+  void Function() openEndDrawer;
+
+  @override
+  State<ProfileSection> createState() => _ProfileSectionState();
+}
+
+class _ProfileSectionState extends State<ProfileSection> {
   @override
   Widget build(BuildContext context) {
     return Consumer<AuthenticationProvider>(
@@ -81,12 +95,9 @@ class ProfileSection extends StatelessWidget {
         if (authProvider.isLoggedIn) {
           return GestureDetector(
             onTap: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) {
-                  return ProfileScreen();
-                }),
-              );
+              setState(() {
+                widget.openEndDrawer();
+              });
             },
             child: CircleAvatar(
               maxRadius: 20,
@@ -137,5 +148,93 @@ class ProfileSection extends StatelessWidget {
     ];
 
     return colors[Random().nextInt(colors.length)];
+  }
+}
+
+class ProfileDetails extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Directionality(
+      textDirection: TextDirection.ltr,
+      child: Drawer(
+        child: ListView(
+          children: [
+            UserAccountsDrawerHeader(
+              accountName: Text('John Doe'),
+              accountEmail: Text('johndoe@example.com'),
+              currentAccountPicture: CircleAvatar(
+                radius: 30,
+                child: Center(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(100),
+                      image: DecorationImage(
+                        image: AssetImage(
+                          'assets/images/profilepic.jpg',
+                        ),
+                        fit: BoxFit.cover,
+                        alignment: Alignment.topCenter,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              // Additional properties can be set to customize the header
+              decoration: BoxDecoration(
+                color: AppColors.secondary,
+              ),
+            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.68,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Column(
+                      children: [
+                        ListTileBar(
+                          listTitle: 'Liked Homes',
+                          iconData: Icons.favorite_rounded,
+                        ),
+                        ListTileBar(
+                          listTitle: 'Recent',
+                          iconData: Icons.history,
+                        ),
+                        ListTileBar(
+                          listTitle: 'Uploads',
+                          iconData: Icons.upload,
+                        ),
+                        Divider(
+                          color: AppColors.textColor,
+                        ),
+                        ListTileBar(
+                          listTitle: 'Reviews',
+                          iconData: Icons.reviews,
+                        ),
+                        ListTileBar(
+                          listTitle: 'FAQ',
+                          iconData: Icons.question_answer,
+                        ),
+                        ListTileBar(
+                          listTitle: 'Logout',
+                          iconData: Icons.logout,
+                        ),
+                        Divider(
+                          color: AppColors.textColor,
+                        ),
+                      ],
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Text('Version 1.0.0'),
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+    );
   }
 }

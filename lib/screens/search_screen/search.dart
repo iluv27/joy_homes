@@ -38,10 +38,15 @@ class _SearchScreenState extends State<SearchScreen> {
 
   RangeValues _sliderValue = RangeValues(700000, 2000000);
 
+  void openEndDrawer() {
+    _scaffoldKey.currentState?.openEndDrawer();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
+      drawer: ProfileDetails(),
       endDrawer: Directionality(
         textDirection: TextDirection.ltr,
         child: Drawer(
@@ -179,6 +184,8 @@ class _SearchScreenState extends State<SearchScreen> {
         ),
       ),
       appBar: AppBarWidget(
+          openEndDrawer: openEndDrawer,
+          leadingWidth1: 0,
           preferredSize1: PreferredSize(
             preferredSize: const Size.fromHeight(1.0),
             child: Container(

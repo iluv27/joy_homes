@@ -21,12 +21,21 @@ final List<String> imgList = [
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key, this.isLoggedIn = false});
   bool isLoggedIn;
+
+  void openEndDrawer() {
+    scaffoldKey.currentState?.openEndDrawer();
+  }
+
+  GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        key: scaffoldKey,
         backgroundColor: const Color(0XFFFAFAFA),
         appBar: AppBarWidget(
+          openEndDrawer: openEndDrawer,
           leadingWidth1: 0,
           preferredSize1: PreferredSize(
             preferredSize: const Size.fromHeight(1.0),
@@ -48,6 +57,7 @@ class HomeScreen extends StatelessWidget {
           height: 60,
         ),
         body: const HouseContainer(),
+        endDrawer: ProfileDetails(),
       ),
     );
   }

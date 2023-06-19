@@ -24,12 +24,21 @@ class FavouriteScreen extends StatelessWidget {
     const FavContainer(),
   ];
 
+  void openEndDrawer() {
+    scaffoldKey.currentState?.openEndDrawer();
+  }
+
+  GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        key: scaffoldKey,
         backgroundColor: const Color(0XFFFAFAFA),
         appBar: AppBarWidget(
+            openEndDrawer: openEndDrawer,
+            leadingWidth1: 0,
             preferredSize1: PreferredSize(
               preferredSize: const Size.fromHeight(1.0),
               child: Container(
@@ -69,6 +78,7 @@ class FavouriteScreen extends StatelessWidget {
             },
           ),
         ),
+        endDrawer: ProfileDetails(),
       ),
     );
   }

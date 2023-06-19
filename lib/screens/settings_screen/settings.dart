@@ -13,12 +13,20 @@ class SettingsScreen extends StatelessWidget {
     super.key,
   });
 
+  void openEndDrawer() {
+    scaffoldKey.currentState?.openEndDrawer();
+  }
+
+  GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        key: scaffoldKey,
         backgroundColor: const Color(0XFFFAFAFA),
         appBar: AppBarWidget(
+          openEndDrawer: openEndDrawer,
+          leadingWidth1: 0,
           preferredSize1: PreferredSize(
             preferredSize: const Size.fromHeight(1.0),
             child: Container(
@@ -44,6 +52,7 @@ class SettingsScreen extends StatelessWidget {
           height: 60,
         ),
         body: const SettingsListview(),
+        endDrawer: ProfileDetails(),
       ),
     );
   }

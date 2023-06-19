@@ -40,10 +40,18 @@ class _HomeDetailsScreenState extends State<HomeDetailsScreen> {
 
   late bool isLoggedIn;
 
+  void openEndDrawer() {
+    scaffoldKey.currentState?.openEndDrawer();
+  }
+
+  GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        key: scaffoldKey,
         appBar: AppBarWidget(
+            openEndDrawer: openEndDrawer,
             leadingWidth1: 36,
             leading: IconButton(
                 onPressed: () {
