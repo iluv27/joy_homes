@@ -1,5 +1,6 @@
 // ignore_for_file: must_be_immutable,
 
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:joy_homes/theme.dart';
 import 'screens/search_screen/search.dart';
@@ -10,6 +11,9 @@ import 'screens/upload_screen/upload.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -43,53 +47,338 @@ class MyApp extends StatelessWidget {
 }
 
 class AuthenticationProvider extends ChangeNotifier {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  User? currentUser;
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
 
-  User? _currentUser;
-  User? get currentUser => _currentUser;
-
-  bool get isLoggedIn => _currentUser != null;
+  bool get isLoggedIn => currentUser != null;
   String? firstName;
   String? lastName;
+  String? displayName;
+  String? userEmail;
+  String? photoUrl;
+  String? identity;
+  String? contactPreference;
+  String? verificationMode;
+  String? verificationImageURL;
+  GoogleSignInAccount? googleUser;
 
-  String getUserInitials() {
-    final String? firstInitial =
-        firstName?.isNotEmpty == true ? firstName![0] : null;
-    final String? lastInitial =
-        lastName?.isNotEmpty == true ? lastName![0] : null;
-    return '$firstInitial $lastInitial';
-  }
-
-  void user() {
-    final user = _currentUser;
-    if (user != null) {
-      firstName = user.displayName?.split(' ')[0];
-      lastName = user.displayName?.split(' ')[1];
-      // ignore: unused_local_variable
-      final userInitials = getUserInitials();
+  // SETTING AGENT INFO
+  Future<void> updateUserOwner(
+    String newOwner,
+    String contactPreference1,
+    // String verificationImageURL1,
+    String verificationMode1,
+  ) async {
+    if (currentUser != null) {
+      await FirebaseFirestore.instance
+          .collection('Users')
+          .doc(currentUser!.uid)
+          .update({
+        'identity': newOwner,
+        'contactPreference': contactPreference1,
+        'verificationMode': verificationMode1,
+        // 'verificationImageURL': verificationImageURL1,
+      }).then((_) async {
+        // Retrieve user data
+        await FirebaseFirestore.instance
+            .collection('Users')
+            .doc(currentUser!.uid)
+            .get()
+            .then((snapshot) async {
+          if (snapshot.exists) {
+            displayName = snapshot.get('displayName');
+            verificationMode = snapshot.get('verificationMode');
+            contactPreference = snapshot.get('contactPreference');
+            userEmail = snapshot.get('email');
+            photoUrl = snapshot.get('photoUrl');
+            identity = snapshot.get('identity');
+            // verificationImageURL = snapshot.get('verificationImageURL');
+            // Copy user data to 'Agents' collection
+          }
+        }).catchError((error) {
+          // Failed to retrieve user data
+        });
+      }).catchError((error) {
+        // Failed to update 'Owner' field
+      });
     }
   }
 
-  void login(String email, String password) async {
+// UPLOAD IMAGE TO THE STORAGE
+  Future<String> uploadImageToFirebaseStorage(File imageFile) async {
     try {
-      final userCredential = await _auth.signInWithEmailAndPassword(
+      String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+      firebase_storage.Reference ref =
+          firebase_storage.FirebaseStorage.instance.ref().child(fileName);
+      await ref.putFile(imageFile);
+      String imageUrl = await ref.getDownloadURL();
+      return imageUrl;
+    } catch (e) {
+      print('Error uploading image to Firebase Storage: $e');
+      return '';
+    }
+  }
+
+// SAVE INFO FROM VERIFICATION PAGE TO FIREBASE
+
+  Future<void> saveVerificationDataToFirestore({
+    required String contactPreference1,
+    required String verificationImageURL,
+    required String verificationMode1,
+    required String identity1,
+  }) async {
+    try {
+      if (currentUser != null || googleUser != null) {
+        await FirebaseFirestore.instance
+            .collection('Users')
+            .doc(currentUser!.uid)
+            .update({
+          'contactPreference': contactPreference1,
+          'verificationMode': verificationMode1,
+          'verificationImageURL': verificationImageURL,
+          'identity': identity1
+        });
+
+        print('Verification data saved successfully.');
+      }
+    } catch (e) {
+      print('Error saving verification data to Firestore: $e');
+    }
+  }
+
+  // GOOGLE SIGN IN
+  Future<void> signInWithGoogle() async {
+    try {
+      // Trigger the Google Sign-In flow.
+      googleUser = await _googleSignIn.signIn();
+
+      // Obtain the auth details from the request.
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser!.authentication;
+
+      // Create a new credential.
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      // Sign in or sign up to Firebase with the Google credential.
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+
+      // Access the authenticated user.
+      currentUser = userCredential.user;
+
+      if (googleUser != null) {
+        await saveUserDataToFirestore(currentUser!, googleUser!);
+        await getUserDataFromFirestore(currentUser!.uid);
+      }
+
+      if (currentUser != null) {
+        // Check if it's a new user (sign-up) or an existing user (sign-in).
+
+        // Retrieve user data from Firestore.
+        await getUserDataFromFirestore(currentUser!.uid);
+        await saveUserDataToFirestore(currentUser!, googleUser!);
+
+        // User is signing up with Google for the first time.
+
+        // Use the retrieved data as needed.
+      }
+    } catch (e) {
+      print('Error signing in with Google: $e');
+    }
+  }
+
+  Future<void> saveUserDataToFirestore(
+      User user, GoogleSignInAccount googleUser) async {
+    try {
+      // ignore: unnecessary_null_comparison
+      if (googleUser != null) {
+        await FirebaseFirestore.instance.collection('Users').doc(user.uid).set({
+          'displayName': googleUser.displayName,
+          'email': googleUser.email,
+          'photoUrl': googleUser.photoUrl,
+          'identity': 'user',
+          'verificationMode': '',
+          'contactPreference': '',
+          'verificationImageURL': '',
+          // Add more fields as needed.
+        });
+      }
+    } catch (e) {
+      print('Error saving user data to Firestore: $e');
+    }
+  }
+
+  Future<Map<String, dynamic>?> getUserDataFromFirestore(String uid) async {
+    try {
+      if (currentUser != null) {
+        // Fetch user document from 'users' collection using UID
+        DocumentSnapshot snapshot = await FirebaseFirestore.instance
+            .collection('Users')
+            .doc(currentUser!.uid)
+            .get();
+
+        if (snapshot.exists) {
+          // Access user data from the document
+          displayName = snapshot.get('displayName');
+          verificationMode = snapshot.get('verificationMode');
+          contactPreference = snapshot.get('contactPreference');
+          userEmail = snapshot.get('email');
+          photoUrl = snapshot.get('photoUrl');
+          identity = snapshot.get('identity');
+
+          print('Display Name: $displayName');
+          print('Email: $userEmail');
+          print('photoUrl: $photoUrl');
+          print('identity: $identity');
+
+          // Do something with the user data
+        }
+      }
+    } catch (e) {
+      print('Error retrieving user data from Firestore: $e');
+      return null;
+    }
+    return null;
+  }
+
+// REGISTER USER and store data in Firebase
+  Future registerUser(
+      String displayName, String phoneNo, String email, String password) async {
+    try {
+      // Create user account with email and password
+      UserCredential userCredential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
 
-      _currentUser = userCredential.user;
+      // Generate unique user ID
+      String uid = userCredential.user!.uid;
 
-      notifyListeners();
+      currentUser = userCredential.user;
+
+      // Store user data in Firebase
+      await FirebaseFirestore.instance.collection('Users').doc(uid).set({
+        'displayName': displayName,
+        'phoneNo': phoneNo,
+        'email': email,
+        'password': password,
+        'identity': 'user',
+        'verificationMode': '',
+        'contactPreference': '',
+        'verificationImageURL': '',
+        'photoUrl': ''
+
+        // Add more fields as needed
+      });
     } catch (e) {
-      print('Sign in error: $e');
+      print('Error registering user: $e');
+    }
+
+    // ignore: unnecessary_null_comparison
+  }
+
+// GET USER'S INITIALS
+
+  String getUserInitials() {
+    if (displayName != null) {
+      List<String> nameParts = displayName!.split(' ');
+
+      firstName = nameParts.isNotEmpty ? nameParts[0] : '';
+      lastName = nameParts.length > 1 ? nameParts.sublist(1).join(' ') : '';
+
+      final String? firstInitial = firstName!.isNotEmpty ? firstName![0] : null;
+      final String? lastInitial = lastName!.isNotEmpty ? lastName![0] : null;
+
+      return '$firstInitial $lastInitial';
+    } else {
+      // Handle the case when displayName is null
+      return '';
     }
   }
 
-  void logout() {
-    // Add your logout logic here
-    _currentUser = null;
+// LOG IN USER
+  Future login(String email, String password) async {
+    try {
+      // Sign in with email and password
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
 
-    notifyListeners();
+      // Get the authenticated user
+      currentUser = userCredential.user;
+
+      // ignore: unnecessary_null_comparison
+      if (currentUser != null) {
+        // Fetch user document from 'users' collection using UID
+        DocumentSnapshot snapshot = await FirebaseFirestore.instance
+            .collection('Users')
+            .doc(currentUser!.uid)
+            .get();
+
+        if (snapshot.exists) {
+          // Access user data from the document
+          displayName = snapshot.get('displayName');
+          userEmail = snapshot.get('email');
+          identity = snapshot.get('identity');
+          verificationMode = snapshot.get('verificationMode');
+          contactPreference = snapshot.get('contactPreference');
+          photoUrl = snapshot.get('photoUrl');
+
+          // Do something with the user data
+          print('Display Name: $displayName');
+          print('Email: $userEmail');
+          print('identity: $identity');
+        }
+      }
+    } catch (e) {
+      print('Error logging in: $e');
+    }
+  }
+
+// LOG OUT USER
+  Future<void> logout() async {
+    try {
+      // Sign out from Firebase
+      await FirebaseAuth.instance.signOut();
+
+      // Clear the user data
+      currentUser = null;
+      displayName = null;
+      userEmail = null;
+
+      notifyListeners();
+
+      // Perform any additional actions after logging out
+    } catch (e) {
+      print('Error logging out: $e');
+    }
+  }
+
+// SIGN OUT FROM GOOGLE
+  Future<void> signOutFromGoogle() async {
+    try {
+      // Sign out from Google.
+      await _googleSignIn.signOut();
+
+      // Sign out from Firebase.
+      await FirebaseAuth.instance.signOut();
+
+      // Clear the user data.
+      currentUser = null;
+      displayName = null;
+      userEmail = null;
+      photoUrl = null;
+      notifyListeners();
+      // Perform any additional actions after logging out.
+    } catch (e) {
+      print('Error signing out: $e');
+    }
   }
 }
 

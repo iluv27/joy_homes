@@ -1,11 +1,12 @@
 import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'upload_constants.dart';
 import 'package:joy_homes/theme.dart';
+import 'package:provider/provider.dart';
+import 'package:joy_homes/main.dart';
 
 class UploadScreen extends StatelessWidget {
   const UploadScreen({super.key});
@@ -147,7 +148,12 @@ class _UploadImagesState extends State<UploadImages> {
                         ),
                         child: Center(
                           child: Text(
-                            'Please click the button below to select images of a home. Long press an image to select more than one.',
+                            Provider.of<AuthenticationProvider>(context,
+                                            listen: false)
+                                        .currentUser !=
+                                    null
+                                ? 'Please click the button below to select images of a home. Long press an image to select more than one.'
+                                : 'You have to be logged in to upload an image. Please log in.',
                             style: TextStyle(
                               fontWeight: FontWeight.w400,
                               color: AppColors.textColor,
@@ -164,23 +170,28 @@ class _UploadImagesState extends State<UploadImages> {
                 alignment: Alignment.bottomCenter,
                 child: Container(
                   padding: EdgeInsets.all(16),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      pickPhotos();
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.secondary,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      fixedSize: const Size(200, 50),
-                    ),
-                    child: Text(
-                      'Select Images',
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                    ),
-                  ),
+                  child: Provider.of<AuthenticationProvider>(context,
+                                  listen: false)
+                              .currentUser !=
+                          null
+                      ? ElevatedButton(
+                          onPressed: () {
+                            pickPhotos();
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.secondary,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            fixedSize: const Size(200, 50),
+                          ),
+                          child: Text(
+                            'Select Images',
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.w600),
+                          ),
+                        )
+                      : null,
                 ),
               ),
             ],

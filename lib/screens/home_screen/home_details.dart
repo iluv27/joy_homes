@@ -58,7 +58,7 @@ class _DetailsPageState extends State<DetailsPage> {
                 child: CarouselSlider(
                   carouselController: _controller,
                   options: CarouselOptions(
-                    aspectRatio: 16 / 10,
+                    aspectRatio: 16 / 11,
                     viewportFraction: 1,
                     onPageChanged: (index, _) {
                       setState(() {
@@ -123,8 +123,8 @@ class _DetailsPageState extends State<DetailsPage> {
             height: 70,
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: ListView.builder(
+              clipBehavior: Clip.none,
               scrollDirection: Axis.horizontal,
-              shrinkWrap: true,
               itemCount: imgList.length,
               itemBuilder: (BuildContext context, int index) {
                 return GestureDetector(
@@ -135,6 +135,8 @@ class _DetailsPageState extends State<DetailsPage> {
                     });
                   },
                   child: Container(
+                    width: 80,
+                    height: 100,
                     margin: const EdgeInsets.all(6),
                     decoration: BoxDecoration(
                       border: Border.all(
@@ -451,6 +453,9 @@ class _DetailsPageState extends State<DetailsPage> {
             child: Wrap(
               children: [
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.baseline,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  textBaseline: TextBaseline.alphabetic,
                   children: [
                     GestureDetector(
                       onTap: () {
@@ -463,13 +468,32 @@ class _DetailsPageState extends State<DetailsPage> {
                         detailHeading: 'Reviews',
                       ),
                     ),
-                    SizedBox(
-                      width: 6,
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                          return ReviewPage();
+                        }));
+                      },
+                      child: Row(
+                        children: [
+                          Text(
+                            'Edit',
+                            style: TextStyle(
+                              color: AppColors.textColor,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Icon(
+                            Icons.rate_review_outlined,
+                            size: 14,
+                            color: AppColors.secondary,
+                          ),
+                        ],
+                      ),
                     ),
-                    Icon(
-                      Icons.rate_review_outlined,
-                      size: 18,
-                    )
                   ],
                 ),
                 const SizedBox(height: 8),
@@ -483,7 +507,7 @@ class _DetailsPageState extends State<DetailsPage> {
           //  THE AVAILABILITY LISTILE
           ListTile(
             leading: SizedBox(
-              width: 200,
+              width: MediaQuery.of(context).size.width * 0.9,
               child: Row(children: [
                 DetailHeadings(detailHeading: 'Availability'),
                 SizedBox(

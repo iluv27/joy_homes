@@ -1,4 +1,4 @@
-// ignore_for_file: must_be_immutable
+// ignore_for_file: must_be_immutable, unnecessary_null_comparison
 
 import 'package:flutter/material.dart';
 import 'package:joy_homes/main.dart';
@@ -24,8 +24,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   TextEditingController password = TextEditingController();
 
-  final _auth = FirebaseAuth.instance;
-
   bool showSpinner = false;
 
   @override
@@ -34,7 +32,9 @@ class _LoginScreenState extends State<LoginScreen> {
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         body: ModalProgressHUD(
-          color: AppColors.secondary,
+          progressIndicator: CircularProgressIndicator(
+            color: AppColors.secondary,
+          ),
           inAsyncCall: showSpinner,
           child: Stack(
             children: <Widget>[
@@ -42,15 +42,84 @@ class _LoginScreenState extends State<LoginScreen> {
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const LogoTag(),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 80.0),
+                    child: const LogoTag(),
+                  ),
                   const SizedBox(
-                    height: 30,
+                    height: 50,
+                  ),
+                  SignupButtons2(
+                    icondata: Icons.fmd_good,
+                    buttonWords: 'Sign in with Google',
+                    onPressed: () async {
+                      setState(() {
+                        showSpinner = true;
+                      });
+                      try {
+                        await Provider.of<AuthenticationProvider>(context,
+                                listen: false)
+                            .signInWithGoogle();
+
+                        if (Provider.of<AuthenticationProvider>(context,
+                                    listen: false)
+                                .currentUser !=
+                            null) {
+                          // ignore: use_build_context_synchronously
+
+                          Navigator.pushReplacement(context,
+                              MaterialPageRoute(builder: ((BuildContext) {
+                            return MainMenuScreen();
+                          })));
+                        }
+                        setState(() {
+                          showSpinner = false;
+                        });
+                      } catch (e) {
+                        // Handle sign-in errors, such as wrong email or password
+                        print('Sign in with google error: $e');
+                      }
+                    },
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 30.0,
+                    ),
+                    child: Stack(children: [
+                      Positioned(
+                        top: 23,
+                        child: Container(
+                          width: MediaQuery.of(context).size.width * 1,
+                          height: 0.5,
+                          color: AppColors.textColor.withOpacity(0.3),
+                        ),
+                      ),
+                      Align(
+                        alignment: AlignmentDirectional.center,
+                        child: ClipRRect(
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(5.0)),
+                          child: Container(
+                            padding: EdgeInsets.all(15),
+                            color: Colors.white,
+                            child: Text(
+                              'Or',
+                              style: TextStyle(
+                                  color: AppColors.textColor.withOpacity(0.4)),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ]),
                   ),
                   Form(
                     key: _formKey,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 30.0, vertical: 50),
+                          horizontal: 30.0, vertical: 30),
                       child: Column(
                         children: [
                           InputField(
@@ -88,9 +157,6 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           ElevatedButton(
                             onPressed: () async {
-                              Provider.of<AuthenticationProvider>(context,
-                                      listen: false)
-                                  .login(email.text, password.text);
                               setState(() {
                                 showSpinner = true;
                               });
@@ -99,16 +165,17 @@ class _LoginScreenState extends State<LoginScreen> {
                                 // Send data to the server
                               }
                               try {
-                                final user =
-                                    await _auth.signInWithEmailAndPassword(
-                                        email: email.text,
-                                        password: password.text);
-                                Provider.of<AuthenticationProvider>(context,
+                                await Provider.of<AuthenticationProvider>(
+                                        context,
                                         listen: false)
                                     .login(email.text, password.text);
 
-                                // ignore: unnecessary_null_comparison
-                                if (user != null) {
+                                // FROM SIGN UP
+
+                                if (Provider.of<AuthenticationProvider>(context,
+                                            listen: false)
+                                        .currentUser !=
+                                    null) {
                                   // ignore: use_build_context_synchronously
 
                                   Navigator.pushReplacement(context,
@@ -148,26 +215,29 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                   ),
-                  Text.rich(
-                    TextSpan(
-                      text: 'Don\'t have an account? ',
-                      style: const TextStyle(fontSize: 16),
-                      children: [
-                        TextSpan(
-                          text: 'Sign up',
-                          style: const TextStyle(
-                            color: AppColors.secondary,
+                  Padding(
+                    padding: const EdgeInsets.only(top: 70.0),
+                    child: Text.rich(
+                      TextSpan(
+                        text: 'Don\'t have an account? ',
+                        style: const TextStyle(fontSize: 16),
+                        children: [
+                          TextSpan(
+                            text: 'Sign up',
+                            style: const TextStyle(
+                              color: AppColors.secondary,
+                            ),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) {
+                                  return const SignupOptions();
+                                }));
+                              },
                           ),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () {
-                              Navigator.push(context,
-                                  MaterialPageRoute(builder: (context) {
-                                return const SignupOptions();
-                              }));
-                            },
-                        ),
-                        const TextSpan(text: '.'),
-                      ],
+                          const TextSpan(text: '.'),
+                        ],
+                      ),
                     ),
                   ),
                 ],

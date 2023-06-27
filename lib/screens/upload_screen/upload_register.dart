@@ -3,6 +3,8 @@ import 'package:joy_homes/theme.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'dart:math' as math;
+import 'package:provider/provider.dart';
+import 'package:joy_homes/main.dart';
 
 class VerificationScreen extends StatefulWidget {
   const VerificationScreen({Key? key});
@@ -42,6 +44,11 @@ class _VerificationScreenState extends State<VerificationScreen>
     super.dispose();
   }
 
+  String? identity;
+  String? contactPreference;
+  String? verificationMode;
+  String? verificationImageUrl;
+  File? uploadedFile;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,8 +85,14 @@ class _VerificationScreenState extends State<VerificationScreen>
               height: 40,
             ),
             SimpleDropdownButton(
-              dropdownItems: ['Owner', 'House Agent'],
+              dropdownItems: ['Landlord', 'House Agent'],
               hintValue: 'Owner?',
+              selectedValue: identity,
+              onChanged: (value) async {
+                setState(() {
+                  identity = value; // Update the selected value
+                });
+              },
             ),
             SizedBox(
               height: 20,
@@ -88,6 +101,12 @@ class _VerificationScreenState extends State<VerificationScreen>
               dropdownItems: ['Mail', 'Phone No.'],
               hintValue: 'Contact Preference',
               helperText: 'This is how an interested tenant will contact you.',
+              selectedValue: contactPreference,
+              onChanged: (value) {
+                setState(() {
+                  contactPreference = value;
+                });
+              },
             ),
             SizedBox(
               height: 20,
@@ -99,17 +118,55 @@ class _VerificationScreenState extends State<VerificationScreen>
                 'International Passport'
               ],
               hintValue: 'Mode of Verification',
+              selectedValue: verificationMode,
+              onChanged: (value) {
+                setState(() {
+                  verificationMode = value;
+                });
+              },
             ),
             SizedBox(
               height: 30,
             ),
-            UploadButton(),
+            UploadButton(
+              uploadedFile: uploadedFile,
+            ),
             SizedBox(
               height: 50,
             ),
             Center(
               child: ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
+                  try {
+                    if (uploadedFile != null) {
+                      verificationImageUrl =
+                          await Provider.of<AuthenticationProvider>(context,
+                                  listen: false)
+                              .uploadImageToFirebaseStorage(uploadedFile!);
+
+                      // await Provider.of<AuthenticationProvider>(context,
+                      //         listen: false)
+                      //     .saveVerificationDataToFirestore(
+                      //         verificationImageURL: verificationImageUrl,
+                      //         verificationMode1: verificationMode.toString(),
+                      //         identity1: identity.toString(),
+                      //         contactPreference1: contactPreference.toString());
+                    }
+
+                    await Provider.of<AuthenticationProvider>(context,
+                            listen: false)
+                        .updateUserOwner(
+                            identity!, verificationMode!, contactPreference!);
+
+                    // Provider.of<AuthenticationProvider>(context, listen: false)
+                    //     .contactPreference = contactPreference;
+
+                    // Provider.of<AuthenticationProvider>(context, listen: false)
+                    //     .verificationMode = verificationMode;
+                  } catch (e) {
+                    print('Updating error is this: $e');
+                  }
+
                   showDialog(
                     context: context,
                     builder: (BuildContext context) {
@@ -129,8 +186,11 @@ class _VerificationScreenState extends State<VerificationScreen>
                               padding: const EdgeInsets.only(bottom: 35.0),
                               child: ElevatedButton(
                                 onPressed: () {
-                                  Navigator.popUntil(
-                                      context, (route) => route.isFirst);
+                                  Navigator.pushReplacement(context,
+                                      MaterialPageRoute(
+                                          builder: ((BuildContext) {
+                                    return MainMenuScreen();
+                                  })));
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: AppColors.secondary,
@@ -176,18 +236,21 @@ class _VerificationScreenState extends State<VerificationScreen>
 
 // DROPDOWN BUTTON CODE
 
+// ignore: must_be_immutable
 class SimpleDropdownButton extends StatefulWidget {
-  final String? selectedValue;
+  String? selectedValue;
   final String hintValue;
   final List<String> dropdownItems;
   final String? helperText;
+  final ValueChanged<String?>? onChanged; // Callback function
 
-  const SimpleDropdownButton({
+  SimpleDropdownButton({
     Key? key,
     required this.dropdownItems,
     this.selectedValue,
     this.helperText,
     required this.hintValue,
+    this.onChanged, // Pass the callback function
   }) : super(key: key);
 
   @override
@@ -210,7 +273,6 @@ class _SimpleDropdownButtonState extends State<SimpleDropdownButton> {
         contentPadding: EdgeInsets.all(0),
         border: InputBorder.none,
         helperText: widget.helperText,
-        // Add the helper text
       ),
       child: DropdownButtonHideUnderline(
         child: Container(
@@ -230,12 +292,13 @@ class _SimpleDropdownButtonState extends State<SimpleDropdownButton> {
             iconEnabledColor: AppColors.textColor.withOpacity(0.5),
             elevation: 1,
             borderRadius: BorderRadius.circular(5),
-            underline: null, // Remove the underline
-            value: selectedValue,
+            underline: null,
+            value: widget.selectedValue,
             onChanged: (newValue) {
               setState(() {
                 selectedValue = newValue;
               });
+              widget.onChanged?.call(newValue); // Trigger the callback function
             },
             items: widget.dropdownItems.map((String value) {
               return DropdownMenuItem<String>(
@@ -252,7 +315,7 @@ class _SimpleDropdownButtonState extends State<SimpleDropdownButton> {
                 fontSize: 16,
                 color: AppColors.textColor.withOpacity(0.5),
               ),
-            ), // Add the hint text
+            ),
           ),
         ),
       ),
@@ -262,14 +325,19 @@ class _SimpleDropdownButtonState extends State<SimpleDropdownButton> {
 
 // UPLOAD DOCUMENT CODE
 
+// ignore: must_be_immutable
 class UploadButton extends StatefulWidget {
+  File? uploadedFile;
+
+  UploadButton({Key? key, this.uploadedFile
+      // Pass the callback function
+      })
+      : super(key: key);
   @override
   _UploadButtonState createState() => _UploadButtonState();
 }
 
 class _UploadButtonState extends State<UploadButton> {
-  File? _uploadedFile;
-
   Future<void> _uploadDocument() async {
     final ImagePicker _picker = ImagePicker();
     final XFile? pickedFile = await _picker.pickImage(
@@ -279,7 +347,7 @@ class _UploadButtonState extends State<UploadButton> {
 
     if (pickedFile != null) {
       setState(() {
-        _uploadedFile = File(pickedFile.path);
+        widget.uploadedFile = File(pickedFile.path);
       });
     }
   }
@@ -310,10 +378,10 @@ class _UploadButtonState extends State<UploadButton> {
             color: AppColors.smallIcons,
           ),
           SizedBox(width: 8.0),
-          if (_uploadedFile != null)
+          if (widget.uploadedFile != null)
             Flexible(
               child: Text(
-                _uploadedFile!.path.split('/').last,
+                widget.uploadedFile!.path.split('/').last,
                 overflow: TextOverflow.ellipsis,
               ),
             )

@@ -1,3 +1,5 @@
+// ignore_for_file: unused_element
+
 import 'package:flutter/material.dart';
 import 'package:joy_homes/profile/profile_constants.dart';
 import 'package:joy_homes/theme.dart';
@@ -31,7 +33,8 @@ class SearchScreen extends StatefulWidget {
   State<SearchScreen> createState() => _SearchScreenState();
 }
 
-class _SearchScreenState extends State<SearchScreen> {
+class _SearchScreenState extends State<SearchScreen>
+    with SingleTickerProviderStateMixin {
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   TextEditingController price = TextEditingController();
@@ -42,13 +45,37 @@ class _SearchScreenState extends State<SearchScreen> {
     _scaffoldKey.currentState?.openEndDrawer();
   }
 
+  late AnimationController _animationController = AnimationController(
+    vsync: this,
+    duration: Duration(milliseconds: 300),
+  );
+
+  late Animation<Offset> _drawerAnimation = Tween<Offset>(
+    begin: Offset(1.0, 0.0),
+    end: Offset.zero,
+  ).animate(CurvedAnimation(
+    parent: _animationController,
+    curve: Curves.easeInOut,
+  ));
+
+  @override
+  void initState() {
+    super.initState();
+    _drawerAnimation;
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      drawer: ProfileDetails(),
-      endDrawer: Directionality(
-        textDirection: TextDirection.ltr,
+      drawer: SlideTransition(
+        position: _drawerAnimation,
         child: Drawer(
           child: ListView(
             children: [
@@ -183,6 +210,7 @@ class _SearchScreenState extends State<SearchScreen> {
           ),
         ),
       ),
+      endDrawer: ProfileDetails(),
       appBar: AppBarWidget(
           openEndDrawer: openEndDrawer,
           leadingWidth1: 0,
@@ -211,6 +239,8 @@ class _SearchScreenState extends State<SearchScreen> {
           height: 60),
       body: SearchScreenDetails(
         scaffoldKey: _scaffoldKey,
+        drawerAnimation: _drawerAnimation,
+        animationController: _animationController,
       ),
     );
   }
@@ -218,15 +248,27 @@ class _SearchScreenState extends State<SearchScreen> {
 
 // ignore: must_be_immutable
 class SearchScreenDetails extends StatefulWidget {
-  SearchScreenDetails({super.key, required this.scaffoldKey});
+  SearchScreenDetails(
+      {super.key,
+      required this.scaffoldKey,
+      required this.drawerAnimation,
+      required this.animationController});
+
   GlobalKey<ScaffoldState> scaffoldKey;
+
+  Animation<Offset> drawerAnimation;
+
+  AnimationController animationController;
+
   @override
   State<SearchScreenDetails> createState() => _SearchScreenDetailsState();
 }
 
-class _SearchScreenDetailsState extends State<SearchScreenDetails> {
-  void openEndDrawer() {
-    widget.scaffoldKey.currentState?.openEndDrawer();
+class _SearchScreenDetailsState extends State<SearchScreenDetails>
+    with SingleTickerProviderStateMixin {
+  void openProfileDrawer() {
+    widget.scaffoldKey.currentState?.openDrawer();
+    widget.animationController.forward();
   }
 
   @override
@@ -275,7 +317,7 @@ class _SearchScreenDetailsState extends State<SearchScreenDetails> {
                     color: Color.fromARGB(255, 115, 57, 16)),
                 onPressed: () {
                   setState(() {
-                    openEndDrawer();
+                    openProfileDrawer();
                   });
                 },
               ),

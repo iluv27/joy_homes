@@ -101,15 +101,21 @@ class _ProfileSectionState extends State<ProfileSection> {
             },
             child: CircleAvatar(
               maxRadius: 20,
-              backgroundColor: _getRandomColor(),
-              child: Text(
-                authProvider.getUserInitials(),
-                style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    letterSpacing: -1,
-                    fontWeight: FontWeight.w600),
-              ),
+              backgroundColor:
+                  authProvider.googleUser != null ? null : getRandomColor(),
+              backgroundImage: authProvider.googleUser != null
+                  ? NetworkImage(authProvider.photoUrl.toString())
+                  : null,
+              child: authProvider.googleUser != null
+                  ? null
+                  : Text(
+                      authProvider.getUserInitials(),
+                      style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          letterSpacing: -2,
+                          fontWeight: FontWeight.w600),
+                    ),
             ),
           );
         } else {
@@ -136,105 +142,111 @@ class _ProfileSectionState extends State<ProfileSection> {
       },
     );
   }
+}
 
-  Color _getRandomColor() {
-    final List<Color> colors = [
-      const Color.fromARGB(255, 133, 20, 12),
-      const Color.fromARGB(255, 15, 85, 143),
-      const Color.fromARGB(255, 9, 107, 12),
-      const Color.fromARGB(255, 123, 112, 13),
-      Color.fromARGB(255, 87, 55, 7),
-      const Color.fromARGB(255, 90, 8, 104),
-    ];
+Color getRandomColor() {
+  final List<Color> colors = [
+    const Color.fromARGB(255, 133, 20, 12),
+    const Color.fromARGB(255, 15, 85, 143),
+    const Color.fromARGB(255, 9, 107, 12),
+    const Color.fromARGB(255, 123, 112, 13),
+    Color.fromARGB(255, 87, 55, 7),
+    const Color.fromARGB(255, 90, 8, 104),
+  ];
 
-    return colors[Random().nextInt(colors.length)];
-  }
+  return colors[Random().nextInt(colors.length)];
 }
 
 class ProfileDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Directionality(
-      textDirection: TextDirection.ltr,
-      child: Drawer(
-        child: ListView(
-          children: [
-            UserAccountsDrawerHeader(
-              accountName: Text('John Doe'),
-              accountEmail: Text('johndoe@example.com'),
-              currentAccountPicture: CircleAvatar(
-                radius: 30,
-                child: Center(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(100),
-                      image: DecorationImage(
-                        image: AssetImage(
-                          'assets/images/profilepic.jpg',
-                        ),
-                        fit: BoxFit.cover,
-                        alignment: Alignment.topCenter,
-                      ),
-                    ),
+    return Consumer<AuthenticationProvider>(
+      builder: (context, authProvider, child) {
+        return Directionality(
+          textDirection: TextDirection.ltr,
+          child: Drawer(
+            child: ListView(
+              children: [
+                UserAccountsDrawerHeader(
+                  accountName: Text(authProvider.displayName.toString()),
+                  accountEmail: Text(authProvider.userEmail.toString()),
+                  currentAccountPicture: CircleAvatar(
+                    maxRadius: 30,
+                    backgroundColor: authProvider.googleUser != null
+                        ? null
+                        : getRandomColor(),
+                    backgroundImage: authProvider.googleUser != null
+                        ? NetworkImage(authProvider.photoUrl.toString())
+                        : null,
+                    child: authProvider.googleUser != null
+                        ? null
+                        : Text(
+                            authProvider.getUserInitials(),
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                letterSpacing: -1,
+                                fontWeight: FontWeight.w600),
+                          ),
+                  ),
+                  // Additional properties can be set to customize the header
+                  decoration: BoxDecoration(
+                    color: AppColors.secondary,
                   ),
                 ),
-              ),
-              // Additional properties can be set to customize the header
-              decoration: BoxDecoration(
-                color: AppColors.secondary,
-              ),
-            ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.68,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: Column(
-                      children: [
-                        ListTileBar(
-                          listTitle: 'Liked Homes',
-                          iconData: Icons.favorite_rounded,
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.68,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          children: [
+                            ListTileBar(
+                              listTitle: 'Liked Homes',
+                              iconData: Icons.favorite_rounded,
+                            ),
+                            ListTileBar(
+                              listTitle: 'Recent',
+                              iconData: Icons.history,
+                            ),
+                            ListTileBar(
+                              listTitle: 'Uploads',
+                              iconData: Icons.upload,
+                            ),
+                            Divider(
+                              color: AppColors.textColor,
+                            ),
+                            ListTileBar(
+                              listTitle: 'Reviews',
+                              iconData: Icons.reviews,
+                            ),
+                            ListTileBar(
+                              listTitle: 'FAQ',
+                              iconData: Icons.question_answer,
+                            ),
+                            ListTileBar(
+                              listTitle: 'Logout',
+                              iconData: Icons.logout,
+                            ),
+                            Divider(
+                              color: AppColors.textColor,
+                            ),
+                          ],
                         ),
-                        ListTileBar(
-                          listTitle: 'Recent',
-                          iconData: Icons.history,
-                        ),
-                        ListTileBar(
-                          listTitle: 'Uploads',
-                          iconData: Icons.upload,
-                        ),
-                        Divider(
-                          color: AppColors.textColor,
-                        ),
-                        ListTileBar(
-                          listTitle: 'Reviews',
-                          iconData: Icons.reviews,
-                        ),
-                        ListTileBar(
-                          listTitle: 'FAQ',
-                          iconData: Icons.question_answer,
-                        ),
-                        ListTileBar(
-                          listTitle: 'Logout',
-                          iconData: Icons.logout,
-                        ),
-                        Divider(
-                          color: AppColors.textColor,
-                        ),
-                      ],
-                    ),
+                      ),
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Text('Version 1.0.0'),
+                      )
+                    ],
                   ),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Text('Version 1.0.0'),
-                  )
-                ],
-              ),
-            )
-          ],
-        ),
-      ),
+                )
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }

@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:joy_homes/theme.dart';
-import 'package:joy_homes/screens/upload_screen/upload_constants.dart';
 import 'review_terms.dart';
 
 class ReviewPage extends StatefulWidget {
@@ -59,7 +58,7 @@ class _ReviewPageState extends State<ReviewPage> {
           children: [
             Expanded(
               child: Container(
-                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                padding: EdgeInsets.symmetric(vertical: 30, horizontal: 20),
                 width: MediaQuery.of(context).size.width * 1,
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -72,118 +71,102 @@ class _ReviewPageState extends State<ReviewPage> {
                     ),
                   ],
                 ),
-                child: SingleChildScrollView(
-                  child: Form(
-                    child: Column(
-                      children: [
-                        Expanded(
-                          flex: 0,
-                          child: SizedBox(
-                            width: double.infinity,
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Expanded(
-                                  child: CountFormField(
-                                    labelText: 'Ratings',
-                                    initialValue: 1,
-                                    minValue: 1,
-                                    maxValue: 5,
-                                    onCountChanged: (_count) {
-                                      setState(() {
-                                        starRating = _count;
-                                      });
-                                    },
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 130,
-                                ),
-                                Row(
-                                  children: List.generate(5, (index) {
-                                    return Icon(
-                                      index < starRating
-                                          ? Icons.star
-                                          : Icons.star_border,
-                                      color: Colors.black,
-                                      size: 18,
-                                    );
-                                  }),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Expanded(
-                          flex: 0,
-                          child: TextFormField(
-                            onChanged: (value) {
-                              setState(() {
-                                reviewContent = value;
-                              });
-                            },
-                            textAlignVertical: TextAlignVertical.center,
-                            textAlign: TextAlign.justify,
-                            cursorColor: AppColors.secondary,
-                            decoration: InputDecoration(
-                              enabled: true,
-                              contentPadding: EdgeInsets.symmetric(
-                                horizontal: 20,
-                                vertical: 0,
-                              ),
-                              hintText: 'Give a review',
-                              suffixIcon: Icon(
-                                Icons.border_color_rounded,
-                                size: 18,
-                                color: AppColors.secondary,
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  width: 0.5,
-                                  color: AppColors.secondary,
-                                ),
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  width: 0.5,
-                                  color: AppColors.primary.withOpacity(0.5),
-                                ),
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        ElevatedButton(
-                          onPressed: submitReview,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.secondary,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                            fixedSize: const Size(200, 50),
-                          ),
-                          child: const Row(
+                child: Form(
+                  child: Column(
+                    children: [
+                      Expanded(
+                        flex: 0,
+                        child: SizedBox(
+                          width: double.infinity,
+                          child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(Icons.person),
-                              SizedBox(width: 10.0),
-                              Text('Submit',
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w600)),
+                              for (int i = 1; i <= 5; i++)
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      starRating = i;
+                                    });
+                                  },
+                                  child: Icon(
+                                    i <= starRating
+                                        ? Icons.star
+                                        : Icons.star_border,
+                                    color: AppColors.textColor,
+                                    size: 30,
+                                  ),
+                                ),
                             ],
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Expanded(
+                        flex: 0,
+                        child: TextFormField(
+                          onChanged: (value) {
+                            setState(() {
+                              reviewContent = value;
+                            });
+                          },
+                          textAlignVertical: TextAlignVertical.center,
+                          textAlign: TextAlign.justify,
+                          cursorColor: AppColors.secondary,
+                          decoration: InputDecoration(
+                            enabled: true,
+                            contentPadding: EdgeInsets.symmetric(
+                              horizontal: 20,
+                              vertical: 0,
+                            ),
+                            hintText: 'Give a review',
+                            suffixIcon: Icon(
+                              Icons.border_color_rounded,
+                              size: 18,
+                              color: AppColors.secondary,
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                width: 0.5,
+                                color: AppColors.secondary,
+                              ),
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                width: 0.5,
+                                color: AppColors.primary.withOpacity(0.5),
+                              ),
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 30,
+                      ),
+                      ElevatedButton(
+                        onPressed: submitReview,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.secondary,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          fixedSize: const Size(200, 50),
+                        ),
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.person),
+                            SizedBox(width: 10.0),
+                            Text('Submit',
+                                style: TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.w600)),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
