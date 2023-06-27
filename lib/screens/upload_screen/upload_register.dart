@@ -5,6 +5,7 @@ import 'dart:io';
 import 'dart:math' as math;
 import 'package:provider/provider.dart';
 import 'package:joy_homes/main.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 class VerificationScreen extends StatefulWidget {
   const VerificationScreen({Key? key});
@@ -129,7 +130,11 @@ class _VerificationScreenState extends State<VerificationScreen>
               height: 30,
             ),
             UploadButton(
-              uploadedFile: uploadedFile,
+              onFileUploaded: (file) {
+                setState(() {
+                  uploadedFile = file;
+                });
+              },
             ),
             SizedBox(
               height: 50,
@@ -143,26 +148,12 @@ class _VerificationScreenState extends State<VerificationScreen>
                           await Provider.of<AuthenticationProvider>(context,
                                   listen: false)
                               .uploadImageToFirebaseStorage(uploadedFile!);
-
-                      // await Provider.of<AuthenticationProvider>(context,
-                      //         listen: false)
-                      //     .saveVerificationDataToFirestore(
-                      //         verificationImageURL: verificationImageUrl,
-                      //         verificationMode1: verificationMode.toString(),
-                      //         identity1: identity.toString(),
-                      //         contactPreference1: contactPreference.toString());
                     }
 
                     await Provider.of<AuthenticationProvider>(context,
                             listen: false)
-                        .updateUserOwner(
-                            identity!, verificationMode!, contactPreference!);
-
-                    // Provider.of<AuthenticationProvider>(context, listen: false)
-                    //     .contactPreference = contactPreference;
-
-                    // Provider.of<AuthenticationProvider>(context, listen: false)
-                    //     .verificationMode = verificationMode;
+                        .updateUserOwner(identity!, contactPreference!,
+                            verificationMode!, verificationImageUrl!);
                   } catch (e) {
                     print('Updating error is this: $e');
                   }
@@ -327,9 +318,11 @@ class _SimpleDropdownButtonState extends State<SimpleDropdownButton> {
 
 // ignore: must_be_immutable
 class UploadButton extends StatefulWidget {
+  final Function(File?) onFileUploaded;
+
   File? uploadedFile;
 
-  UploadButton({Key? key, this.uploadedFile
+  UploadButton({Key? key, required this.onFileUploaded, this.uploadedFile
       // Pass the callback function
       })
       : super(key: key);
@@ -339,6 +332,9 @@ class UploadButton extends StatefulWidget {
 
 class _UploadButtonState extends State<UploadButton> {
   Future<void> _uploadDocument() async {
+    setState(() {
+      spinner = true;
+    });
     final ImagePicker _picker = ImagePicker();
     final XFile? pickedFile = await _picker.pickImage(
       source: ImageSource.gallery,
@@ -348,9 +344,14 @@ class _UploadButtonState extends State<UploadButton> {
     if (pickedFile != null) {
       setState(() {
         widget.uploadedFile = File(pickedFile.path);
+        spinner = false;
       });
+
+      widget.onFileUploaded(widget.uploadedFile); // Add this line
     }
   }
+
+  bool spinner = false;
 
   @override
   Widget build(BuildContext context) {
@@ -370,27 +371,34 @@ class _UploadButtonState extends State<UploadButton> {
         ),
         fixedSize: MaterialStateProperty.all(Size.fromHeight(120)),
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.upload,
-            color: AppColors.smallIcons,
-          ),
-          SizedBox(width: 8.0),
-          if (widget.uploadedFile != null)
-            Flexible(
-              child: Text(
-                widget.uploadedFile!.path.split('/').last,
-                overflow: TextOverflow.ellipsis,
-              ),
-            )
-          else
-            Text(
-              'Upload Document',
-              style: TextStyle(color: AppColors.smallIcons, fontSize: 15),
+      child: ModalProgressHUD(
+        inAsyncCall: spinner,
+        progressIndicator: CircularProgressIndicator(
+          color: AppColors.secondary,
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.upload,
+              color: AppColors.smallIcons,
             ),
-        ],
+            SizedBox(width: 8.0),
+            if (widget.uploadedFile != null)
+              Flexible(
+                child: Text(
+                  // widget.uploadedFile!.path.split('/').last,
+                  widget.uploadedFile!.path,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              )
+            else
+              Text(
+                'Upload Document',
+                style: TextStyle(color: AppColors.smallIcons, fontSize: 15),
+              ),
+          ],
+        ),
       ),
     );
   }
@@ -463,19 +471,22 @@ class DrawingPainter extends CustomPainter {
     final paint = Paint()
       ..color = Colors.green
       ..strokeWidth = 4.0
-      ..strokeCap = StrokeCap.round;
+      ..strokeCap = StrokeCap.round
+      ..style = PaintingStyle.stroke; // Set the painting style to stroke
 
     final centerX = size.width / 2;
     final centerY = size.height / 2;
     final radius = size.width / 4;
 
-    final startAngle = math.pi / 4;
-    final endAngle = -math.pi / 2;
+    final startAngle =
+        5 * math.pi / 4; // Start angle set to 5pi/4 (225 degrees)
+    final endAngle = -math.pi / 2; // End angle set to -pi/2 (-90 degrees)
 
-    final sweepAngle = startAngle + (endAngle - startAngle) * drawingValue;
+    final sweepAngle = startAngle - (startAngle - endAngle) * drawingValue;
+    // Calculate the sweep angle by subtracting from the start angle
 
     canvas.drawArc(
-      Rect.fromCircle(center: Offset(centerY, centerX), radius: radius),
+      Rect.fromCircle(center: Offset(centerX, centerY), radius: radius),
       startAngle,
       sweepAngle,
       false,

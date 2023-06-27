@@ -64,20 +64,20 @@ class AuthenticationProvider extends ChangeNotifier {
 
   // SETTING AGENT INFO
   Future<void> updateUserOwner(
-    String newOwner,
+    String identity1,
     String contactPreference1,
-    // String verificationImageURL1,
     String verificationMode1,
+    String verificationImageURL1,
   ) async {
     if (currentUser != null) {
       await FirebaseFirestore.instance
           .collection('Users')
           .doc(currentUser!.uid)
           .update({
-        'identity': newOwner,
+        'identity': identity1,
         'contactPreference': contactPreference1,
         'verificationMode': verificationMode1,
-        // 'verificationImageURL': verificationImageURL1,
+        'verificationImageURL': verificationImageURL1,
       }).then((_) async {
         // Retrieve user data
         await FirebaseFirestore.instance
@@ -87,12 +87,12 @@ class AuthenticationProvider extends ChangeNotifier {
             .then((snapshot) async {
           if (snapshot.exists) {
             displayName = snapshot.get('displayName');
-            verificationMode = snapshot.get('verificationMode');
-            contactPreference = snapshot.get('contactPreference');
             userEmail = snapshot.get('email');
             photoUrl = snapshot.get('photoUrl');
             identity = snapshot.get('identity');
-            // verificationImageURL = snapshot.get('verificationImageURL');
+            contactPreference = snapshot.get('contactPreference');
+            verificationMode = snapshot.get('verificationMode');
+            verificationImageURL = snapshot.get('verificationImageURL');
             // Copy user data to 'Agents' collection
           }
         }).catchError((error) {
@@ -116,33 +116,6 @@ class AuthenticationProvider extends ChangeNotifier {
     } catch (e) {
       print('Error uploading image to Firebase Storage: $e');
       return '';
-    }
-  }
-
-// SAVE INFO FROM VERIFICATION PAGE TO FIREBASE
-
-  Future<void> saveVerificationDataToFirestore({
-    required String contactPreference1,
-    required String verificationImageURL,
-    required String verificationMode1,
-    required String identity1,
-  }) async {
-    try {
-      if (currentUser != null || googleUser != null) {
-        await FirebaseFirestore.instance
-            .collection('Users')
-            .doc(currentUser!.uid)
-            .update({
-          'contactPreference': contactPreference1,
-          'verificationMode': verificationMode1,
-          'verificationImageURL': verificationImageURL,
-          'identity': identity1
-        });
-
-        print('Verification data saved successfully.');
-      }
-    } catch (e) {
-      print('Error saving verification data to Firestore: $e');
     }
   }
 
@@ -223,11 +196,13 @@ class AuthenticationProvider extends ChangeNotifier {
         if (snapshot.exists) {
           // Access user data from the document
           displayName = snapshot.get('displayName');
-          verificationMode = snapshot.get('verificationMode');
-          contactPreference = snapshot.get('contactPreference');
           userEmail = snapshot.get('email');
           photoUrl = snapshot.get('photoUrl');
           identity = snapshot.get('identity');
+
+          verificationMode = snapshot.get('verificationMode');
+          contactPreference = snapshot.get('contactPreference');
+          verificationImageURL = snapshot.get('verificationImageURL');
 
           print('Display Name: $displayName');
           print('Email: $userEmail');
@@ -266,11 +241,11 @@ class AuthenticationProvider extends ChangeNotifier {
         'phoneNo': phoneNo,
         'email': email,
         'password': password,
+        'photoUrl': '',
         'identity': 'user',
         'verificationMode': '',
         'contactPreference': '',
         'verificationImageURL': '',
-        'photoUrl': ''
 
         // Add more fields as needed
       });
@@ -325,10 +300,11 @@ class AuthenticationProvider extends ChangeNotifier {
           // Access user data from the document
           displayName = snapshot.get('displayName');
           userEmail = snapshot.get('email');
-          identity = snapshot.get('identity');
-          verificationMode = snapshot.get('verificationMode');
-          contactPreference = snapshot.get('contactPreference');
           photoUrl = snapshot.get('photoUrl');
+          identity = snapshot.get('identity');
+          contactPreference = snapshot.get('contactPreference');
+          verificationMode = snapshot.get('verificationMode');
+          verificationImageURL = snapshot.get('verificationImageURL');
 
           // Do something with the user data
           print('Display Name: $displayName');
