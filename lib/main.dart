@@ -1,7 +1,9 @@
 // ignore_for_file: must_be_immutable,
 
 import 'dart:io';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:joy_homes/screens/upload_screen/upload_constants.dart';
 import 'package:joy_homes/theme.dart';
 import 'screens/search_screen/search.dart';
 import 'screens/favourites.dart';
@@ -14,6 +16,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:uuid/uuid.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,8 +29,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => AuthenticationProvider(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<AuthenticationProvider>(
+          create: (context) => AuthenticationProvider(),
+        ),
+        ChangeNotifierProvider<HouseProvider>(
+          create: (context) => HouseProvider(),
+        ),
+      ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         home: SafeArea(child: const MainMenuScreen()),
@@ -46,6 +56,11 @@ class MyApp extends StatelessWidget {
   }
 }
 
+// you can use the Provider.of<AuthenticationProvider>(context) method,
+// and for the house information provider,
+//you can use Provider.of<HouseProvider>(context)
+
+// THIS IS THE AUTHENTICATION PROVIDER
 class AuthenticationProvider extends ChangeNotifier {
   User? currentUser;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
@@ -107,9 +122,15 @@ class AuthenticationProvider extends ChangeNotifier {
 // UPLOAD IMAGE TO THE STORAGE
   Future<String> uploadImageToFirebaseStorage(File imageFile) async {
     try {
-      String fileName = DateTime.now().millisecondsSinceEpoch.toString();
-      firebase_storage.Reference ref =
-          firebase_storage.FirebaseStorage.instance.ref().child(fileName);
+      // Get the current user's ID or name
+      // String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+
+      // Create a reference to the user's folder in the "Verification" folder
+
+      firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
+          .ref()
+          .child('Verification')
+          .child(currentUser!.uid);
       await ref.putFile(imageFile);
       String imageUrl = await ref.getDownloadURL();
       return imageUrl;
@@ -356,7 +377,188 @@ class AuthenticationProvider extends ChangeNotifier {
       print('Error signing out: $e');
     }
   }
+
+//FOR HOUSE
+  String? tagLine;
 }
+
+// THIS IS THE HOUSE PROVIDER
+class HouseProvider extends ChangeNotifier {
+  String? tagLine;
+  String? description;
+  String? rent;
+  int? bedroom;
+  int? bathroom;
+  int? toilet;
+  int? waterHeater;
+  int? wardrobe;
+  int? balcony;
+  String? fence;
+  String? parkingSpace;
+  String? availability;
+
+  // SECOND SLIDE
+  String? address1;
+  String? state;
+  String? LGA;
+  String? address2;
+  String? longitude;
+  String? latitude;
+
+  final housesCollection = FirebaseFirestore.instance.collection('Houses');
+  final userId = FirebaseAuth.instance.currentUser!.uid;
+
+  String? houseid;
+
+  Future<void> setHouseDetails({
+    String? TagLine,
+    String? Description,
+    String? Rent,
+    int? Bedroom,
+    int? Bathroom,
+    int? Toilet,
+    int? WaterHeater,
+    int? Wardrobe,
+    int? Balcony,
+    String? Fence,
+    String? ParkingSpace,
+    String? Availability,
+  }) async {
+    // User Id
+
+    // Create a new document with a unique ID under the houses collection
+    final newHouseDoc = housesCollection.doc(userId);
+
+    // Set the house data in the document
+    await newHouseDoc.set({
+      'tagLine': TagLine,
+      'description': Description,
+      'rent': Rent,
+      'bedrooms': Bedroom,
+      'bathrooms': Bathroom,
+      'toilets': Toilet,
+      'waterHeater': WaterHeater,
+      'wardrobe': Wardrobe,
+      'balcony': Balcony,
+      'fence': Fence,
+      'parkingSpace': ParkingSpace,
+      'availability': Availability,
+      'address1': '',
+      'state': '',
+      'LGA': '',
+      'address2': '',
+      'longitude': '',
+      'latitude': '',
+      'userId': userId,
+      'images': []
+      // Add other house details as needed
+    });
+
+    houseid = newHouseDoc.id;
+
+// ignore: unused_element
+
+    DocumentSnapshot snapshot =
+        await FirebaseFirestore.instance.collection('Houses').doc(userId).get();
+
+    if (snapshot.exists) {
+      // Access user data from the document
+      tagLine = snapshot.get('tagLine');
+      description = snapshot.get('description');
+      rent = snapshot.get('rent');
+      bedroom = snapshot.get('bedrooms');
+      bathroom = snapshot.get('bathrooms');
+      toilet = snapshot.get('toilets');
+      waterHeater = snapshot.get('waterHeater');
+      wardrobe = snapshot.get('wardrobe');
+      balcony = snapshot.get('balcony');
+      fence = snapshot.get('fence');
+      parkingSpace = snapshot.get('parkingSpace');
+      availability = snapshot.get('availability');
+      address1 = snapshot.get('address1');
+      state = snapshot.get('state');
+      LGA = snapshot.get('LGA');
+      address2 = snapshot.get('address2');
+      longitude = snapshot.get('longitude');
+      latitude = snapshot.get('latitude');
+    }
+  }
+
+  // SETTING AGENT INFO
+  Future<void> setLocationDetails(
+      {String? Address1,
+      String? State,
+      String? lga,
+      String? Address2,
+      String? Longitude,
+      String? Latitude}) async {
+    // ignore: unnecessary_null_comparison
+    if (userId != null) {
+      await FirebaseFirestore.instance.collection('Houses').doc(userId).update({
+        'address1': Address1,
+        'state': State,
+        'LGA': lga,
+        'address2': Address2,
+        'longitude': Longitude,
+        'latitude': Latitude,
+      }).then((_) async {
+        // Retrieve user data
+        await FirebaseFirestore.instance
+            .collection('Houses')
+            .doc(userId)
+            .get()
+            .then((snapshot) async {
+          if (snapshot.exists) {
+            tagLine = snapshot.get('tagLine');
+            description = snapshot.get('description');
+            rent = snapshot.get('rent');
+            bedroom = snapshot.get('bedrooms');
+            bathroom = snapshot.get('bathrooms');
+            toilet = snapshot.get('toilets');
+            waterHeater = snapshot.get('waterHeater');
+            wardrobe = snapshot.get('wardrobe');
+            balcony = snapshot.get('balcony');
+            fence = snapshot.get('fence');
+            parkingSpace = snapshot.get('parkingSpace');
+            availability = snapshot.get('availability');
+            address1 = snapshot.get('address1');
+            state = snapshot.get('state');
+            LGA = snapshot.get('LGA');
+            address2 = snapshot.get('address2');
+            longitude = snapshot.get('longitude');
+            latitude = snapshot.get('latitude');
+            // Copy user data to 'Agents' collection
+          }
+        }).catchError((error) {
+          // Failed to retrieve user data
+        });
+      }).catchError((error) {
+        // Failed to update 'Owner' field
+      });
+    }
+  }
+
+  Future<void> saveHouseImages() async {
+    List<String> imageUrls = [];
+
+    for (var image in selectedImages) {
+      final storageRef = FirebaseStorage.instance
+          .ref()
+          .child('Houses')
+          .child(userId)
+          .child('${Uuid().v4()}.jpg');
+      await storageRef.putFile(image);
+      final imageUrl = await storageRef.getDownloadURL();
+      imageUrls.add(imageUrl);
+    }
+
+    // Save the image URLs in the house document
+    await housesCollection.doc(userId).update({
+      'images': FieldValue.arrayUnion(imageUrls),
+    });
+  }
+}
+//  THIS IS THE BOTTOM NAV BAR HOME SCREEN
 
 class MainMenuScreen extends StatefulWidget {
   const MainMenuScreen({super.key});

@@ -3,6 +3,8 @@ import 'package:joy_homes/screens/upload_screen/upload_constants.dart';
 import 'package:joy_homes/screens/upload_screen/upload_locate.dart';
 import 'package:joy_homes/theme.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:provider/provider.dart';
+import 'package:joy_homes/main.dart';
 import 'upload_popUp.dart';
 
 class UploadDetails extends StatelessWidget {
@@ -11,24 +13,18 @@ class UploadDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return RegisterWidget();
-        },
-      );
+      if (Provider.of<AuthenticationProvider>(context, listen: false)
+              .identity ==
+          'user') {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return RegisterWidget();
+          },
+        );
+      }
     });
-    // if (!_dialogShown) {
-    //   _dialogShown = true;
-    //   WidgetsBinding.instance.addPostFrameCallback((_) {
-    //     showDialog(
-    //       context: context,
-    //       builder: (BuildContext context) {
-    //         return RegisterWidget();
-    //       },
-    //     );
-    //   });
-    // }
+
     return Scaffold(
         appBar: AppBar(
           leadingWidth: 40,
@@ -140,6 +136,18 @@ class _UploadDetailsFormState extends State<UploadDetailsForm> {
   TextEditingController tagLine = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   TextEditingController rentController = TextEditingController();
+  String? rentPerWhat;
+  String? rent;
+
+  int bedroom = 0;
+  int bathroom = 0;
+  int toilet = 0;
+  int waterHeater = 0;
+  int wardrobe = 0;
+  int balcony = 0;
+  String? fences;
+  String? parkingSpace;
+  String? availability;
 
   @override
   Widget build(BuildContext context) {
@@ -162,7 +170,21 @@ class _UploadDetailsFormState extends State<UploadDetailsForm> {
                   validatorText: 'Please enter your email',
                 ),
                 DescriptionTextField(controller: descriptionController),
-                RentTextField(controller: rentController),
+                RentTextField(
+                  controller: rentController,
+                  onValueChanged: (value) {
+                    setState(() {
+                      // Handle the input value here
+                      rentController.text = value;
+                    });
+                  },
+                  onSelectedValueChanged: (selectedValue) {
+                    // Handle the selected value here
+                    setState(() {
+                      rentPerWhat = selectedValue;
+                    });
+                  },
+                ),
                 SizedBox(
                   height: 30,
                 ),
@@ -173,10 +195,16 @@ class _UploadDetailsFormState extends State<UploadDetailsForm> {
                   children: [
                     Expanded(
                       child: CountFormField(
+                        selectedValue: bedroom,
                         labelText: 'Bedroom',
-                        initialValue: 2,
+                        initialValue: 1,
                         minValue: 0,
                         maxValue: 10,
+                        onCountChanged: (value) {
+                          setState(() {
+                            bedroom = value;
+                          });
+                        },
                       ),
                     ),
                     SizedBox(
@@ -184,10 +212,16 @@ class _UploadDetailsFormState extends State<UploadDetailsForm> {
                     ),
                     Expanded(
                       child: CountFormField(
+                        selectedValue: bathroom,
                         labelText: 'Bathroom',
-                        initialValue: 3,
+                        initialValue: 1,
                         minValue: 0,
                         maxValue: 10,
+                        onCountChanged: (value) {
+                          setState(() {
+                            bathroom = value;
+                          });
+                        },
                       ),
                     ),
                     SizedBox(
@@ -195,10 +229,16 @@ class _UploadDetailsFormState extends State<UploadDetailsForm> {
                     ),
                     Expanded(
                       child: CountFormField(
+                        selectedValue: toilet,
                         labelText: 'Toilet',
                         initialValue: 1,
                         minValue: 0,
                         maxValue: 10,
+                        onCountChanged: (value) {
+                          setState(() {
+                            toilet = value;
+                          });
+                        },
                       ),
                     ),
                   ],
@@ -213,10 +253,16 @@ class _UploadDetailsFormState extends State<UploadDetailsForm> {
                   children: [
                     Expanded(
                       child: CountFormField(
+                        selectedValue: waterHeater,
                         labelText: 'Water Heater',
-                        initialValue: 1,
+                        initialValue: 0,
                         minValue: 0,
                         maxValue: 10,
+                        onCountChanged: (value) {
+                          setState(() {
+                            waterHeater = value;
+                          });
+                        },
                       ),
                     ),
                     SizedBox(
@@ -224,10 +270,16 @@ class _UploadDetailsFormState extends State<UploadDetailsForm> {
                     ),
                     Expanded(
                       child: CountFormField(
+                        selectedValue: wardrobe,
                         labelText: 'Wardrobe',
-                        initialValue: 1,
+                        initialValue: 0,
                         minValue: 0,
                         maxValue: 10,
+                        onCountChanged: (value) {
+                          setState(() {
+                            wardrobe = value;
+                          });
+                        },
                       ),
                     ),
                     SizedBox(
@@ -235,10 +287,16 @@ class _UploadDetailsFormState extends State<UploadDetailsForm> {
                     ),
                     Expanded(
                       child: CountFormField(
+                        selectedValue: balcony,
                         labelText: 'Balcony',
                         initialValue: 0,
                         minValue: 0,
                         maxValue: 10,
+                        onCountChanged: (value) {
+                          setState(() {
+                            balcony = value;
+                          });
+                        },
                       ),
                     ),
                   ],
@@ -253,6 +311,11 @@ class _UploadDetailsFormState extends State<UploadDetailsForm> {
                   children: [
                     Expanded(
                         child: ToggleDetailsButtons(
+                      onSelectedValueChanged: (value) {
+                        setState(() {
+                          fences = value;
+                        });
+                      },
                       sizedBoxWidth: 5,
                       toggleTitle: 'Fences',
                     )),
@@ -261,6 +324,11 @@ class _UploadDetailsFormState extends State<UploadDetailsForm> {
                     ),
                     Expanded(
                         child: ToggleDetailsButtons(
+                      onSelectedValueChanged: (value) {
+                        setState(() {
+                          parkingSpace = value;
+                        });
+                      },
                       toggleTitle: 'Parking Space',
                       sizedBoxWidth: 5,
                     )),
@@ -272,17 +340,47 @@ class _UploadDetailsFormState extends State<UploadDetailsForm> {
 
                 // AVAILABE SPACE CODE
                 ToggleDetailsButtons(
+                    onSelectedValueChanged: (value) {
+                      setState(() {
+                        availability = value;
+                      });
+                    },
                     sizedBoxWidth: 10,
                     toggleTitle: 'Is this apartment currently available?'),
 
                 const SizedBox(height: 40),
                 BottomNavButton(
                   formKey: _formKey,
-                  bottomFunctionality: () {
+                  bottomFunctionality: () async {
                     if (_formKey.currentState!.validate()) {
                       _formKey.currentState!.save();
                       // Send data to the server
                     }
+
+                    rent = '${rentController.text}/$rentPerWhat';
+
+                    try {
+                      await Provider.of<HouseProvider>(context, listen: false)
+                          .setHouseDetails(
+                              TagLine: tagLine.text,
+                              Description: descriptionController.text,
+                              Rent: rent,
+                              Bedroom: bedroom,
+                              Bathroom: bathroom,
+                              Toilet: toilet,
+                              WaterHeater: waterHeater,
+                              Wardrobe: wardrobe,
+                              Balcony: balcony,
+                              Fence: fences,
+                              ParkingSpace: parkingSpace,
+                              Availability: availability);
+
+                      Provider.of<HouseProvider>(context, listen: false)
+                          .saveHouseImages();
+                    } catch (e) {
+                      print('this is the house upload error: $e');
+                    }
+
                     Navigator.push(context,
                         MaterialPageRoute(builder: (Context) {
                       return UploadLocate();

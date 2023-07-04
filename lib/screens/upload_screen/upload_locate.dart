@@ -4,6 +4,9 @@ import 'package:joy_homes/theme.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:provider/provider.dart';
+import 'package:joy_homes/main.dart';
+import 'nigeria_states.dart';
 
 class UploadLocate extends StatelessWidget {
   const UploadLocate({super.key});
@@ -102,8 +105,26 @@ class _MapScreenState extends State<_MapScreen> {
     }
   }
 
-  TextEditingController address = TextEditingController();
+  TextEditingController address1 = TextEditingController();
+  TextEditingController address2 = TextEditingController();
+  TextEditingController latitude1 = TextEditingController();
+  TextEditingController longitude1 = TextEditingController();
+
   final _formKey = GlobalKey<FormState>();
+
+  // THIS IS FOR THE STATES DROP DOWN
+  String? selectedState;
+  String? selectedLGA;
+
+  void handleStateSelected(String state) {
+    selectedState = state;
+    print('Selected State: $state');
+  }
+
+  void handleLGASelected(String lga) {
+    selectedLGA = lga;
+    print('Selected LGA: $lga');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -183,9 +204,9 @@ class _MapScreenState extends State<_MapScreen> {
                   children: [
                     InputField(
                       inputTitle: 'Address 1',
-                      textEditingController: address,
+                      textEditingController: address1,
                       onInputChanged: ((value) {
-                        value = address.text;
+                        value = address1.text;
                       }),
                       innerText: 'House Location?',
                       validatorText: 'Please enter the address',
@@ -193,7 +214,10 @@ class _MapScreenState extends State<_MapScreen> {
                     SizedBox(
                       height: 5,
                     ),
-                    _LocateDropdownBtn(),
+                    _LocateDropdownBtn(
+                      onStateSelected: handleStateSelected,
+                      onLGASelected: handleLGASelected,
+                    ),
                     SizedBox(
                       height: 40,
                     ),
@@ -217,9 +241,9 @@ class _MapScreenState extends State<_MapScreen> {
                     ),
                     InputField(
                       inputTitle: 'Address 2 (Optional)',
-                      textEditingController: address,
+                      textEditingController: address2,
                       onInputChanged: ((value) {
-                        value = address.text;
+                        value = address2.text;
                       }),
                       innerText: 'No 2, Bola Street, Wuse',
                       validatorText: 'Please enter the address',
@@ -234,6 +258,7 @@ class _MapScreenState extends State<_MapScreen> {
                           child: _ButtonCode(
                             buttonTitle: 'Longitude',
                             buttonHint: '102.30',
+                            controller: longitude1,
                           ),
                         ),
                         SizedBox(
@@ -243,6 +268,7 @@ class _MapScreenState extends State<_MapScreen> {
                           child: _ButtonCode(
                             buttonTitle: 'Latitude',
                             buttonHint: '203.45',
+                            controller: latitude1,
                           ),
                         ),
                       ],
@@ -257,9 +283,19 @@ class _MapScreenState extends State<_MapScreen> {
                           _formKey.currentState!.save();
                           // Send data to the server
                         }
+
+                        Provider.of<HouseProvider>(context, listen: false)
+                            .setLocationDetails(
+                                Address1: address1.text,
+                                State: selectedState,
+                                lga: selectedLGA,
+                                Address2: address2.text,
+                                Longitude: longitude1.text,
+                                Latitude: latitude1.text);
+
                         Navigator.push(context,
                             MaterialPageRoute(builder: (Context) {
-                          return UploadLocate();
+                          return MainMenuScreen();
                         }));
                       },
                       buttonTitle: 'Upload',
@@ -278,9 +314,12 @@ class _MapScreenState extends State<_MapScreen> {
 
 // SIDE BY SIDE BUTTON CODE
 class _ButtonCode extends StatefulWidget {
-  _ButtonCode({required this.buttonTitle, required this.buttonHint});
+  _ButtonCode(
+      {required this.buttonTitle,
+      required this.buttonHint,
+      required this.controller});
 
-  final TextEditingController controller = TextEditingController();
+  final TextEditingController controller;
   final String buttonTitle;
   final String buttonHint;
 
@@ -305,6 +344,9 @@ class __ButtonCodeState extends State<_ButtonCode> {
             cursorColor: AppColors.secondary,
             cursorWidth: 1,
             controller: widget.controller,
+            onChanged: (value) {
+              widget.controller.text = value;
+            },
             keyboardType: TextInputType.number,
             decoration: InputDecoration(
               hintText: widget.buttonHint,
@@ -342,10 +384,45 @@ class __ButtonCodeState extends State<_ButtonCode> {
 // DROPDOWN BUTTON CODE
 
 class _LocateDropdownBtn extends StatefulWidget {
-  const _LocateDropdownBtn();
+  const _LocateDropdownBtn(
+      {required this.onStateSelected, required this.onLGASelected});
+  final Function(String) onStateSelected;
+  final Function(String) onLGASelected;
 
   @override
   State<_LocateDropdownBtn> createState() => __LocateDropdownBtnState();
+}
+
+String? selectedState;
+String? selectedLGA;
+
+List<DropdownMenuItem<String>> buildStateDropdown() {
+  List<DropdownMenuItem<String>> items = [];
+  for (String state in states) {
+    items.add(
+      DropdownMenuItem(
+        value: state,
+        child: Text(state),
+      ),
+    );
+  }
+  return items;
+}
+
+List<DropdownMenuItem<String>> buildLGADropdown() {
+  List<DropdownMenuItem<String>> items = [];
+  if (selectedState != null && lgasByState.containsKey(selectedState)) {
+    List<String>? lgas = lgasByState[selectedState];
+    for (String lga in lgas!) {
+      items.add(
+        DropdownMenuItem(
+          value: lga,
+          child: Text(lga),
+        ),
+      );
+    }
+  }
+  return items;
 }
 
 class __LocateDropdownBtnState extends State<_LocateDropdownBtn> {
@@ -378,6 +455,7 @@ class __LocateDropdownBtnState extends State<_LocateDropdownBtn> {
                   borderRadius: BorderRadius.circular(5),
                 ),
                 child: DropdownButton(
+                  value: selectedState,
                   underline: Container(),
                   isExpanded: true,
                   iconSize: 40,
@@ -391,18 +469,15 @@ class __LocateDropdownBtnState extends State<_LocateDropdownBtn> {
                           fontSize: 16),
                     ),
                   ),
-                  items: const [
-                    DropdownMenuItem(
-                      value: 'option1',
-                      child: Text('Option 1'),
-                    ),
-                    DropdownMenuItem(
-                      value: 'option2',
-                      child: Text('Option 2'),
-                    ),
-                  ],
+                  items: buildStateDropdown(),
                   onChanged: (value) {
-                    // Do something with the selected value
+                    setState(() {
+                      selectedState = value;
+                      selectedLGA =
+                          null; // Reset selected LGA when state changes
+                      widget.onStateSelected(
+                          value!); // Call the callback function
+                    });
                   },
                 ),
               ),
@@ -437,6 +512,7 @@ class __LocateDropdownBtnState extends State<_LocateDropdownBtn> {
                   borderRadius: BorderRadius.circular(5),
                 ),
                 child: DropdownButton(
+                  value: selectedLGA,
                   underline: Container(),
                   isExpanded: true,
                   iconSize: 42,
@@ -450,18 +526,13 @@ class __LocateDropdownBtnState extends State<_LocateDropdownBtn> {
                           fontSize: 16),
                     ),
                   ),
-                  items: const [
-                    DropdownMenuItem(
-                      value: 'option3',
-                      child: Text('Option 3'),
-                    ),
-                    DropdownMenuItem(
-                      value: 'option4',
-                      child: Text('Option 4'),
-                    ),
-                  ],
+                  items: buildLGADropdown(),
                   onChanged: (value) {
-                    // Do something with the selected value
+                    setState(() {
+                      selectedLGA = value;
+                      widget
+                          .onLGASelected(value!); // Call the callback function
+                    });
                   },
                 ),
               ),

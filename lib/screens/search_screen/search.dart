@@ -70,6 +70,10 @@ class _SearchScreenState extends State<SearchScreen>
     super.dispose();
   }
 
+  int bathroom = 0;
+  int bedroom = 0;
+  String? parkingSpace;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -148,6 +152,7 @@ class _SearchScreenState extends State<SearchScreen>
                               height: 10,
                             ),
                             CountFormField(
+                              selectedValue: bathroom,
                               labelText: 'Bathroom',
                               initialValue: 3,
                               minValue: 0,
@@ -157,6 +162,7 @@ class _SearchScreenState extends State<SearchScreen>
                               height: 20,
                             ),
                             CountFormField(
+                              selectedValue: bedroom,
                               labelText: 'Bedroom',
                               initialValue: 3,
                               minValue: 0,
@@ -166,6 +172,11 @@ class _SearchScreenState extends State<SearchScreen>
                               height: 20,
                             ),
                             ToggleDetailsButtons(
+                              onSelectedValueChanged: (value) {
+                                setState(() {
+                                  parkingSpace = value;
+                                });
+                              },
                               sizedBoxWidth: 5,
                               toggleTitle: 'Parking Space',
                             ),

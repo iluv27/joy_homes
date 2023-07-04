@@ -217,8 +217,16 @@ class DescriptionTextField extends StatelessWidget {
 
 class RentTextField extends StatefulWidget {
   final TextEditingController controller;
+  final ValueChanged<String>
+      onValueChanged; // Callback for handling input value
+  final ValueChanged<String>
+      onSelectedValueChanged; // Callback for handling selected value
 
-  const RentTextField({required this.controller});
+  const RentTextField({
+    required this.controller,
+    required this.onValueChanged,
+    required this.onSelectedValueChanged,
+  });
 
   @override
   State<RentTextField> createState() => _RentTextFieldState();
@@ -231,6 +239,8 @@ class _RentTextFieldState extends State<RentTextField> {
     setState(() {
       if (selectedIndex != index) {
         selectedIndex = index;
+        String selectedValue = index == 0 ? 'Year' : 'Month';
+        widget.onSelectedValueChanged.call(selectedValue);
       }
     });
   }
@@ -252,6 +262,9 @@ class _RentTextFieldState extends State<RentTextField> {
               child: Container(
                 height: 50,
                 child: TextFormField(
+                  onChanged: (value) {
+                    widget.onValueChanged(value);
+                  },
                   cursorColor: AppColors.secondary,
                   cursorWidth: 1,
                   controller: widget.controller,
@@ -313,11 +326,11 @@ class _RentTextFieldState extends State<RentTextField> {
                     ),
                     side: BorderSide(
                       color: selectedIndex == 0
-                          ? AppColors.secondary
+                          ? AppColors.primary
                           : AppColors.primary.withOpacity(0.3),
                     ),
                     backgroundColor: selectedIndex == 0
-                        ? AppColors.secondary
+                        ? AppColors.primary
                         : Colors.transparent,
                     minimumSize: const Size(150, 45),
                   ),
@@ -352,11 +365,11 @@ class _RentTextFieldState extends State<RentTextField> {
                     ),
                     side: BorderSide(
                       color: selectedIndex == 1
-                          ? AppColors.secondary
+                          ? AppColors.primary
                           : AppColors.primary.withOpacity(0.3),
                     ),
                     backgroundColor: selectedIndex == 1
-                        ? AppColors.secondary
+                        ? AppColors.primary
                         : Colors.transparent,
                     minimumSize: const Size(150, 45),
                   ),
@@ -379,18 +392,21 @@ class _RentTextFieldState extends State<RentTextField> {
   }
 }
 
+// ignore: must_be_immutable
 class CountFormField extends StatefulWidget {
   final String labelText;
   final int initialValue;
   final int minValue;
   final int maxValue;
-  final void Function(int)? onCountChanged;
+  int selectedValue;
+  final ValueChanged<int>? onCountChanged;
 
   CountFormField({
     required this.labelText,
     required this.initialValue,
     required this.minValue,
     required this.maxValue,
+    required this.selectedValue,
     this.onCountChanged,
   });
 
@@ -400,15 +416,15 @@ class CountFormField extends StatefulWidget {
 
 class _CountFormFieldState extends State<CountFormField> {
   late TextEditingController _controller;
-  late int _count;
+
   bool _isValueSelected = false;
 
   @override
   void initState() {
     super.initState();
-    _count = widget.initialValue;
+    widget.selectedValue = widget.initialValue;
     _isValueSelected = false;
-    _controller = TextEditingController(text: _count.toString());
+    _controller = TextEditingController(text: widget.selectedValue.toString());
   }
 
   @override
@@ -419,22 +435,26 @@ class _CountFormFieldState extends State<CountFormField> {
 
   void _incrementCount() {
     setState(() {
-      _count = (_count < widget.maxValue) ? _count + 1 : _count;
-      _controller.text = _count.toString();
+      widget.selectedValue = (widget.selectedValue < widget.maxValue)
+          ? widget.selectedValue + 1
+          : widget.selectedValue;
+      _controller.text = widget.selectedValue.toString();
       _isValueSelected = true;
       if (widget.onCountChanged != null) {
-        widget.onCountChanged!(_count);
+        widget.onCountChanged!(widget.selectedValue);
       }
     });
   }
 
   void _decrementCount() {
     setState(() {
-      _count = (_count > widget.minValue) ? _count - 1 : _count;
-      _controller.text = _count.toString();
+      widget.selectedValue = (widget.selectedValue > widget.minValue)
+          ? widget.selectedValue - 1
+          : widget.selectedValue;
+      _controller.text = widget.selectedValue.toString();
       _isValueSelected = true;
       if (widget.onCountChanged != null) {
-        widget.onCountChanged!(_count);
+        widget.onCountChanged!(widget.selectedValue);
       }
     });
   }
@@ -474,9 +494,9 @@ class _CountFormFieldState extends State<CountFormField> {
                       ? (value) {
                           if (int.tryParse(value) != null) {
                             setState(() {
-                              _count = int.parse(value);
+                              widget.selectedValue = int.parse(value);
                             });
-                            widget.onCountChanged!(_count);
+                            widget.onCountChanged!(widget.selectedValue);
                           }
                         }
                       : null,
@@ -525,10 +545,14 @@ class _CountFormFieldState extends State<CountFormField> {
 
 class ToggleDetailsButtons extends StatefulWidget {
   const ToggleDetailsButtons(
-      {super.key, required this.toggleTitle, required this.sizedBoxWidth});
+      {super.key,
+      required this.toggleTitle,
+      required this.sizedBoxWidth,
+      required this.onSelectedValueChanged});
 
   final String toggleTitle;
   final double sizedBoxWidth;
+  final ValueChanged<String> onSelectedValueChanged;
 
   @override
   State<ToggleDetailsButtons> createState() => _ToggleDetailsButtonsState();
@@ -541,6 +565,8 @@ class _ToggleDetailsButtonsState extends State<ToggleDetailsButtons> {
     setState(() {
       if (selectedIndex != index) {
         selectedIndex = index;
+        String selectedValue = index == 0 ? 'Yes' : 'No';
+        widget.onSelectedValueChanged.call(selectedValue);
       }
     });
   }
@@ -573,11 +599,11 @@ class _ToggleDetailsButtonsState extends State<ToggleDetailsButtons> {
                     ),
                     side: BorderSide(
                       color: selectedIndex == 0
-                          ? AppColors.secondary
+                          ? AppColors.primary
                           : AppColors.primary.withOpacity(0.3),
                     ),
                     backgroundColor: selectedIndex == 0
-                        ? AppColors.secondary
+                        ? AppColors.primary
                         : Colors.transparent,
                     minimumSize: const Size(150, 45),
                   ),
@@ -612,11 +638,11 @@ class _ToggleDetailsButtonsState extends State<ToggleDetailsButtons> {
                     ),
                     side: BorderSide(
                       color: selectedIndex == 1
-                          ? AppColors.secondary
+                          ? AppColors.primary
                           : AppColors.primary.withOpacity(0.3),
                     ),
                     backgroundColor: selectedIndex == 1
-                        ? AppColors.secondary
+                        ? AppColors.primary
                         : Colors.transparent,
                     minimumSize: const Size(150, 45),
                   ),

@@ -50,175 +50,236 @@ class _VerificationScreenState extends State<VerificationScreen>
   String? verificationMode;
   String? verificationImageUrl;
   File? uploadedFile;
+
+  bool showSpinner = false;
+
+  // Define the error variables
+  bool showErrorIdentity = false;
+  bool showErrorContactPreference = false;
+  bool showErrorVerificationMode = false;
+  bool showErrorUploadButton = false;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color(0XFFFAFAFA),
-      appBar: AppBar(
-        leadingWidth: 40,
-        leading: IconButton(
-          padding: EdgeInsets.only(left: 20),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: Icon(
-            Icons.arrow_back_ios,
-            color: AppColors.textColor,
-          ),
+    return SafeArea(
+      child: ModalProgressHUD(
+        inAsyncCall: showSpinner, // Show the spinner
+        progressIndicator: CircularProgressIndicator(
+          color: AppColors.secondary,
         ),
-        title: Text('Go back'),
-        centerTitle: false,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Verify Identity',
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
+        child: Scaffold(
+          backgroundColor: Color(0XFFFAFAFA),
+          appBar: AppBar(
+            leadingWidth: 40,
+            leading: IconButton(
+              padding: EdgeInsets.only(left: 20),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: Icon(
+                Icons.arrow_back_ios,
                 color: AppColors.textColor,
               ),
             ),
-            SizedBox(
-              height: 40,
-            ),
-            SimpleDropdownButton(
-              dropdownItems: ['Landlord', 'House Agent'],
-              hintValue: 'Owner?',
-              selectedValue: identity,
-              onChanged: (value) async {
-                setState(() {
-                  identity = value; // Update the selected value
-                });
-              },
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            SimpleDropdownButton(
-              dropdownItems: ['Mail', 'Phone No.'],
-              hintValue: 'Contact Preference',
-              helperText: 'This is how an interested tenant will contact you.',
-              selectedValue: contactPreference,
-              onChanged: (value) {
-                setState(() {
-                  contactPreference = value;
-                });
-              },
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            SimpleDropdownButton(
-              dropdownItems: [
-                'Driver\'s License',
-                'NIN',
-                'International Passport'
-              ],
-              hintValue: 'Mode of Verification',
-              selectedValue: verificationMode,
-              onChanged: (value) {
-                setState(() {
-                  verificationMode = value;
-                });
-              },
-            ),
-            SizedBox(
-              height: 30,
-            ),
-            UploadButton(
-              onFileUploaded: (file) {
-                setState(() {
-                  uploadedFile = file;
-                });
-              },
-            ),
-            SizedBox(
-              height: 50,
-            ),
-            Center(
-              child: ElevatedButton(
-                onPressed: () async {
-                  try {
-                    if (uploadedFile != null) {
-                      verificationImageUrl =
+            title: Text('Go back'),
+            centerTitle: false,
+          ),
+          body: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Verify Identity',
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.textColor,
+                  ),
+                ),
+                SizedBox(
+                  height: 40,
+                ),
+                SimpleDropdownButton(
+                  dropdownItems: ['Landlord', 'House Agent'],
+                  hintValue: 'Owner?',
+                  selectedValue: identity,
+                  onChanged: (value) async {
+                    setState(() {
+                      identity = value; // Update the selected value
+                    });
+                  },
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                SimpleDropdownButton(
+                  dropdownItems: ['Mail', 'Phone No.'],
+                  hintValue: 'Contact Preference',
+                  helperText:
+                      'This is how an interested tenant will contact you.',
+                  selectedValue: contactPreference,
+                  onChanged: (value) {
+                    setState(() {
+                      contactPreference = value;
+                    });
+                  },
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                SimpleDropdownButton(
+                  dropdownItems: [
+                    'Driver\'s License',
+                    'NIN',
+                    'International Passport'
+                  ],
+                  hintValue: 'Mode of Verification',
+                  selectedValue: verificationMode,
+                  onChanged: (value) {
+                    setState(() {
+                      verificationMode = value;
+                    });
+                  },
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+                UploadButton(
+                  onFileUploaded: (file) {
+                    setState(() {
+                      uploadedFile = file;
+                    });
+                  },
+                ),
+                SizedBox(
+                  height: 50,
+                ),
+                Center(
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      if (identity == null ||
+                          contactPreference == null ||
+                          verificationMode == null ||
+                          uploadedFile == null) {
+                        setState(() {
+                          // Set showError flag for each field that is not selected or uploaded
+
+                          identity == null
+                              ? showErrorIdentity = true
+                              : showErrorIdentity = false;
+                          contactPreference == null
+                              ? showErrorContactPreference = true
+                              : showErrorContactPreference = false;
+                          verificationMode == null
+                              ? showErrorVerificationMode = true
+                              : showErrorVerificationMode = false;
+                          uploadedFile == null
+                              ? showErrorUploadButton = true
+                              : showErrorUploadButton = false;
+                          showSpinner = false; // Disable the spinner
+                        });
+                        return; // Stop the verification process if any field is missing
+                      } else {
+                        setState(() {
+                          showSpinner = true;
+                        });
+
+                        try {
+                          if (uploadedFile != null) {
+                            verificationImageUrl = await Provider.of<
+                                        AuthenticationProvider>(context,
+                                    listen: false)
+                                .uploadImageToFirebaseStorage(uploadedFile!);
+                          }
+
                           await Provider.of<AuthenticationProvider>(context,
                                   listen: false)
-                              .uploadImageToFirebaseStorage(uploadedFile!);
-                    }
+                              .updateUserOwner(identity!, contactPreference!,
+                                  verificationMode!, verificationImageUrl!);
 
-                    await Provider.of<AuthenticationProvider>(context,
-                            listen: false)
-                        .updateUserOwner(identity!, contactPreference!,
-                            verificationMode!, verificationImageUrl!);
-                  } catch (e) {
-                    print('Updating error is this: $e');
-                  }
+                          setState(() {
+                            showSpinner = true;
+                          });
+                        } catch (e) {
+                          print('Updating error is this: $e');
+                        }
 
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: Text('Verification Successful'),
-                        content: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            DrawingAnimation(),
-                            Text('Successful'),
-                          ],
-                        ),
-                        actions: [
-                          Align(
-                            alignment: Alignment.bottomCenter,
-                            child: Padding(
-                              padding: const EdgeInsets.only(bottom: 35.0),
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  Navigator.pushReplacement(context,
-                                      MaterialPageRoute(
-                                          builder: ((BuildContext) {
-                                    return MainMenuScreen();
-                                  })));
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: AppColors.secondary,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5.0),
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Center(
+                                  child: Text(
+                                'Verification Successful!',
+                                textAlign: TextAlign.center,
+                              )),
+                              content: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  SizedBox(
+                                    height: 15,
                                   ),
-                                  fixedSize: const Size(200, 50),
-                                ),
-                                child: Text('Continue',
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w600)),
+                                  DrawingAnimation(),
+                                  SizedBox(
+                                    height: 15,
+                                  ),
+                                  Text('Successful'),
+                                ],
                               ),
-                            ),
-                          ),
-                        ],
-                      );
+                              actions: [
+                                Align(
+                                  alignment: Alignment.bottomCenter,
+                                  child: Padding(
+                                    padding:
+                                        const EdgeInsets.only(bottom: 35.0),
+                                    child: ElevatedButton(
+                                      onPressed: () {
+                                        Navigator.pushReplacement(context,
+                                            MaterialPageRoute(
+                                                builder: ((BuildContext) {
+                                          return MainMenuScreen();
+                                        })));
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: AppColors.secondary,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(5.0),
+                                        ),
+                                        fixedSize: const Size(200, 50),
+                                      ),
+                                      child: Text('Continue',
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w600)),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      }
                     },
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.secondary,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5.0),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.secondary,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
+                      fixedSize: const Size(200, 50),
+                    ),
+                    child: Text(
+                      'Verify',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                   ),
-                  fixedSize: const Size(200, 50),
                 ),
-                child: Text(
-                  'Verify',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
@@ -233,7 +294,8 @@ class SimpleDropdownButton extends StatefulWidget {
   final String hintValue;
   final List<String> dropdownItems;
   final String? helperText;
-  final ValueChanged<String?>? onChanged; // Callback function
+  final ValueChanged<String?>? onChanged;
+  // Callback function
 
   SimpleDropdownButton({
     Key? key,
@@ -250,6 +312,7 @@ class SimpleDropdownButton extends StatefulWidget {
 
 class _SimpleDropdownButtonState extends State<SimpleDropdownButton> {
   String? selectedValue;
+  bool showError = false;
 
   @override
   void initState() {
@@ -272,7 +335,8 @@ class _SimpleDropdownButtonState extends State<SimpleDropdownButton> {
             borderRadius: BorderRadius.circular(5),
             color: Colors.white,
             border: Border.all(
-              color: AppColors.primary.withOpacity(0.8),
+              color:
+                  showError ? Colors.red : AppColors.primary.withOpacity(0.8),
               width: 1,
             ),
           ),
@@ -288,6 +352,7 @@ class _SimpleDropdownButtonState extends State<SimpleDropdownButton> {
             onChanged: (newValue) {
               setState(() {
                 selectedValue = newValue;
+                showError = false;
               });
               widget.onChanged?.call(newValue); // Trigger the callback function
             },
@@ -319,39 +384,45 @@ class _SimpleDropdownButtonState extends State<SimpleDropdownButton> {
 // ignore: must_be_immutable
 class UploadButton extends StatefulWidget {
   final Function(File?) onFileUploaded;
-
   File? uploadedFile;
 
-  UploadButton({Key? key, required this.onFileUploaded, this.uploadedFile
-      // Pass the callback function
-      })
+  UploadButton({Key? key, required this.onFileUploaded, this.uploadedFile})
       : super(key: key);
+
   @override
   _UploadButtonState createState() => _UploadButtonState();
 }
 
 class _UploadButtonState extends State<UploadButton> {
+  bool isUploading = false;
+  bool showError = false;
+
+  final ImagePicker _picker = ImagePicker();
+
   Future<void> _uploadDocument() async {
     setState(() {
-      spinner = true;
+      isUploading = true;
     });
-    final ImagePicker _picker = ImagePicker();
+
     final XFile? pickedFile = await _picker.pickImage(
       source: ImageSource.gallery,
       imageQuality: 80,
     );
 
     if (pickedFile != null) {
+      File uploadedFile = File(pickedFile.path);
       setState(() {
-        widget.uploadedFile = File(pickedFile.path);
-        spinner = false;
+        widget.uploadedFile = uploadedFile;
+        isUploading = false;
       });
 
-      widget.onFileUploaded(widget.uploadedFile); // Add this line
+      widget.onFileUploaded(widget.uploadedFile);
+    } else {
+      setState(() {
+        isUploading = false;
+      });
     }
   }
-
-  bool spinner = false;
 
   @override
   Widget build(BuildContext context) {
@@ -365,40 +436,45 @@ class _UploadButtonState extends State<UploadButton> {
         ),
         side: MaterialStateProperty.all(
           BorderSide(
-            color: AppColors.primary.withOpacity(0.3),
+            color: showError
+                ? Colors.red // Display red border if there is an error
+                : AppColors.primary.withOpacity(0.3),
             width: 1.0,
           ),
         ),
         fixedSize: MaterialStateProperty.all(Size.fromHeight(120)),
       ),
-      child: ModalProgressHUD(
-        inAsyncCall: spinner,
-        progressIndicator: CircularProgressIndicator(
-          color: AppColors.secondary,
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.upload,
-              color: AppColors.smallIcons,
-            ),
-            SizedBox(width: 8.0),
-            if (widget.uploadedFile != null)
-              Flexible(
-                child: Text(
-                  // widget.uploadedFile!.path.split('/').last,
-                  widget.uploadedFile!.path,
-                  overflow: TextOverflow.ellipsis,
-                ),
+      child: Center(
+        child: isUploading
+            ? CircularProgressIndicator(
+                color: AppColors.secondary,
               )
-            else
-              Text(
-                'Upload Document',
-                style: TextStyle(color: AppColors.smallIcons, fontSize: 15),
+            : Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.upload,
+                    color: AppColors.smallIcons,
+                  ),
+                  SizedBox(width: 8.0),
+                  if (widget.uploadedFile != null)
+                    Flexible(
+                      child: Text(
+                        // widget.uploadedFile!.path.split('/').last,
+                        'Uploaded successfully',
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    )
+                  else
+                    Text(
+                      'Upload Document',
+                      style: TextStyle(
+                        color: AppColors.smallIcons,
+                        fontSize: 15,
+                      ),
+                    ),
+                ],
               ),
-          ],
-        ),
       ),
     );
   }
@@ -472,23 +548,20 @@ class DrawingPainter extends CustomPainter {
       ..color = Colors.green
       ..strokeWidth = 4.0
       ..strokeCap = StrokeCap.round
-      ..style = PaintingStyle.stroke; // Set the painting style to stroke
+      ..style = PaintingStyle.stroke;
 
     final centerX = size.width / 2;
     final centerY = size.height / 2;
-    final radius = size.width / 4;
+    final radius = size.width / 2 - paint.strokeWidth / 2;
 
-    final startAngle =
-        5 * math.pi / 4; // Start angle set to 5pi/4 (225 degrees)
-    final endAngle = -math.pi / 2; // End angle set to -pi/2 (-90 degrees)
-
-    final sweepAngle = startAngle - (startAngle - endAngle) * drawingValue;
-    // Calculate the sweep angle by subtracting from the start angle
+    final startAngle = -math.pi / 2; // Start angle set to -pi/2 (-90 degrees)
+    final endAngle = startAngle + 2 * math.pi * drawingValue;
+    // Calculate the end angle based on the drawingValue
 
     canvas.drawArc(
       Rect.fromCircle(center: Offset(centerX, centerY), radius: radius),
       startAngle,
-      sweepAngle,
+      endAngle - startAngle,
       false,
       paint,
     );
