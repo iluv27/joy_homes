@@ -362,21 +362,21 @@ class _UploadDetailsFormState extends State<UploadDetailsForm> {
                     try {
                       await Provider.of<HouseProvider>(context, listen: false)
                           .setHouseDetails(
-                              TagLine: tagLine.text,
-                              Description: descriptionController.text,
-                              Rent: rent,
-                              Bedroom: bedroom,
-                              Bathroom: bathroom,
-                              Toilet: toilet,
-                              WaterHeater: waterHeater,
-                              Wardrobe: wardrobe,
-                              Balcony: balcony,
-                              Fence: fences,
-                              ParkingSpace: parkingSpace,
-                              Availability: availability);
+                              tagLine: tagLine.text,
+                              description: descriptionController.text,
+                              rent: rent,
+                              bedroom: bedroom,
+                              bathroom: bathroom,
+                              toilet: toilet,
+                              waterHeater: waterHeater,
+                              wardrobe: wardrobe,
+                              balcony: balcony,
+                              fence: fences,
+                              parkingSpace: parkingSpace,
+                              availability: availability);
 
-                      Provider.of<HouseProvider>(context, listen: false)
-                          .saveHouseImages();
+                      await Provider.of<HouseProvider>(context, listen: false)
+                          .saveHouseImages(selectedImages);
                     } catch (e) {
                       print('this is the house upload error: $e');
                     }

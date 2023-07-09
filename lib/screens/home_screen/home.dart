@@ -7,15 +7,8 @@ import '../../profile/profile_constants.dart';
 import 'home_constants.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:shimmer/shimmer.dart';
-
-final List<String> imgList = [
-  'https://cdn.pixabay.com/photo/2016/11/18/17/46/house-1836070_1280.jpg',
-  'https://cdn.pixabay.com/photo/2016/11/18/17/20/living-room-1835923_1280.jpg',
-  'https://cdn.pixabay.com/photo/2015/10/20/18/57/furniture-998265_1280.jpg',
-  'https://cdn.pixabay.com/photo/2017/08/27/10/16/interior-2685521_1280.jpg',
-  'https://cdn.pixabay.com/photo/2016/12/30/07/59/kitchen-1940174_1280.jpg',
-  'https://cdn.pixabay.com/photo/2014/07/10/17/17/bedroom-389254_1280.jpg'
-];
+import 'package:provider/provider.dart';
+import 'package:joy_homes/main.dart';
 
 // ignore: must_be_immutable
 class HomeScreen extends StatelessWidget {
@@ -56,30 +49,96 @@ class HomeScreen extends StatelessWidget {
           ),
           height: 60,
         ),
-        body: const HouseContainer(),
+        body: HouseListScreen(),
         endDrawer: ProfileDetails(),
       ),
     );
   }
 }
 
-class HouseContainer extends StatelessWidget {
-  const HouseContainer({super.key});
+class HouseListScreen extends StatefulWidget {
+  @override
+  _HouseListScreenState createState() => _HouseListScreenState();
+}
+
+class _HouseListScreenState extends State<HouseListScreen> {
+  final HouseProvider _houseProvider = HouseProvider();
+
+  @override
+  void initState() {
+    super.initState();
+    fetchHouses();
+  }
+
+  Future<void> fetchHouses() async {
+    await _houseProvider.fetchHouses();
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: const [
-        HouseItem(),
-        HouseItem(),
-        HouseItem(),
-      ],
+    return FutureBuilder<List<Map<String, dynamic>>>(
+      future: _houseProvider.fetchHouses(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+
+        if (snapshot.hasError) {
+          return Center(
+            child: Text('Error: ${snapshot.error}'),
+          );
+        }
+
+        final List<Map<String, dynamic>> houseDataList = snapshot.data ?? [];
+
+        return ListView.builder(
+          itemCount: houseDataList.length,
+          itemBuilder: (context, index) {
+            final houseData = houseDataList[index];
+
+            final List<String> imageUrls =
+                List<String>.from(houseData['images']);
+
+            return HouseItem(
+                houseImages: imageUrls,
+                address11: houseData['address1'],
+                bedroom: houseData['bedrooms'],
+                tagline1: houseData['tagLine'],
+                toilet: houseData['toilets'],
+                bathroom: 2);
+            // ListTile(
+            //   title: Text(houseData['tagLine'] ?? ''),
+            //   subtitle: Text(houseData['description'] ?? ''),
+            //   leading: Image.network(
+            //       imageUrls.first), // Displaying the first image URL
+            // );
+          },
+        );
+      },
     );
   }
 }
 
+// ignore: must_be_immutable
 class HouseItem extends StatefulWidget {
-  const HouseItem() : super();
+  HouseItem(
+      {required this.houseImages,
+      required this.address11,
+      required this.bedroom,
+      required this.tagline1,
+      required this.toilet,
+      required this.bathroom})
+      : super();
+
+  final List<String> houseImages;
+  final String tagline1;
+  final String address11;
+  var bedroom;
+  var bathroom;
+  var toilet;
 
   @override
   State<HouseItem> createState() => _HouseItemState();
@@ -155,7 +214,7 @@ class _HouseItemState extends State<HouseItem>
                   aspectRatio: 16 / 16,
                   viewportFraction: 1,
                 ),
-                items: imgList
+                items: widget.houseImages
                     .map(
                       (item) => Container(
                         child: CachedNetworkImage(
@@ -259,8 +318,12 @@ class _HouseItemState extends State<HouseItem>
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const Text(
-                                    'A 2 Bedroom Apartment',
+                                  // for (Map<String, dynamic> houses
+                                  //     in Provider.of<HouseProvider>(context,
+                                  //             listen: false)
+                                  //         .houseDataList)
+                                  Text(
+                                    widget.tagline1,
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 18,
@@ -280,7 +343,7 @@ class _HouseItemState extends State<HouseItem>
                                         width: 5,
                                       ),
                                       Text(
-                                        'Wuse II, Beside supermarket',
+                                        widget.address11,
                                         style: TextStyle(
                                             color:
                                                 Colors.white.withOpacity(0.7)),
@@ -343,7 +406,7 @@ class _HouseItemState extends State<HouseItem>
                                       width: 5,
                                     ),
                                     Text(
-                                      '2 beds',
+                                      '${widget.bedroom} beds',
                                       style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 13,
@@ -362,7 +425,7 @@ class _HouseItemState extends State<HouseItem>
                                       width: 5,
                                     ),
                                     Text(
-                                      '1 pool',
+                                      '${widget.bathroom} pool',
                                       style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 13,
@@ -381,7 +444,7 @@ class _HouseItemState extends State<HouseItem>
                                       width: 5,
                                     ),
                                     Text(
-                                      '2 rooms',
+                                      '${widget.toilet} rooms',
                                       style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 13,

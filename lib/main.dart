@@ -377,12 +377,10 @@ class AuthenticationProvider extends ChangeNotifier {
       print('Error signing out: $e');
     }
   }
-
-//FOR HOUSE
-  String? tagLine;
 }
 
 // THIS IS THE HOUSE PROVIDER
+
 class HouseProvider extends ChangeNotifier {
   String? tagLine;
   String? description;
@@ -400,164 +398,218 @@ class HouseProvider extends ChangeNotifier {
   // SECOND SLIDE
   String? address1;
   String? state;
-  String? LGA;
+  String? lga;
   String? address2;
   String? longitude;
   String? latitude;
 
-  final housesCollection = FirebaseFirestore.instance.collection('Houses');
-  final userId = FirebaseAuth.instance.currentUser!.uid;
+  String? houseId;
 
-  String? houseid;
+  // IMAGES
+  List<String> imageUrls = [];
+
+  final CollectionReference housesCollection =
+      FirebaseFirestore.instance.collection('Houses');
+  final String userId = FirebaseAuth.instance.currentUser!.uid;
 
   Future<void> setHouseDetails({
-    String? TagLine,
-    String? Description,
-    String? Rent,
-    int? Bedroom,
-    int? Bathroom,
-    int? Toilet,
-    int? WaterHeater,
-    int? Wardrobe,
-    int? Balcony,
-    String? Fence,
-    String? ParkingSpace,
-    String? Availability,
+    String? tagLine,
+    String? description,
+    String? rent,
+    int? bedroom,
+    int? bathroom,
+    int? toilet,
+    int? waterHeater,
+    int? wardrobe,
+    int? balcony,
+    String? fence,
+    String? parkingSpace,
+    String? availability,
   }) async {
-    // User Id
+    try {
+      // Generate a new houseId
+      houseId = housesCollection.doc().id;
 
-    // Create a new document with a unique ID under the houses collection
-    final newHouseDoc = housesCollection.doc(userId);
+      // Create a new document with a unique ID under the houses collection
+      final newHouseDoc = housesCollection.doc(houseId);
 
-    // Set the house data in the document
-    await newHouseDoc.set({
-      'tagLine': TagLine,
-      'description': Description,
-      'rent': Rent,
-      'bedrooms': Bedroom,
-      'bathrooms': Bathroom,
-      'toilets': Toilet,
-      'waterHeater': WaterHeater,
-      'wardrobe': Wardrobe,
-      'balcony': Balcony,
-      'fence': Fence,
-      'parkingSpace': ParkingSpace,
-      'availability': Availability,
-      'address1': '',
-      'state': '',
-      'LGA': '',
-      'address2': '',
-      'longitude': '',
-      'latitude': '',
-      'userId': userId,
-      'images': []
-      // Add other house details as needed
-    });
-
-    houseid = newHouseDoc.id;
-
-// ignore: unused_element
-
-    DocumentSnapshot snapshot =
-        await FirebaseFirestore.instance.collection('Houses').doc(userId).get();
-
-    if (snapshot.exists) {
-      // Access user data from the document
-      tagLine = snapshot.get('tagLine');
-      description = snapshot.get('description');
-      rent = snapshot.get('rent');
-      bedroom = snapshot.get('bedrooms');
-      bathroom = snapshot.get('bathrooms');
-      toilet = snapshot.get('toilets');
-      waterHeater = snapshot.get('waterHeater');
-      wardrobe = snapshot.get('wardrobe');
-      balcony = snapshot.get('balcony');
-      fence = snapshot.get('fence');
-      parkingSpace = snapshot.get('parkingSpace');
-      availability = snapshot.get('availability');
-      address1 = snapshot.get('address1');
-      state = snapshot.get('state');
-      LGA = snapshot.get('LGA');
-      address2 = snapshot.get('address2');
-      longitude = snapshot.get('longitude');
-      latitude = snapshot.get('latitude');
-    }
-  }
-
-  // SETTING AGENT INFO
-  Future<void> setLocationDetails(
-      {String? Address1,
-      String? State,
-      String? lga,
-      String? Address2,
-      String? Longitude,
-      String? Latitude}) async {
-    // ignore: unnecessary_null_comparison
-    if (userId != null) {
-      await FirebaseFirestore.instance.collection('Houses').doc(userId).update({
-        'address1': Address1,
-        'state': State,
-        'LGA': lga,
-        'address2': Address2,
-        'longitude': Longitude,
-        'latitude': Latitude,
-      }).then((_) async {
-        // Retrieve user data
-        await FirebaseFirestore.instance
-            .collection('Houses')
-            .doc(userId)
-            .get()
-            .then((snapshot) async {
-          if (snapshot.exists) {
-            tagLine = snapshot.get('tagLine');
-            description = snapshot.get('description');
-            rent = snapshot.get('rent');
-            bedroom = snapshot.get('bedrooms');
-            bathroom = snapshot.get('bathrooms');
-            toilet = snapshot.get('toilets');
-            waterHeater = snapshot.get('waterHeater');
-            wardrobe = snapshot.get('wardrobe');
-            balcony = snapshot.get('balcony');
-            fence = snapshot.get('fence');
-            parkingSpace = snapshot.get('parkingSpace');
-            availability = snapshot.get('availability');
-            address1 = snapshot.get('address1');
-            state = snapshot.get('state');
-            LGA = snapshot.get('LGA');
-            address2 = snapshot.get('address2');
-            longitude = snapshot.get('longitude');
-            latitude = snapshot.get('latitude');
-            // Copy user data to 'Agents' collection
-          }
-        }).catchError((error) {
-          // Failed to retrieve user data
-        });
-      }).catchError((error) {
-        // Failed to update 'Owner' field
+      // Set the house data in the document
+      await newHouseDoc.set({
+        'tagLine': tagLine,
+        'description': description,
+        'rent': rent,
+        'bedrooms': bedroom,
+        'bathrooms': bathroom,
+        'toilets': toilet,
+        'waterHeater': waterHeater,
+        'wardrobe': wardrobe,
+        'balcony': balcony,
+        'fence': fence,
+        'parkingSpace': parkingSpace,
+        'availability': availability,
+        'address1': '',
+        'state': '',
+        'lga': '',
+        'address2': '',
+        'longitude': '',
+        'latitude': '',
+        'userId': userId,
+        'images': [],
       });
+
+      // Retrieve the updated document
+      final snapshot = await newHouseDoc.get();
+
+      if (snapshot.exists) {
+        // Access the user data from the document
+        tagLine = snapshot.get('tagLine');
+        description = snapshot.get('description');
+        rent = snapshot.get('rent');
+        bedroom = snapshot.get('bedrooms');
+        bathroom = snapshot.get('bathrooms');
+        toilet = snapshot.get('toilets');
+        waterHeater = snapshot.get('waterHeater');
+        wardrobe = snapshot.get('wardrobe');
+        balcony = snapshot.get('balcony');
+        fence = snapshot.get('fence');
+        parkingSpace = snapshot.get('parkingSpace');
+        availability = snapshot.get('availability');
+        address1 = snapshot.get('address1');
+        state = snapshot.get('state');
+        lga = snapshot.get('lga');
+        address2 = snapshot.get('address2');
+        longitude = snapshot.get('longitude');
+        latitude = snapshot.get('latitude');
+        imageUrls = List<String>.from(snapshot.get('images'));
+      }
+
+      print('Images: $imageUrls');
+      print('Bathroom: $bathroom');
+      print('Description: $description');
+    } catch (e) {
+      print('Error setting house details: $e');
     }
   }
 
-  Future<void> saveHouseImages() async {
-    List<String> imageUrls = [];
+  Future<void> setLocationDetails({
+    String? address1,
+    String? state,
+    String? lga,
+    String? address2,
+    String? longitude,
+    String? latitude,
+  }) async {
+    try {
+      // Update the existing house document with the location details
+      await housesCollection.doc(houseId).update({
+        'address1': address1,
+        'state': state,
+        'lga': lga,
+        'address2': address2,
+        'longitude': longitude,
+        'latitude': latitude,
+      });
 
-    for (var image in selectedImages) {
-      final storageRef = FirebaseStorage.instance
-          .ref()
-          .child('Houses')
-          .child(userId)
-          .child('${Uuid().v4()}.jpg');
-      await storageRef.putFile(image);
-      final imageUrl = await storageRef.getDownloadURL();
-      imageUrls.add(imageUrl);
+      // Retrieve the updated document
+      final snapshot = await housesCollection.doc(houseId).get();
+
+      if (snapshot.exists) {
+        // Access the user data from the document
+        tagLine = snapshot.get('tagLine');
+        description = snapshot.get('description');
+        rent = snapshot.get('rent');
+        bedroom = snapshot.get('bedrooms');
+        bathroom = snapshot.get('bathrooms');
+        toilet = snapshot.get('toilets');
+        waterHeater = snapshot.get('waterHeater');
+        wardrobe = snapshot.get('wardrobe');
+        balcony = snapshot.get('balcony');
+        fence = snapshot.get('fence');
+        parkingSpace = snapshot.get('parkingSpace');
+        availability = snapshot.get('availability');
+        address1 = snapshot.get('address1');
+        state = snapshot.get('state');
+        lga = snapshot.get('lga');
+        address2 = snapshot.get('address2');
+        longitude = snapshot.get('longitude');
+        latitude = snapshot.get('latitude');
+        imageUrls = List<String>.from(snapshot.get('images'));
+      }
+
+      print('Images: $imageUrls');
+      print('Bathroom: $bathroom');
+      print('Description: $description');
+    } catch (e) {
+      print('Error setting location details: $e');
     }
-
-    // Save the image URLs in the house document
-    await housesCollection.doc(userId).update({
-      'images': FieldValue.arrayUnion(imageUrls),
-    });
   }
+
+  Future<void> saveHouseImages(List<File> selectedImages) async {
+    try {
+      List<String> updatedImageUrls = [];
+
+      for (var image in selectedImages) {
+        final storageRef = FirebaseStorage.instance
+            .ref()
+            .child('Houses')
+            .child(houseId!)
+            .child('${Uuid().v4()}.jpg');
+        final uploadTask = storageRef.putFile(image);
+        final TaskSnapshot taskSnapshot = await uploadTask;
+        final imageUrl = await taskSnapshot.ref.getDownloadURL();
+        updatedImageUrls.add(imageUrl);
+      }
+
+      // Save the image URLs in the house document
+      await housesCollection.doc(houseId).update({
+        'images': FieldValue.arrayUnion(updatedImageUrls),
+      });
+
+      // Update the imageUrls list with the newly added URLs
+      imageUrls.addAll(updatedImageUrls);
+
+      print('Updated Image URLs: $imageUrls');
+    } catch (e) {
+      print('Error saving house images: $e');
+    }
+  }
+
+// Fetch and iterate over the documents in the collection
+
+  Future<List<Map<String, dynamic>>> fetchHouses() async {
+    try {
+      QuerySnapshot<Map<String, dynamic>> snapshot =
+          await housesCollection.get() as QuerySnapshot<Map<String, dynamic>>;
+
+      List<Map<String, dynamic>> houseDataList = [];
+
+      for (QueryDocumentSnapshot<Map<String, dynamic>> docSnapshot
+          in snapshot.docs) {
+        // Access the data in each document
+        Map<String, dynamic> houseData = docSnapshot.data();
+
+        // Ensure 'images' field is present and of type List
+        // Ensure 'images' field is present and of type List
+        if (houseData.containsKey('images') && houseData['images'] is List) {
+          houseData['images'] = List<String>.from(houseData['images']);
+        } else {
+          houseData['images'] =
+              []; // Assign an empty list if 'images' field is missing or not of type List
+        }
+
+        houseDataList.add(houseData);
+      }
+      return houseDataList;
+    } catch (e) {
+      print('Error fetching houses: $e');
+      return [];
+    }
+  }
+
+// Call the fetchHouses function to start retrieving the data
+// fetchHouses();
 }
+
 //  THIS IS THE BOTTOM NAV BAR HOME SCREEN
 
 class MainMenuScreen extends StatefulWidget {

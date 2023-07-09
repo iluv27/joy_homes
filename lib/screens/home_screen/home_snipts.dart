@@ -1,15 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:joy_homes/theme.dart';
 
-final List<String> imgList = [
-  'https://cdn.pixabay.com/photo/2016/11/18/17/46/house-1836070_1280.jpg',
-  'https://cdn.pixabay.com/photo/2016/11/18/17/20/living-room-1835923_1280.jpg',
-  'https://cdn.pixabay.com/photo/2015/10/20/18/57/furniture-998265_1280.jpg',
-  'https://cdn.pixabay.com/photo/2017/08/27/10/16/interior-2685521_1280.jpg',
-  'https://cdn.pixabay.com/photo/2016/12/30/07/59/kitchen-1940174_1280.jpg',
-  'https://cdn.pixabay.com/photo/2014/07/10/17/17/bedroom-389254_1280.jpg'
-];
-
 class DetailHeadings extends StatelessWidget {
   const DetailHeadings({super.key, required this.detailHeading});
 

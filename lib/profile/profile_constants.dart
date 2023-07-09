@@ -16,6 +16,7 @@ import 'package:joy_homes/signUp_Screens/register.dart';
 //   });
 // }
 
+// ignore: must_be_immutable
 class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   final Widget? title;
   final Widget? leading;

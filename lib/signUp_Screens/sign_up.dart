@@ -6,10 +6,8 @@ import 'package:joy_homes/theme.dart';
 import 'constants.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'log_in.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:provider/provider.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SignupScreen extends StatefulWidget {
   SignupScreen({super.key});
@@ -29,7 +27,6 @@ class _SignupScreenState extends State<SignupScreen> {
   TextEditingController confirmPassword = TextEditingController();
 
 // FOR SIGN UP
-  final _auth = FirebaseAuth.instance;
 
   void _signUpWithEmail() {
     String firstName1 = firstName.text;

@@ -278,20 +278,20 @@ class _MapScreenState extends State<_MapScreen> {
                     ),
                     BottomNavButton(
                       formKey: _formKey,
-                      bottomFunctionality: () {
+                      bottomFunctionality: () async {
                         if (_formKey.currentState!.validate()) {
                           _formKey.currentState!.save();
                           // Send data to the server
                         }
 
-                        Provider.of<HouseProvider>(context, listen: false)
+                        await Provider.of<HouseProvider>(context, listen: false)
                             .setLocationDetails(
-                                Address1: address1.text,
-                                State: selectedState,
+                                address1: address1.text,
+                                state: selectedState,
                                 lga: selectedLGA,
-                                Address2: address2.text,
-                                Longitude: longitude1.text,
-                                Latitude: latitude1.text);
+                                address2: address2.text,
+                                longitude: longitude1.text,
+                                latitude: latitude1.text);
 
                         Navigator.push(context,
                             MaterialPageRoute(builder: (Context) {

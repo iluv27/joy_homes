@@ -1,7 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:joy_homes/theme.dart';
 import 'upload_details.dart';
-import 'dart:io';
 
 final List<File> selectedImages = [];
 

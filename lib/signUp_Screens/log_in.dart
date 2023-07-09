@@ -6,7 +6,6 @@ import 'package:joy_homes/signUp_Screens/register.dart';
 import 'package:joy_homes/theme.dart';
 import 'constants.dart';
 import 'package:flutter/gestures.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:provider/provider.dart';
 
