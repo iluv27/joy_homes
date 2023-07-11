@@ -6,16 +6,6 @@ import 'package:joy_homes/profile/profile_main.dart';
 import 'package:joy_homes/theme.dart';
 import 'package:joy_homes/signUp_Screens/register.dart';
 
-// class UserInfo {
-//   final String newUser;
-//   final String newMail;
-
-//   UserInfo({
-//     required this.newUser,
-//     required this.newMail,
-//   });
-// }
-
 // ignore: must_be_immutable
 class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   final Widget? title;
@@ -105,18 +95,18 @@ class _ProfileSectionState extends State<ProfileSection> {
               backgroundColor:
                   authProvider.googleUser != null ? null : getRandomColor(),
               backgroundImage: authProvider.googleUser != null
-                  ? NetworkImage(authProvider.photoUrl.toString())
-                  : null,
-              child: authProvider.googleUser != null
                   ? null
-                  : Text(
+                  : NetworkImage(authProvider.photoUrl.toString()),
+              child: authProvider.googleUser != null
+                  ? Text(
                       authProvider.getUserInitials(),
                       style: const TextStyle(
                           color: Colors.white,
                           fontSize: 16,
                           letterSpacing: -2,
                           fontWeight: FontWeight.w600),
-                    ),
+                    )
+                  : null,
             ),
           );
         } else {
@@ -174,21 +164,21 @@ class ProfileDetails extends StatelessWidget {
                   currentAccountPicture: CircleAvatar(
                     maxRadius: 30,
                     backgroundColor: authProvider.googleUser != null
-                        ? null
-                        : getRandomColor(),
-                    backgroundImage: authProvider.googleUser != null
-                        ? NetworkImage(authProvider.photoUrl.toString())
+                        ? getRandomColor()
                         : null,
-                    child: authProvider.googleUser != null
+                    backgroundImage: authProvider.googleUser != null
                         ? null
-                        : Text(
+                        : NetworkImage(authProvider.photoUrl.toString()),
+                    child: authProvider.googleUser != null
+                        ? Text(
                             authProvider.getUserInitials(),
                             style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 16,
                                 letterSpacing: -1,
                                 fontWeight: FontWeight.w600),
-                          ),
+                          )
+                        : null,
                   ),
                   // Additional properties can be set to customize the header
                   decoration: BoxDecoration(

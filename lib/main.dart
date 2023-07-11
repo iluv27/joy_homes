@@ -144,6 +144,37 @@ class AuthenticationProvider extends ChangeNotifier {
   Future<void> signInWithGoogle() async {
     try {
       // Trigger the Google Sign-In flow.
+      final googleUser = await _googleSignIn.signIn();
+
+      // Obtain the auth details from the request.
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser!.authentication;
+
+      // Create a new credential.
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      // Sign in to Firebase with the Google credential.
+      final UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+
+      // Access the authenticated user.
+      currentUser = userCredential.user;
+
+      if (currentUser != null) {
+        // Retrieve user data from Firestore.
+        await getUserDataFromFirestore(currentUser!.uid);
+      }
+    } catch (e) {
+      print('Error signing in with Google: $e');
+    }
+  }
+
+  Future<void> signUpWithGoogle() async {
+    try {
+      // Trigger the Google Sign-In flow.
       googleUser = await _googleSignIn.signIn();
 
       // Obtain the auth details from the request.
@@ -156,31 +187,21 @@ class AuthenticationProvider extends ChangeNotifier {
         idToken: googleAuth.idToken,
       );
 
-      // Sign in or sign up to Firebase with the Google credential.
-      UserCredential userCredential =
+      // Sign up to Firebase with the Google credential.
+      final UserCredential userCredential =
           await FirebaseAuth.instance.signInWithCredential(credential);
 
       // Access the authenticated user.
       currentUser = userCredential.user;
 
-      if (googleUser != null) {
-        await saveUserDataToFirestore(currentUser!, googleUser!);
-        await getUserDataFromFirestore(currentUser!.uid);
-      }
-
       if (currentUser != null) {
-        // Check if it's a new user (sign-up) or an existing user (sign-in).
+        // Save user data to Firestore.
 
-        // Retrieve user data from Firestore.
-        await getUserDataFromFirestore(currentUser!.uid);
         await saveUserDataToFirestore(currentUser!, googleUser!);
-
-        // User is signing up with Google for the first time.
-
-        // Use the retrieved data as needed.
+        await getUserDataFromFirestore(currentUser!.uid);
       }
     } catch (e) {
-      print('Error signing in with Google: $e');
+      print('Error signing up with Google: $e');
     }
   }
 
@@ -209,10 +230,8 @@ class AuthenticationProvider extends ChangeNotifier {
     try {
       if (currentUser != null) {
         // Fetch user document from 'users' collection using UID
-        DocumentSnapshot snapshot = await FirebaseFirestore.instance
-            .collection('Users')
-            .doc(currentUser!.uid)
-            .get();
+        final DocumentSnapshot snapshot =
+            await FirebaseFirestore.instance.collection('Users').doc(uid).get();
 
         if (snapshot.exists) {
           // Access user data from the document
@@ -220,7 +239,6 @@ class AuthenticationProvider extends ChangeNotifier {
           userEmail = snapshot.get('email');
           photoUrl = snapshot.get('photoUrl');
           identity = snapshot.get('identity');
-
           verificationMode = snapshot.get('verificationMode');
           contactPreference = snapshot.get('contactPreference');
           verificationImageURL = snapshot.get('verificationImageURL');
@@ -231,6 +249,16 @@ class AuthenticationProvider extends ChangeNotifier {
           print('identity: $identity');
 
           // Do something with the user data
+
+          // return {
+          //   'displayName': displayName,
+          //   'userEmail': userEmail,
+          //   'photoUrl': photoUrl,
+          //   'identity': identity,
+          //   'verificationMode': verificationMode,
+          //   'contactPreference': contactPreference,
+          //   'verificationImageURL': verificationImageURL,
+          // };
         }
       }
     } catch (e) {
@@ -576,6 +604,8 @@ class HouseProvider extends ChangeNotifier {
 
 // Fetch and iterate over the documents in the collection
 
+  List<Map<String, dynamic>> houseList = [];
+
   Future<List<Map<String, dynamic>>> fetchHouses() async {
     try {
       QuerySnapshot<Map<String, dynamic>> snapshot =
@@ -589,7 +619,6 @@ class HouseProvider extends ChangeNotifier {
         Map<String, dynamic> houseData = docSnapshot.data();
 
         // Ensure 'images' field is present and of type List
-        // Ensure 'images' field is present and of type List
         if (houseData.containsKey('images') && houseData['images'] is List) {
           houseData['images'] = List<String>.from(houseData['images']);
         } else {
@@ -599,10 +628,23 @@ class HouseProvider extends ChangeNotifier {
 
         houseDataList.add(houseData);
       }
+
+      debugPrint('house data: $houseDataList');
+
+      houseList = houseDataList;
+
       return houseDataList;
     } catch (e) {
       print('Error fetching houses: $e');
       return [];
+    }
+  }
+
+  Map<String, dynamic> getHouseData(int index) {
+    if (index >= 0 && index < houseList.length) {
+      return houseList[index];
+    } else {
+      return {};
     }
   }
 

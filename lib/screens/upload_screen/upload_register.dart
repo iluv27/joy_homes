@@ -324,7 +324,7 @@ class _SimpleDropdownButtonState extends State<SimpleDropdownButton> {
   Widget build(BuildContext context) {
     return InputDecorator(
       decoration: InputDecoration(
-        contentPadding: EdgeInsets.all(0),
+        contentPadding: EdgeInsets.only(left: 5),
         border: InputBorder.none,
         helperText: widget.helperText,
       ),
@@ -359,9 +359,12 @@ class _SimpleDropdownButtonState extends State<SimpleDropdownButton> {
             items: widget.dropdownItems.map((String value) {
               return DropdownMenuItem<String>(
                 value: value,
-                child: Text(
-                  value,
-                  style: TextStyle(fontSize: 16, color: AppColors.textColor),
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 8.0),
+                  child: Text(
+                    value,
+                    style: TextStyle(fontSize: 16, color: AppColors.textColor),
+                  ),
                 ),
               );
             }).toList(),

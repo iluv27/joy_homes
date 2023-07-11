@@ -82,7 +82,9 @@ class _HouseListScreenState extends State<HouseListScreen> {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(
-            child: CircularProgressIndicator(),
+            child: CircularProgressIndicator(
+              color: AppColors.primary,
+            ),
           );
         }
 
@@ -92,23 +94,35 @@ class _HouseListScreenState extends State<HouseListScreen> {
           );
         }
 
-        final List<Map<String, dynamic>> houseDataList = snapshot.data ?? [];
-
         return ListView.builder(
-          itemCount: houseDataList.length,
+          itemCount: _houseProvider.houseList.length,
           itemBuilder: (context, index) {
-            final houseData = houseDataList[index];
+            final houseData1 = _houseProvider.getHouseData(index);
 
             final List<String> imageUrls =
-                List<String>.from(houseData['images']);
+                List<String>.from(houseData1['images']);
 
             return HouseItem(
-                houseImages: imageUrls,
-                address11: houseData['address1'],
-                bedroom: houseData['bedrooms'],
-                tagline1: houseData['tagLine'],
-                toilet: houseData['toilets'],
-                bathroom: 2);
+              houseImages: imageUrls,
+              address11: houseData1['address1'],
+              bedroom: houseData1['bedrooms'],
+              tagline1: houseData1['tagLine'],
+              toilet: houseData1['toilets'],
+              rent: houseData1['rent'],
+              availability: houseData1['availability'],
+              bathroom: houseData1['bathrooms'],
+              onTapped: () {
+                print(imageUrls.length);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) {
+                    return HomeDetailsScreen(
+                      houseData: houseData1,
+                    );
+                  }),
+                );
+              },
+            );
             // ListTile(
             //   title: Text(houseData['tagLine'] ?? ''),
             //   subtitle: Text(houseData['description'] ?? ''),
@@ -130,7 +144,10 @@ class HouseItem extends StatefulWidget {
       required this.bedroom,
       required this.tagline1,
       required this.toilet,
-      required this.bathroom})
+      required this.rent,
+      required this.availability,
+      required this.bathroom,
+      required this.onTapped})
       : super();
 
   final List<String> houseImages;
@@ -139,6 +156,9 @@ class HouseItem extends StatefulWidget {
   var bedroom;
   var bathroom;
   var toilet;
+  String rent;
+  String availability;
+  Function() onTapped;
 
   @override
   State<HouseItem> createState() => _HouseItemState();
@@ -196,14 +216,7 @@ class _HouseItemState extends State<HouseItem>
     return Padding(
       padding: const EdgeInsets.only(top: 35.0),
       child: GestureDetector(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) {
-              return const HomeDetailsScreen();
-            }),
-          );
-        },
+        onTap: widget.onTapped,
         onDoubleTap: _handleDoubleTap,
         child: Stack(
           children: [
@@ -355,8 +368,8 @@ class _HouseItemState extends State<HouseItem>
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
-                                  const Text(
-                                    '₦ 750K/Year',
+                                  Text(
+                                    widget.rent,
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 18,
@@ -369,8 +382,10 @@ class _HouseItemState extends State<HouseItem>
                                     children: [
                                       Icon(
                                         Icons.circle,
-                                        color: const Color.fromARGB(
-                                            255, 9, 255, 108),
+                                        color: widget.availability == 'Yes'
+                                            ? const Color.fromARGB(
+                                                255, 9, 255, 108)
+                                            : Colors.grey,
                                         size: 14,
                                       ),
                                       const SizedBox(
@@ -406,7 +421,7 @@ class _HouseItemState extends State<HouseItem>
                                       width: 5,
                                     ),
                                     Text(
-                                      '${widget.bedroom} beds',
+                                      '${widget.bedroom} room(s)',
                                       style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 13,
@@ -425,7 +440,7 @@ class _HouseItemState extends State<HouseItem>
                                       width: 5,
                                     ),
                                     Text(
-                                      '${widget.bathroom} pool',
+                                      '${widget.toilet} toilet',
                                       style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 13,
@@ -444,7 +459,7 @@ class _HouseItemState extends State<HouseItem>
                                       width: 5,
                                     ),
                                     Text(
-                                      '${widget.toilet} rooms',
+                                      '${widget.bathroom} bathroom',
                                       style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 13,

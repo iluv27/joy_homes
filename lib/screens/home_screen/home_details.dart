@@ -13,7 +13,9 @@ import 'package:provider/provider.dart';
 import 'package:joy_homes/main.dart';
 
 class DetailsPage extends StatefulWidget {
-  const DetailsPage({super.key});
+  const DetailsPage({super.key, required this.houseData});
+
+  final Map<String, dynamic> houseData;
 
   @override
   State<DetailsPage> createState() => _DetailsPageState();
@@ -51,530 +53,530 @@ class _DetailsPageState extends State<DetailsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<HouseProvider>(builder: (context, authProvider, child) {
-      return Container(
-        child: ListView(
-          children: [
-            Stack(
-              children: [
-                Container(
-                  child: CarouselSlider(
-                    carouselController: _controller,
-                    options: CarouselOptions(
-                      aspectRatio: 16 / 11,
-                      viewportFraction: 1,
-                      onPageChanged: (index, _) {
-                        setState(() {
-                          pageIndex = index;
-                        });
-                      },
-                    ),
-                    items: authProvider.imageUrls
-                        .map(
-                          (item) => Container(
-                            child: CachedNetworkImage(
-                              imageUrl: item,
-                              fit: BoxFit.cover,
-                              placeholder: (context, url) => Shimmer.fromColors(
-                                child: Container(
-                                  color: Colors.white,
-                                ),
-                                baseColor: Colors.grey[300]!,
-                                highlightColor: Colors.grey[100]!,
-                                direction: ShimmerDirection.ltr,
-                              ),
-                              errorWidget: (context, url, error) =>
-                                  Icon(Icons.error),
-                            ),
-                          ),
-                        )
-                        .toList(),
-                  ),
-                ),
-                SizedBox(
-                  height: 255,
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          IconButton(
-                            onPressed: () => _controller.previousPage(),
-                            icon: const Icon(
-                              Icons.arrow_back_ios_new_rounded,
-                              size: 30,
-                              color: Colors.white,
-                            ),
-                          ),
-                          IconButton(
-                            onPressed: () => _controller.nextPage(),
-                            icon: const Icon(
-                              Icons.arrow_forward_ios_rounded,
-                              size: 30,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ]),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Container(
-              height: 70,
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: ListView.builder(
-                clipBehavior: Clip.none,
-                scrollDirection: Axis.horizontal,
-                itemCount: authProvider.imageUrls.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return GestureDetector(
-                    onTap: () {
+    final List<String> imageUrls =
+        List<String>.from(widget.houseData['images']);
+
+    return Container(
+      child: ListView(
+        children: [
+          Stack(
+            children: [
+              Container(
+                child: CarouselSlider(
+                  carouselController: _controller,
+                  options: CarouselOptions(
+                    aspectRatio: 16 / 11,
+                    viewportFraction: 1,
+                    onPageChanged: (index, _) {
                       setState(() {
                         pageIndex = index;
-                        _controller.animateToPage(pageIndex);
                       });
                     },
-                    child: Container(
-                      width: 80,
-                      height: 100,
-                      margin: const EdgeInsets.all(6),
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: index == pageIndex
-                              ? AppColors.primary
-                              : Colors.grey,
-                          width: 2.0,
-                        ),
-                        borderRadius: BorderRadius.circular(5.0),
-                      ),
-                      child: Container(
-                        child: CachedNetworkImage(
-                          imageUrl: authProvider.imageUrls[index],
-                          fit: BoxFit.cover,
-                          placeholder: (context, url) => Shimmer.fromColors(
-                            child: Container(
-                              color: Colors.white,
+                  ),
+                  items: imageUrls
+                      .map(
+                        (item) => Container(
+                          child: CachedNetworkImage(
+                            imageUrl: item,
+                            fit: BoxFit.cover,
+                            placeholder: (context, url) => Shimmer.fromColors(
+                              child: Container(
+                                color: Colors.white,
+                              ),
+                              baseColor: Colors.grey[300]!,
+                              highlightColor: Colors.grey[100]!,
+                              direction: ShimmerDirection.ltr,
                             ),
-                            baseColor: Colors.grey[300]!,
-                            highlightColor: Colors.grey[100]!,
-                            direction: ShimmerDirection.ltr,
+                            errorWidget: (context, url, error) =>
+                                Icon(Icons.error),
                           ),
-                          errorWidget: (context, url, error) =>
-                              Icon(Icons.error),
                         ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-
-            // THE DETAILS SECTION
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              height: 200,
-              decoration: BoxDecoration(
-                border: Border(
-                  top: BorderSide(
-                    color: AppColors.secondary.withOpacity(0.2),
-                    width: 1.0,
-                  ),
-                  bottom: BorderSide(
-                    color: AppColors.secondary.withOpacity(0.2),
-                    width: 1.0,
-                  ),
+                      )
+                      .toList(),
                 ),
               ),
-              child: Stack(
-                children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'A 2 Bedroom Apartment',
-                            style: TextStyle(
-                                color: AppColors.textColor,
-                                fontSize: 18,
-                                fontWeight: FontWeight.w700),
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          Row(
-                            children: [
-                              const Icon(
-                                Icons.near_me,
-                                color: AppColors.secondary,
-                                size: 16,
-                              ),
-                              const SizedBox(
-                                width: 5,
-                              ),
-                              Text(
-                                'Wuse II, Beside supermarket',
-                                style: TextStyle(
-                                    color:
-                                        AppColors.textColor.withOpacity(0.8)),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          const Text(
-                            '₦ 750K/Year',
-                            style: TextStyle(
-                                color: AppColors.textColor,
-                                fontSize: 18,
-                                fontWeight: FontWeight.w700),
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.circle,
-                                color: const Color.fromARGB(255, 4, 202, 83),
-                                size: 14,
-                              ),
-                              const SizedBox(
-                                width: 5,
-                              ),
-                              Text(
-                                'Available',
-                                style: TextStyle(
-                                    color:
-                                        AppColors.textColor.withOpacity(0.8)),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-
-                  //Bottom 4 Items
-                  const Align(
-                    alignment: Alignment.center,
-                    widthFactor: 1,
-                    child: Row(
+              SizedBox(
+                height: 255,
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        IconButton(
+                          onPressed: () => _controller.previousPage(),
+                          icon: const Icon(
+                            Icons.arrow_back_ios_new_rounded,
+                            size: 30,
+                            color: Colors.white,
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () => _controller.nextPage(),
+                          icon: const Icon(
+                            Icons.arrow_forward_ios_rounded,
+                            size: 30,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ]),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Container(
+            height: 70,
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: ListView.builder(
+              clipBehavior: Clip.none,
+              scrollDirection: Axis.horizontal,
+              itemCount: imageUrls.length,
+              itemBuilder: (BuildContext context, int index) {
+                return GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      pageIndex = index;
+                      _controller.animateToPage(pageIndex);
+                    });
+                  },
+                  child: Container(
+                    width: 80,
+                    height: 100,
+                    margin: const EdgeInsets.all(6),
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: index == pageIndex
+                            ? AppColors.primary
+                            : Colors.grey,
+                        width: 1.0,
+                      ),
+                      borderRadius: BorderRadius.circular(5.0),
+                    ),
+                    child: Container(
+                      child: CachedNetworkImage(
+                        imageUrl: imageUrls[index],
+                        fit: BoxFit.cover,
+                        placeholder: (context, url) => Shimmer.fromColors(
+                          child: Container(
+                            color: Colors.white,
+                          ),
+                          baseColor: Colors.grey[300]!,
+                          highlightColor: Colors.grey[100]!,
+                          direction: ShimmerDirection.ltr,
+                        ),
+                        errorWidget: (context, url, error) => Icon(Icons.error),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+
+          // THE DETAILS SECTION
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            height: 200,
+            decoration: BoxDecoration(
+              border: Border(
+                top: BorderSide(
+                  color: AppColors.secondary.withOpacity(0.2),
+                  width: 1.0,
+                ),
+                bottom: BorderSide(
+                  color: AppColors.secondary.withOpacity(0.2),
+                  width: 1.0,
+                ),
+              ),
+            ),
+            child: Stack(
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(
-                          children: [
-                            IconContainer(
-                              iconData: Icons.bed,
-                            ),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Text(
-                              '2 beds',
-                              style: TextStyle(
-                                  color: AppColors.textColor,
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                          ],
+                        Text(
+                          widget.houseData['tagLine'],
+                          style: TextStyle(
+                              color: AppColors.textColor,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w700),
+                        ),
+                        const SizedBox(
+                          height: 5,
                         ),
                         Row(
                           children: [
-                            IconContainer(
-                              iconData: Icons.pool,
+                            const Icon(
+                              Icons.near_me,
+                              color: AppColors.secondary,
+                              size: 16,
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 5,
                             ),
                             Text(
-                              '1 pool',
+                              widget.houseData['address1'],
                               style: TextStyle(
-                                  color: AppColors.textColor,
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            IconContainer(
-                              iconData: Icons.room_service,
-                            ),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Text(
-                              '2 rooms',
-                              style: TextStyle(
-                                  color: AppColors.textColor,
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            IconContainer(
-                              iconData: Icons.lightbulb,
-                            ),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Text(
-                              '24/7',
-                              style: TextStyle(
-                                  color: AppColors.textColor,
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w500),
+                                  color: AppColors.textColor.withOpacity(0.8)),
                             ),
                           ],
                         ),
                       ],
                     ),
-                  ),
-
-                  Align(
-                      alignment: Alignment.bottomCenter,
-                      child: Padding(
-                        padding: const EdgeInsets.only(bottom: 8.0),
-                        child: ElevatedButton(
-                            style: ButtonStyle(
-                              minimumSize: MaterialStateProperty.all<Size>(
-                                const Size(double.infinity, 45),
-                              ),
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                  AppColors.contactColor),
-                            ),
-                            onPressed: () {
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return _Popup();
-                                },
-                              );
-                            },
-                            child: const Text(
-                              'Contact Agent',
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.w600),
-                            )),
-                      ))
-                ],
-              ),
-            ),
-            const SizedBox(
-              height: 30,
-            ),
-
-            // THE INFORMATION SECTION
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  DetailHeadings(detailHeading: 'Information'),
-                  const SizedBox(height: 10),
-                  ExpandableText(
-                    text:
-                        'It is a fully functioning two bedroom flat, all just to accommodate your needs. It has two bedrooms, 3 bathrooms (each with heaters). There is a spacious garage for 3 cars and a pool where both children and adults can swim.',
-                    maxLines: 3,
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(
-              height: 30,
-            ),
-
-            // THE FEATURES SECTION
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  DetailHeadings(detailHeading: 'Features'),
-                  const SizedBox(height: 8),
-                  ListView(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    padding: const EdgeInsets.only(left: 15, bottom: 20),
-                    children: const [
-                      FeaturesItems(
-                        featuresListItem: 'Two Bedroom',
-                      ),
-                      FeaturesItems(
-                        featuresListItem: 'Three Bathroom',
-                      ),
-                      FeaturesItems(
-                        featuresListItem: 'One garage',
-                      ),
-                      FeaturesItems(
-                        featuresListItem: 'A basement',
-                      ),
-                      FeaturesItems(
-                        featuresListItem: 'A swimming pool',
-                      ),
-                      FeaturesItems(
-                        featuresListItem: 'A heater for each bathroom',
-                      ),
-                      FeaturesItems(
-                        featuresListItem: 'AC for each room',
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-
-            // THE REVIEW SECTION
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
-              decoration: BoxDecoration(
-                border: Border(
-                  top: BorderSide(
-                    color: AppColors.secondary.withOpacity(0.2),
-                    width: 1.0,
-                  ),
-                  bottom: BorderSide(
-                    color: AppColors.secondary.withOpacity(0.2),
-                    width: 1.0,
-                  ),
-                ),
-              ),
-              child: Wrap(
-                children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.baseline,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    textBaseline: TextBaseline.alphabetic,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context) {
-                            return ReviewPage();
-                          }));
-                        },
-                        child: DetailHeadings(
-                          detailHeading: 'Reviews',
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(
+                          widget.houseData['rent'],
+                          style: TextStyle(
+                              color: AppColors.textColor,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w700),
                         ),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context) {
-                            return ReviewPage();
-                          }));
-                        },
-                        child: Row(
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        Row(
                           children: [
-                            Text(
-                              'Edit',
-                              style: TextStyle(
-                                color: AppColors.textColor,
-                              ),
+                            Icon(
+                              Icons.circle,
+                              color: widget.houseData['availability'] == 'Yes'
+                                  ? Color.fromARGB(255, 4, 202, 83)
+                                  : Colors.grey,
+                              size: 14,
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 5,
                             ),
-                            Icon(
-                              Icons.rate_review_outlined,
-                              size: 14,
-                              color: AppColors.secondary,
+                            Text(
+                              'Available',
+                              style: TextStyle(
+                                  color: AppColors.textColor.withOpacity(0.8)),
                             ),
                           ],
                         ),
+                      ],
+                    ),
+                  ],
+                ),
+
+                //Bottom 4 Items
+                Align(
+                  alignment: Alignment.center,
+                  widthFactor: 1,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          IconContainer(
+                            iconData: Icons.bed,
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Text(
+                            '${widget.houseData['bedrooms']} room(s)',
+                            style: TextStyle(
+                                color: AppColors.textColor,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w500),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          IconContainer(
+                            iconData: Icons.pool,
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Text(
+                            '1 pool',
+                            style: TextStyle(
+                                color: AppColors.textColor,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w500),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          IconContainer(
+                            iconData: Icons.room_service,
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Text(
+                            '${widget.houseData['toilets']} toilet',
+                            style: TextStyle(
+                                color: AppColors.textColor,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w500),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          IconContainer(
+                            iconData: Icons.lightbulb,
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Text(
+                            '24/7',
+                            style: TextStyle(
+                                color: AppColors.textColor,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w500),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                  const SizedBox(height: 8),
-                  Column(
-                    children: getTopReviewSection(reviewSections),
+                ),
+
+                Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 8.0),
+                      child: ElevatedButton(
+                          style: ButtonStyle(
+                            minimumSize: MaterialStateProperty.all<Size>(
+                              const Size(double.infinity, 45),
+                            ),
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                                AppColors.contactColor),
+                          ),
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return _Popup();
+                              },
+                            );
+                          },
+                          child: const Text(
+                            'Contact Agent',
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.w600),
+                          )),
+                    ))
+              ],
+            ),
+          ),
+          const SizedBox(
+            height: 30,
+          ),
+
+          // THE INFORMATION SECTION
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                DetailHeadings(detailHeading: 'Information'),
+                const SizedBox(height: 10),
+                ExpandableText(
+                  text: widget.houseData['description'],
+                  maxLines: 3,
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(
+            height: 30,
+          ),
+
+          // THE FEATURES SECTION
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                DetailHeadings(detailHeading: 'Features'),
+                const SizedBox(height: 8),
+                ListView(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  padding: const EdgeInsets.only(left: 15, bottom: 20),
+                  children: [
+                    FeaturesItems(
+                      featuresListItem:
+                          '${widget.houseData['bedrooms']} Bedroom',
+                    ),
+                    FeaturesItems(
+                      featuresListItem:
+                          '${widget.houseData['bathrooms']} Bathroom',
+                    ),
+                    FeaturesItems(
+                      featuresListItem: 'One balcony',
+                    ),
+                    FeaturesItems(
+                      featuresListItem: 'A basement',
+                    ),
+                    FeaturesItems(
+                      featuresListItem: 'A swimming pool',
+                    ),
+                    FeaturesItems(
+                      featuresListItem: 'A heater for each bathroom',
+                    ),
+                    FeaturesItems(
+                      featuresListItem: 'AC for each room',
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+
+          // THE REVIEW SECTION
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
+            decoration: BoxDecoration(
+              border: Border(
+                top: BorderSide(
+                  color: AppColors.secondary.withOpacity(0.2),
+                  width: 1.0,
+                ),
+                bottom: BorderSide(
+                  color: AppColors.secondary.withOpacity(0.2),
+                  width: 1.0,
+                ),
+              ),
+            ),
+            child: Wrap(
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.baseline,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  textBaseline: TextBaseline.alphabetic,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                          return ReviewPage();
+                        }));
+                      },
+                      child: DetailHeadings(
+                        detailHeading: 'Reviews',
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                          return ReviewPage();
+                        }));
+                      },
+                      child: Row(
+                        children: [
+                          Text(
+                            'Edit',
+                            style: TextStyle(
+                              color: AppColors.textColor,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Icon(
+                            Icons.rate_review_outlined,
+                            size: 14,
+                            color: AppColors.secondary,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Column(
+                  children: getTopReviewSection(reviewSections),
+                ),
+              ],
+            ),
+          ),
+
+          //  THE AVAILABILITY LISTILE
+          ListTile(
+            leading: SizedBox(
+              width: MediaQuery.of(context).size.width * 0.9,
+              child: Row(children: [
+                DetailHeadings(detailHeading: 'Availability'),
+                SizedBox(
+                  width: 7,
+                ),
+                GestureDetector(
+                  child: Container(
+                      height: 25,
+                      width: 40,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: AppColors.primary,
+                          width: 1.0,
+                        ),
+                        borderRadius: BorderRadius.circular(1000),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(1000),
+                        child: CupertinoSwitch(
+                          value: toggleSwitch,
+                          onChanged: (bool value) {
+                            setState(() {
+                              toggleSwitch = value;
+                            });
+                          },
+                          activeColor: AppColors.secondary,
+                          trackColor: Colors.white,
+                          thumbColor:
+                              toggleSwitch ? Colors.white : AppColors.secondary,
+                        ),
+                      )),
+                ),
+              ]),
+            ),
+            trailing: SizedBox(
+              width: 60,
+              child: Row(
+                children: [
+                  Text(
+                    'Edit',
+                    style: TextStyle(
+                      color: AppColors.textColor,
+                    ),
+                  ),
+                  SizedBox(
+                    width: 5,
+                  ),
+                  Icon(
+                    Icons.border_color_outlined,
+                    size: 16,
+                    color: AppColors.secondary,
                   ),
                 ],
               ),
             ),
-
-            //  THE AVAILABILITY LISTILE
-            ListTile(
-              leading: SizedBox(
-                width: MediaQuery.of(context).size.width * 0.9,
-                child: Row(children: [
-                  DetailHeadings(detailHeading: 'Availability'),
-                  SizedBox(
-                    width: 7,
-                  ),
-                  GestureDetector(
-                    child: Container(
-                        height: 25,
-                        width: 40,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: AppColors.primary,
-                            width: 1.0,
-                          ),
-                          borderRadius: BorderRadius.circular(1000),
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(1000),
-                          child: CupertinoSwitch(
-                            value: toggleSwitch,
-                            onChanged: (bool value) {
-                              setState(() {
-                                toggleSwitch = value;
-                              });
-                            },
-                            activeColor: AppColors.secondary,
-                            trackColor: Colors.white,
-                            thumbColor: toggleSwitch
-                                ? Colors.white
-                                : AppColors.secondary,
-                          ),
-                        )),
-                  ),
-                ]),
-              ),
-              trailing: SizedBox(
-                width: 60,
-                child: Row(
-                  children: [
-                    Text(
-                      'Edit',
-                      style: TextStyle(
-                        color: AppColors.textColor,
-                      ),
-                    ),
-                    SizedBox(
-                      width: 5,
-                    ),
-                    Icon(
-                      Icons.border_color_outlined,
-                      size: 16,
-                      color: AppColors.secondary,
-                    ),
-                  ],
-                ),
-              ),
-            )
-          ],
-        ),
-      );
-    });
+          )
+        ],
+      ),
+    );
   }
 }
 

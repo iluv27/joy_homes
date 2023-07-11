@@ -9,7 +9,9 @@ import 'home_details.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class HomeDetailsScreen extends StatefulWidget {
-  const HomeDetailsScreen({super.key});
+  const HomeDetailsScreen({super.key, required this.houseData});
+
+  final Map<String, dynamic> houseData;
 
   @override
   State<HomeDetailsScreen> createState() => _HomeDetailsScreenState();
@@ -69,12 +71,16 @@ class _HomeDetailsScreenState extends State<HomeDetailsScreen> {
               ),
             ),
             height: 60),
-        body: const HouseInfoToggle());
+        body: HouseInfoToggle(
+          houseData: widget.houseData,
+        ));
   }
 }
 
 class HouseInfoToggle extends StatefulWidget {
-  const HouseInfoToggle({super.key});
+  const HouseInfoToggle({super.key, required this.houseData});
+
+  final Map<String, dynamic> houseData;
 
   @override
   _HouseInfoToggleState createState() => _HouseInfoToggleState();
@@ -189,7 +195,11 @@ class _HouseInfoToggleState extends State<HouseInfoToggle>
           Expanded(
             child: Stack(
               children: [
-                selectedIndex == 0 ? DetailsPage() : const HomeLocateScreen()
+                selectedIndex == 0
+                    ? DetailsPage(
+                        houseData: widget.houseData,
+                      )
+                    : const HomeLocateScreen()
               ],
             ),
           ),

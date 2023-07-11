@@ -50,7 +50,7 @@ class _SignupOptionsState extends State<SignupOptions> {
                       try {
                         await Provider.of<AuthenticationProvider>(context,
                                 listen: false)
-                            .signInWithGoogle();
+                            .signUpWithGoogle();
 
                         if (Provider.of<AuthenticationProvider>(context,
                                     listen: false)
